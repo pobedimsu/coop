@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Мои заявки{% endblock %}
+
+{% block content %}
+    <p style="float: right; margin-top: 8px;">
+        <a href="{{ path('jp_my') }}" class="btn btn-info">Мои закупки</a>
+        <a href="{{ path('jp_create') }}" class="btn btn-success">Создать cовместную закупку</a>
+    </p>
+
+    <h1>Мои заявки</h1>
+
+    <p>Всего: {{ orders|length }}</p>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+{#            <th>Картинка</th>#}
+            <th>Закупка</th>
+            <th>Товары</th>
+            <th>Стоимость</th>
+            <th>Доставка</th>
+            <th>Оплата</th>
+            <th>Статус</th>
+            <th>Дата создания</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+{#
+                <td><a href="{{ path('jp_show', {'id': order.jointPurchase.id}) }}#{{ order.id }}" style="height: 70px; display: block;">
+                        <img src="{{ path('image', {'filter': '100x70', 'id': 0}) }}" style="max-width: 100px; max-height: 70px;">
+                    </a>
+                </td>
+#}
+                <td>
+                    <a href="{{ path('jp_show', {'id': order.jointPurchase.id}) }}">{{ order }}</a>
+                </td>
+                <td>
+                    <ol>
+                        {% set amount = 0 %}
+                    {% for line in order.lines %}
+                        <li>
+                            <b><a href="{{ path('jp_show', {'id': order.jointPurchase.id}) }}#{{ line.product.id }}">{{ line }}</a></b>
+
+                            {{ line.quantity }} x {{ line.product.price }} = {{ line.quantity * line.product.price }}
+
+                            {% if line.comment is not empty %}
+                                <div class="alert alert-warning" role="alert">
+                                    {{ line.comment }}
+                                </div>
+                            {% endif %}
+
+                            {% set amount = amount + (line.quantity * line.product.price) %}
+                        </li>
+                    {% endfor %}
+                    </ol>
+                </td>
+                <td>
+                    {% if order.jointPurchase.transportationCostInPercent %}
+                        <h5>{{ amount + (amount * order.jointPurchase.transportationCostInPercent / 100) | round }}</h5> {# @todo make twig function #}
+
+                        {{ amount }} + {{ order.jointPurchase.transportationCostInPercent }} %
+                    {% else %}
+                        <h5>{{ amount }}</h5>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if order.shippingCost %}
+                        {{ order.shippingCost }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>{% if order.payment %}
+                        {{ order.payment }}
+                    {% else %}
+                        <span class="badge badge-danger">нет</span>
+                    {% endif %}
+                </td>
+                <td>{{ order.jointPurchase.statusAsText }}</td>
+                <td title="Обновлено: {{ order.createdAt|date('Y-M-d H:i') }}">{{ order.createdAt|date('Y-M-d H:i') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Участники{% endblock %}
+
+{% block content %}
+    <h1>Участники системы</h1>
+
+    <p>Всего: {{ users|length }}</p>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Предложения</th>
+            <th>Сделки</th>
+            <th>Приглашен</th>
+            <th>Дата регистрации</th>
+            <th>Последний вход</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>
+                    {% if user.telegramUsername %}
+                        <a href="tg://resolve?domain={{ user.telegramUsername }}">
+                            <span title="Написать сообщение в Телеграм" style="float: right; color: Dodgerblue;">
+                                <i class="fab fa-telegram-plane"></i>
+                            </span>
+                        </a>
+                    {% endif %}
+
+                    {% if user.longitude and user.latitude %}
+                        <span style="float: right; color: Dodgerblue; margin-right: 4px;">
+                            <i class="fa fa-map-marker-alt"></i>
+                        </span>
+                    {% endif %}
+
+                    <a href="{{ path('user_show', {'id': user.id}) }}">{{ user }}</a>
+                </td>
+                <td>
+                    Доступных: @todo {{ app_count_offers_available_for_user(user) }}
+                    / Всего: {{ app_count_offers_for_user(user) }}
+                </td>
+                <td>{{ app_count_deals_for_user(user) }}</td>
+                <td>{% if user.invitedByUser %}
+                        <a href="{{ path('user_show', {'id': user.invitedByUser.id}) }}">{{ user.invitedByUser }}</a>
+                    {% endif %}
+                </td>
+                <td>{{ user.createdAt|date }}</td>
+                <td>{% if user.lastLogin %}
+                        {{ user.lastLogin|date }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

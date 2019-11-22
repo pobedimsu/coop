@@ -1,0 +1,9 @@
+{% if jp.status == 1 %}
+    <span class="badge badge-success">{{ jp.statusAsText }}</span>
+{% elseif jp.status == 3 %}
+    <span class="badge badge-danger">{{ jp.statusAsText }}</span>
+{% elseif jp.status == 2 %}
+    <span class="badge badge-info">{{ jp.statusAsText }}</span>
+{% else %}
+    <span class="badge badge-light">{{ jp.statusAsText }}</span>
+{% endif %}

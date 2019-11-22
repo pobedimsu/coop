@@ -1,0 +1,104 @@
+<br>
+<br>
+<div class="alert alert-warning" role="alert">
+    <h4 class="alert-heading">Информация по закупке</h4>
+
+    <p><strong>Статус</strong>: {% include 'joint_purchase/_status.html.twig' %}</p>
+
+    <p><strong>Организатор</strong>:
+        {% if jp.organizer.telegramUsername %}
+            <a href="tg://resolve?domain={{ jp.organizer.telegramUsername }}" title="Написать сообщение в Телеграм">{{ jp.organizer }}</a>
+        {% else %}
+            {{ jp.organizer }}
+        {% endif %}
+    </p>
+
+    <p><strong>Ссылка на чат</strong>:
+        {% if jp.telegramChatLink %}
+            <a href="{{ jp.telegramChatLinkAction }}">присоедениться</a>
+        {% else %}
+            нет
+        {% endif %}
+    </p>
+
+    <p><strong>Финальная дата:</strong> {{ jp.finalDate|format_date }}</p>
+
+    <p><strong>Осталось дней:</strong> @todo</p>
+
+    <p><strong>Транспортные расходы:</strong>
+        {% if jp.transportationCostInPercent %}
+            {{ jp.transportationCostInPercent }} %
+        {% else %}
+            нет
+        {% endif %}
+    </p>
+
+    <p><strong>Позиций товаров:</strong> {{ jp.products|length }}</p>
+
+    <p><strong>На сумму:</strong>
+        {% set amount = 0 %}
+
+        {% for product in jp.products %}
+            {% set amount = amount + (product.price * product.minQuantity) %}
+        {% endfor %}
+
+        {{ amount }}
+    </p>
+
+    <p><strong>Собрана сумма:</strong>
+        {% set collect = 0 %}
+
+        {% for product in jp.products %}
+            {% for orderLine in product.orderLines %}
+                {% set collect = collect + (orderLine.quantity * product.price) %}
+            {% endfor %}
+        {% endfor %}
+
+        {{ collect }}
+    </p>
+
+    <p><strong>Осталось собрать:</strong>
+        {{ amount - collect }}
+    </p>
+
+</div>
+
+{# Мой заказ #}
+{% set my_order_amount = 0 %}
+
+{% for product in jp.products %}
+    {% for orderLine in product.orderLines %}
+        {% if orderLine.order.user == app.user %}
+            {% set my_order_amount = my_order_amount + (orderLine.quantity * product.price) %}
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+{% if my_order_amount > 0 %}
+<br>
+<div class="alert alert-warning" role="alert">
+    <h4 class="alert-heading">Мой заказ в закупке</h4>
+    <br>
+    {% for product in jp.products %}
+        {% for orderLine in product.orderLines %}
+            {% if orderLine.order.user == app.user %}
+                <p><strong>{{ product }}</strong><br> {{ orderLine.quantity }} x {{ product.price }} = {{ orderLine.quantity * product.price }}</p>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+    <hr>
+    <p><strong>Итого товаров на сумму:</strong> {{ my_order_amount }}</p>
+
+    {% if jp.transportationCostInPercent %}
+        <hr>
+        <p>
+        <b>Итоговая стоимость с транспортными расходами:</b>
+            <br>
+        {{ my_order_amount }} + {{ jp.transportationCostInPercent }} %
+        = <b>{{ my_order_amount + (my_order_amount * jp.transportationCostInPercent / 100) | round }}</b> {# @todo make twig function #}
+        </p>
+    {% endif %}
+
+</div>
+{% endif %}

@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Мои предложения{% endblock %}
+
+{% block content %}
+    <p style="float: right; margin-top: 8px;">
+        <a href="{{ path('offer_create') }}" class="btn btn-success">Добавить предложение</a>
+    </p>
+
+    <h1>Мои предложения</h1>
+
+{#    <p>Всего записей: <b>{{ pagerfanta.count }}</b>#}
+{#        {% if pagerfanta.haveToPaginate %} Текущая страница: <b>{{ pagerfanta.currentPage }}</b> Записей на страницу: <b>{{ pagerfanta.maxPerPage }}</b>{% endif %}#}
+{#    </p>#}
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Картинка</th>
+            <th>Наименование</th>
+            <th>Стоимость</th>
+            <th>Кол-во</th>
+            <th>Резерв</th>
+            <th>Общая стоимость</th>
+            <th>Сделок</th>
+            <th>Статус</th>
+            <th>Дата создания</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for offer in offers %}
+            <tr {% if offer.status == 0 %} style="text-decoration:line-through;" {% endif %}>
+                <td><a href="{{ path('offer_edit', {'id': offer.id}) }}" style="height: 70px; display: block;">
+                        <img src="{{ path('image', {'filter': '100x70', 'id': offer.imageId ?: 0}) }}" style="max-width: 100px; max-height: 70px;">
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('offer_edit', {'id': offer.id}) }}">{{ offer.title }}</a>
+                    <br>
+                    <span class="badge badge-light">{{ offer.category }}</span>
+                </td>
+                <td>{{ offer.price }}
+                    {% if offer.quantity > 0 %}
+                        за <i>{{ offer.measureAsText }}</i>
+                    {% endif %}
+                </td>
+                <td>{{ offer.quantity }}
+                    {% if offer.quantity > 0 %}
+                        <i>{{ offer.measureAsText }}</i>
+                    {% endif %}
+                </td>
+                <td>{{ offer.quantityReserved }}
+                    {% if offer.quantity > 0 and offer.quantityReserved > 0 %}
+                        <i>{{ offer.measureAsText }}</i>
+                    {% endif %}
+                </td>
+                <td>{{ offer.priceTotal }}</td>
+                <td>
+                    <b title="Активные" style="cursor: help;">{{ app_count_active_deals_for_offer(offer) }}</b> /
+                    <span title="Всего" style="cursor: help;">{{ app_count_deals_for_offer(offer) }}</span>
+                </td>
+                <td>
+                    {% include 'offer/_status.html.twig' %}
+                </td>
+                <td title="Обновлено: {{ offer.updatedAt|date('Y-M-d H:i') }}">{{ offer.createdAt|date('Y-M-d H:i') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{#    {% if pagerfanta.haveToPaginate %}#}
+{#        {{ pagerfanta(pagerfanta, 'twitter_bootstrap_translated', {'css_container_class': 'pagination pagination-centered'}) }}#}
+{#    {% endif %}#}
+
+    <h3>Итого на сумму: {{ app_offers_balance(app.user) }}</h3>
+
+{% endblock %}

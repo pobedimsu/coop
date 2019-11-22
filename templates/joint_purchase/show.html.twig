@@ -1,0 +1,222 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ jp }} - Совместная закупка от {{ jp.organizer }} {% endblock %}
+
+{% block content %}
+    <p style="float: right; margin-top: 8px;">
+        <a href="{{ path('jp_my_orders') }}" class="btn btn-primary">Мои заявки</a>
+        <a href="{{ path('jp_my') }}" class="btn btn-info">Мои закупки</a>
+        <a href="{{ path('jp_create') }}" class="btn btn-success">Создать cовместную закупку</a>
+    </p>
+
+    <h3>Совместная закупка</h3>
+    <div class="clear"></div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="clear"></div>
+
+            <h1>{{ jp.title }}</h1>
+
+            {% if jp.organizer == app.user %}
+                <p>
+                    <a href="{{ path('jp_edit', {'id': jp.id}) }}" class="btn btn-sm btn-success">Редактировать</a>
+                    <a href="{{ path('jp_orders', {'id': jp.id}) }}" class="btn btn-sm btn-info">Заказы</a>
+                </p>
+            {% endif %}
+
+            <p>{{ jp.description|nl2br }}</p>
+
+            <h5>Позиции товаров ({{ jp.products|length }})</h5>
+
+            <table class="table table-bordered table-hover">
+                <tbody>
+                {% for product in jp.products %}
+                    <tr>
+                        <td>
+                            <a name="{{ product.id }}"></a>
+                            <h4>{{ product }}</h4>
+
+                            <table width="100%">
+                                <tr>
+                                    <td style="width: 40%">
+                                        <table>
+                                            <tr>
+                                                <td>Цена (за ед.)</td>
+                                                <td>{{ product.price }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Минимальное кол-во</td>
+                                                <td>{{ product.minQuantity }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Набрано кол-во</td>
+                                                <td>{{ product.currentQuantity }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Осталось набрать</td>
+                                                <td>{{ product.minQuantity - product.currentQuantity }}</td>
+                                            </tr>
+
+                                            {% set ordered_by_me = 0 %}
+                                            {% set my_quantity = 1 %}
+                                            {% set comment_by_me = '' %}
+
+                                            {% for orderLine in product.orderLines %}
+                                                {% if orderLine.order.user == app.user %}
+                                                    {% set ordered_by_me = orderLine.quantity %}
+                                                    {% set my_quantity   = orderLine.quantity %}
+                                                    {% set comment_by_me = orderLine.comment %}
+                                                {% endif %}
+                                            {% endfor %}
+
+                                            {% if ordered_by_me > 0 %}
+                                                <tr>
+                                                    <td>Мой заказ</td>
+                                                    <td><b>{{ ordered_by_me }}</b></td>
+                                                </tr>
+                                            {% endif %}
+
+                                        </table>
+
+                                        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#order_modal_{{ product.id }}">
+                                            {% if ordered_by_me == 0 %}
+                                                Заказать
+                                            {% else %}
+                                                Изменить заказ
+                                            {% endif %}
+                                        </a>
+
+                                        <div class="modal fade" id="order_modal_{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="order_modal_label" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="order_modal_label">{{ product }}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+
+                                                        <form class="orders_forms" id="order_form_{{ product.id }}" action="{{ path('jp_order_update') }}" method="post">
+                                                            <input type="hidden" name="product" value="{{ product.id }}">
+
+                                                            <div class="form-group">
+                                                                <label for="order-quantity_{{ product.id }}" class="col-form-label">Количество</label>
+                                                                <input type="number" id="order-quantity_{{ product.id }}" class="form-control" name="quantity" value="{{ my_quantity }}">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="message-text_{{ product.id }}" class="col-form-label">Комментарий</label>
+                                                                <textarea class="form-control" id="message-text_{{ product.id }}" name="comment" rows="3">{{ comment_by_me }}</textarea>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount_{{ product.id }}">{{ my_quantity * product.price }} ₽</strong></div>
+                                                                {#                                                    <button type="button" class="btn btn-light" data-dismiss="modal">Закрыть</button>#}
+                                                                <button type="submit" class="btn btn-success" id="form_submit_{{ product.id }}">Отправить</button>
+                                                            </div>
+                                                        </form>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <script>
+                                          $(document).ready( function() {
+                                            $('#order_modal_{{ product.id }}').on('shown.bs.modal', function (e) {
+                                              $('#order-quantity_{{ product.id }}').focus();
+                                            });
+                                          });
+
+                                          $('#order-quantity_{{ product.id }}').bind('keyup mouseup', function () {
+                                            $('#order-amount_{{ product.id }}').text(this.value * {{ product.price }} + ' ₽');
+                                          });
+                                        </script>
+
+                                    </td>
+                                    <td>
+                                        {% if product.imageId %}
+                                            <a href="#" data-toggle="modal" data-target="#image_modal_{{ product.id }}">
+                                                <svg class="card-img-top"
+                                                     width="90%" height="180"
+                                                     xmlns="http://www.w3.org/2000/svg"
+                                                     preserveAspectRatio="xMidYMid slice"
+                                                     focusable="false"
+                                                     role="img"
+                                                     style=" background-image: url('{{ path('image', {'filter': 'offers_list_thumbnail', 'id': product.imageId ?:0 }) }}');
+                                                             background-repeat: no-repeat;
+                                                             background-position: center;
+                                                             "
+                                                >
+                                                </svg>
+                                            </a>
+                                            <br>
+
+                                            <div class="modal fade" id="image_modal_{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="order_modal_label" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 1200px !important; max-height: 800px !important;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="order_modal_label">{{ product }}</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body" style="text-align: center;">
+                                                            <img src="{{ path('image', {'filter': 'compress_original', 'id': product.imageId ?:0 }) }}" class="img-fluid">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        {% endif %}
+
+                                        {{ product.description|nl2br }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="col-md-4">
+            {% include 'joint_purchase/_stats.html.twig' %}
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block js %}
+    {{ parent() }}
+
+    <script>
+      $(document).ready( function() {
+        $('.orders_forms').on('submit', function(event) {
+          event.preventDefault();
+          // $('#form_submit').attr('disabled', true); @todo деактивацию кнопки
+
+          $.post( $(this).attr('action'), $(this).serialize(), function(data) {
+            //console.log(data);
+            if(data.status == 'success') {
+              // Success code here
+              location.reload();
+            } else {
+              // Error code here
+              new PNotify({
+                title: '{{ 'Error'|trans }}!',
+                text: data.message,
+                type: 'error'
+              });
+
+              // $('#form_submit').attr('disabled', false);
+            }
+          }, 'json')
+        });
+      });
+    </script>
+
+{% endblock js %}

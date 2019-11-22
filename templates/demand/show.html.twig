@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Заявка на предложение{% endblock %}
+
+{% block content %}
+    <h1>Заявка на предложение</h1>
+
+    <p>{{ demand.createdAt|date('Y-m-d H:i') }}</p>
+
+    <h2>{{ demand.title }}</h2>
+
+    <p>@todo картинку</p>
+
+    <p>{{ demand.description }}</p>
+
+    <p>Автор: <a href="#">{{ demand.user }}</a></p>
+
+    <hr>
+    <a href="{{ path('demand') }}">Назад</a> @todo с учетом страницы
+{% endblock %}

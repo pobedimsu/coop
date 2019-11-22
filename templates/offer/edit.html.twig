@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Изменить предложение{% endblock %}
+
+{% block content %}
+    <h1>Изменить предложение</h1>
+
+{#    <p>@todo метки</p>#}
+
+    <div class="row">
+        <div class="col-md-8">
+            {{ form(form) }}
+        </div>
+
+        <div class="col-md-4">
+            {% include 'offer/_help.html.twig' %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    <script>
+      $('#offer_measure').on('change', function() {
+        if (this.value == 0) {
+          quantityHide();
+        } else {
+          quantityShow();
+        }
+      });
+      
+      function quantityHide() {
+        $('#offer_quantity').closest('.form-group').hide();
+        //$('#offer_quantity_reserved').closest('.form-group').hide();
+      }
+
+      function quantityShow() {
+        $('#offer_quantity').closest('.form-group').show();
+        //$('#offer_quantity_reserved').closest('.form-group').show();
+      }
+
+      {% if form.vars.data.measure == 0 %}
+        quantityHide();
+      {% endif %}
+
+    </script>
+{% endblock js %}

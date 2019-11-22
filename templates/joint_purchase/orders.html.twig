@@ -1,0 +1,225 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Заказы по закупке: {{ jp }}{% endblock %}
+
+{% block content %}
+    <p style="float: right; margin-top: 8px;">
+        <a href="{{ path('jp_my') }}" class="btn btn-info">Мои закупки</a>
+        <a href="{{ path('jp_create') }}" class="btn btn-success">Создать cовместную закупку</a>
+    </p>
+
+    <h1>Заказы по закупке: <a href="{{ path('jp_show', {'id': jp.id}) }}">{{ jp }}</a></h1>
+
+
+    <p>
+        Собрана сумма: <strong>
+        {% set amount = 0 %}
+        {% set collect = 0 %}
+        {% set paid = 0 %}
+
+        {% for product in jp.products %}
+            {% set amount = amount + (product.price * product.minQuantity) %}
+            {% for orderLine in product.orderLines %}
+                {% set collect = collect + (orderLine.quantity * product.price) %}
+            {% endfor %}
+        {% endfor %}
+
+        {% for order in jp.orders %}
+            {% set paid = paid + order.payment %}
+        {% endfor %}
+
+        {{ collect }}
+        </strong>
+
+        &nbsp;&nbsp;Осталось собрать: <strong>{{ amount - collect }}</strong>
+
+        &nbsp;&nbsp;Оплачена сумма: <strong> {{ paid }} </strong>
+    </p>
+
+    <p>Всего заказов: {{ orders|length }}</p>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+{#            <th>Картинка</th>#}
+{#            <th>Наименование</th>#}
+{#            <th>Цена</th>#}
+{#            <th>Оплачено?</th>#}
+            <th>Участник</th>
+            <th>Товары</th>
+            <th>Стоимость</th>
+            <th>Доставка</th>
+            <th>Оплата</th>
+            <th>Комментарий</th>
+            <th>Дата создания</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+{#
+                <td><a href="{{ path('jp_show', {'id': order.product.jointPurchase.id}) }}#{{ order.product.id }}" style="height: 70px; display: block;">
+                        <img src="{{ path('image', {'filter': '100x70', 'id': 0}) }}" style="max-width: 100px; max-height: 70px;">
+                    </a>
+                </td>
+#}
+{#
+                <td><a href="{{ path('jp_show', {'id': order.jointPurchase.id}) }}#{{ order.id }}">{{ order }}</a>
+
+                </td>
+                <td><h5>{{ order.quantity * order.product.price }}</h5>
+                    {{ order.quantity }} x {{ order.product.price }}
+                </td>
+                <td>{% if order.isPaid %}
+                        <span class="badge badge-success">да</span>
+                    {% else %}
+                        <span class="badge badge-danger">нет</span>
+                    {% endif %}
+                </td>
+#}
+                <td>{{ order.user }}
+                    {% if order.user.telegramUsername %}
+                        <a href="tg://resolve?domain={{ order.user.telegramUsername }}">
+                            <span title="Написать сообщение в Телеграм" style="float: right; color: Dodgerblue;">
+                                <i class="fab fa-telegram-plane"></i>
+                            </span>
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    <ol>
+                        {% set amount = 0 %}
+                        {% for line in order.lines %}
+                            <li>
+                                <b><a href="{{ path('jp_show', {'id': order.jointPurchase.id}) }}#{{ line.product.id }}">{{ line }}</a></b>
+
+                                {{ line.quantity }} x {{ line.product.price }} = {{ line.quantity * line.product.price }}
+
+                                {% if line.comment is not empty %}
+                                    <div class="alert alert-warning" role="alert">
+                                        {{ line.comment }}
+                                    </div>
+                                {% endif %}
+
+                                {% set amount = amount + (line.quantity * line.product.price) %}
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </td>
+                <td>
+                    {% if order.jointPurchase.transportationCostInPercent %}
+                        <h5>{{ amount + (amount * order.jointPurchase.transportationCostInPercent / 100) | round }}</h5> {# @todo make twig function #}
+
+                        {{ amount }} + {{ order.jointPurchase.transportationCostInPercent }} %
+                    {% else %}
+                        <h5>{{ amount }}</h5>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="#" data-toggle="modal" data-target="#order_modal_{{ order.id }}">
+                    {% if order.shippingCost %}
+                        {{ order.shippingCost }}
+                    {% else %}
+                        -
+                    {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a href="#" data-toggle="modal" data-target="#order_modal_{{ order.id }}">
+                        {% if order.payment %}
+                            {{ order.payment }}
+                        {% else %}
+                            <span class="badge badge-danger">нет</span>
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    {% if order.comment %}
+                        <a href="#" data-toggle="modal" data-target="#order_modal_{{ order.id }}">{{ order.comment }}</a>
+                    {% else %}
+                        <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#order_modal_{{ order.id }}">Добавить</a>
+                    {% endif %}
+
+                    <div class="modal fade" id="order_modal_{{ order.id }}" tabindex="-1" role="dialog" aria-labelledby="order_modal_label" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="order_modal_label">{{ order.user }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" tabindex="-1">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><i class="fas fa-cart-plus"></i>
+                                        {{ amount + (amount * order.jointPurchase.transportationCostInPercent / 100) | round }} {# @todo make twig function #}
+                                    </p>
+
+                                    <form class="orders_forms myform" id="order_form_{{ order.id }}" action="{{ path('jp_admin_order_update') }}" method="post">
+                                        <input type="hidden" name="order_id" value="{{ order.id }}">
+
+                                        <div class="form-group">
+                                            <label for="order-payment_{{ order.id }}" class="col-form-label">Оплата</label>
+                                            <input type="number" id="order-payment_{{ order.id }}" class="form-control" name="payment" value="{{ order.payment }}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="order-shipping_cost_{{ order.id }}" class="col-form-label">Доставка</label>
+                                            <input type="number" id="order-shipping_cost_{{ order.id }}" class="form-control" name="shipping_cost" value="{{ order.shippingCost }}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="message-text_{{ order.id }}" class="col-form-label">Комментарий</label>
+                                            <textarea class="form-control" id="message-text_{{ order.id }}" name="comment" rows="3">{{ order.comment }}</textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success" id="form_submit_{{ order.id }}">Отправить</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                      $(document).ready( function() {
+                        $('#order_modal_{{ order.id }}').on('shown.bs.modal', function (e) {
+                          $('#order-payment_{{ order.id }}').focus();
+                        });
+                      });
+                    </script>
+
+                </td>
+                <td title="Обновлено: {{ order.createdAt|date('Y-M-d H:i') }}">{{ order.createdAt|date('Y-M-d H:i') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}
+
+{% block js %}
+    {{ parent() }}
+
+    <script>
+      $(document).ready( function() {
+        $('.orders_forms').on('submit', function(event) {
+          event.preventDefault();
+          // $('#form_submit').attr('disabled', true); @todo деактивацию кнопки
+
+          $.post( $(this).attr('action'), $(this).serialize(), function(data) {
+            //console.log(data);
+            if(data.status == 'success') {
+              // Success code here
+              location.reload();
+            } else {
+              // Error code here
+              new PNotify({
+                title: '{{ 'Error'|trans }}!',
+                text: data.message,
+                type: 'error'
+              });
+
+              // $('#form_submit').attr('disabled', false);
+            }
+          }, 'json')
+        });
+      });
+    </script>
+{% endblock js %}

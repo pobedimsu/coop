@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Мои cовместные закупки{% endblock %}
+
+{% block content %}
+    <p style="float: right; margin-top: 8px;">
+        <a href="{{ path('jp_my_orders') }}" class="btn btn-primary">Мои заявки</a>
+        <a href="{{ path('jp_create') }}" class="btn btn-success">Создать cовместную закупку</a>
+    </p>
+
+    <h1>Мои cовместные закупки</h1>
+
+    <p>Всего: {{ jps|length }}</p>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+{#            <th>Картинка</th>#}
+            <th>Наименование</th>
+            <th>На сумму / собрано / осталось</th>
+            <th>Заказы</th>
+            <th>Статус</th>
+            <th>Дата создания</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for jp in jps %}
+            <tr {% if jp.status == 0 %} style="text-decoration: _line-through;" {% endif %}>
+{#
+                <td><a href="{{ path('jp_show', {'id': jp.id}) }}" style="height: 70px; display: block;">
+                        @todo
+                        <img src="{{ path('image', {'filter': '100x70', 'id': offer.imageId ?: 0}) }}" style="max-width: 100px; max-height: 70px;">
+                    </a>
+                </td>
+#}
+                <td>
+                    <a href="{{ path('jp_show', {'id': jp.id}) }}">{{ jp.title }}</a>
+                </td>
+                <td>
+                    {% set amount = 0 %}
+                    {% for product in jp.products %}
+                        {% set amount = amount + (product.price * product.minQuantity) %}
+                    {% endfor %}
+
+                    {% set collect = 0 %}
+                    {% for product in jp.products %}
+                        {% for line in product.orderLines %}
+                            {% set collect = collect + (line.quantity * product.price) %}
+                        {% endfor %}
+                    {% endfor %}
+
+                    {{ amount }} / {{ collect }} / <b>{{ amount - collect }}</b>
+                </td>
+                <td>
+{#                    {% set orders_count = 0 %}#}
+{#                    {% for product in jp.orders %}#}
+{#                        {% set orders_count = orders_count + product.orderLines|length %}#}
+{#                    {% endfor %}#}
+
+{#                    <a href="#">{{ orders_count }}</a>#}
+                    <a href="{{ path('jp_orders', {'id': jp.id}) }}">{{ jp.orders|length }}</a>
+                </td>
+                <td>
+                    {% include 'joint_purchase/_status.html.twig' %}
+                </td>
+                <td title="Обновлено: {{ jp.updatedAt|date('Y-M-d H:i') }}">{{ jp.createdAt|date('Y-M-d H:i') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

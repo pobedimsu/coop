@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Мои сделки{% endblock %}
+
+{% block content %}
+    <h1>Мои сделки</h1>
+
+    <ul class="nav nav-pills">
+        <li {% if show == 'active' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'active'}) }}">Активные</a></li>
+        <li {% if show == 'in' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'in'}) }}">Входящие</a></li>
+        <li {% if show == 'out' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'out'}) }}">Исходящие</a></li>
+        <li {% if show == 'complete' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'complete'}) }}">Завешенные</a></li>
+        <li {% if show == 'canceled' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'canceled'}) }}">Отменённые</a></li>
+        <li {% if show == 'all' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'all'}) }}">Все</a></li>
+    </ul>
+
+    <p>Всего: <b>{{ pagerfanta|length }}</b>
+        {#{% if pagerfanta.haveToPaginate %} Текущая страница: <b>{{ pagerfanta.currentPage }}</b> Записей на страницу: <b>{{ pagerfanta.maxPerPage }}</b>{% endif %}#}
+    </p>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            {% if show == 'active' or show == 'complete' or show == 'canceled' or show == 'all' %}<th>Тип</th>{% endif %}
+            <th>Участник</th>
+            <th>Предложение</th>
+            <th>Стоимость за ед.</th>
+            <th>Кол-во</th>
+            <th>Общая стоимость</th>
+            <th>Статус</th>
+            <th>Дата создания</th>
+            <th>Дата обновления</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for deal in pagerfanta %}
+            <tr {% if deal.viewedAt is null %} class="table-info" title="Не просмотрено" {% endif %}>
+                {% if show == 'active' or show == 'complete' or show == 'canceled' or show == 'all' %}
+                    <td>
+                        {% if deal.contractorUser == app.user %}
+                            Входящие
+                        {% elseif deal.declarantUser == app.user %}
+                            Исходящие
+                        {% endif %}
+                    </td>
+                {% endif %}
+                <td>
+                    {% if deal.contractorUser == app.user %}
+                        <a href="{{ path('user_show', {'id': deal.declarantUser.id}) }}">{{ deal.declarantUser }}</a>
+                    {% elseif deal.declarantUser == app.user %}
+                        <a href="{{ path('user_show', {'id': deal.contractorUser.id}) }}">{{ deal.contractorUser }}</a>
+                    {% endif %}
+                </td>
+                <td><a href="{{ path('deal_show', {'id': deal.id}) }}">{{ deal.offer.title }}</a></td>
+                <td>{{ deal.cost }}</td>
+                <td>{{ deal.quantity }}</td>
+                <td>{{ deal.amountCost }}</td>
+                <td>{{ deal.statusAsText }}
+                    {% if deal.status == 1 %}
+                        <br>{{ deal.viewedAt|format_datetime }}
+                    {% endif %}
+                </td>
+                <td>{{ deal.createdAt|format_datetime }}</td>
+                <td>
+                    {% if deal.updatedAt is not empty %}
+                        {{ deal.updatedAt|format_datetime }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {#
+    {% if pagerfanta.haveToPaginate %}
+        {{ pagerfanta(pagerfanta, 'twitter_bootstrap_translated', {'css_container_class': 'pagination pagination-centered'}) }}
+    {% endif %}
+    #}
+{% endblock %}

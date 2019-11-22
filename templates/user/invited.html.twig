@@ -1,0 +1,48 @@
+{% extends 'user/_layout.html.twig' %}
+
+{% block profile_content %}
+    {% set user = app.user %}
+
+    @todo
+    <!--
+{#    <p>Всего: {{ user.invitedUsers|length }}</p>#}
+    <p>Всего: {{ users|length }}</p>
+
+    <h1>@todo user.invitedUsers, а пока все</h1>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+{#            <th>id</th>#}
+            <th>ФИО</th>
+            <th>Статус</th>
+            <th>Дата создания</th>
+            <th>Был в сети</th>
+        </tr>
+        </thead>
+        <tbody>
+{#        {% for u in user.invitedUsers %}#}
+        {% for u in users %}
+            <tr>
+{#                <td>{{ u.id }}</td>#}
+{#                <td><a href="{{ path('site.user.show', {'id': u.id}) }}">{{ u.username }}</a></td>#}
+                <td><a href="#">{{ u }}</a></td>
+                <td>
+                    {% if u.enabled %}
+                        <span class="label label-success label-important">Активен</span>
+                    {% else %}
+                        <span class="label label-danger label-important">Не Активен</span>
+                    {% endif %}
+                </td>
+                <td>{{ u.createdAt|format_datetime }}</td>
+                <td>
+                    {% if u.lastLogin is not empty %}
+                        {{ u.lastLogin|format_datetime }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+-->
+{% endblock profile_content %}

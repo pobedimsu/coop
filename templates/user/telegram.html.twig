@@ -1,0 +1,54 @@
+{% extends 'user/_layout.html.twig' %}
+
+{% block profile_content %}
+    {% if app.user.telegramUsername %}
+        <h2>Телеграм</h2>
+
+        <p><a href="tg://resolve?domain={{ app.user.telegramUsername }}">@{{ app.user.telegramUsername }}</a>
+            - <a href="?remove" style="color: red;" onclick="return confirm('Вы уверены, что хотите отвязать телеграмм аккаунт?')">отключить</a>
+        </p>
+    {% else %}
+        <h2>Подключение телеграм</h2>
+
+        <p>На данный момент, телеграм используется как средство коммуникации между участниками, а также уведомления о заявках и других событиях. По этому для работы в системе необходимо подключить ваш телеграм аккаунт.</p>
+
+        <p>В первую очередь, убедитесь, что вы задали "Имя пользователя" в телеграме, это можно проверить, зайдя в <b>Настройки -> Изменить профиль</b>.</p>
+
+        <p>Также настоятельно рекомендуется настроить приватность в телеграме таким образом, чтобы внешне было затруднительно идентифицировать с реальным человеком.
+            Для этого стоит избегать указания реальных имён и фамилий, как в профиле, так и в "имени пользователя", а также в настройках конфиденциальность указать никому не показывать "номер телефона".
+        </p>
+
+        <p>Скопируйте код <b>{{ code }}</b></p>
+
+        <p>Зайдите в чат бот в телеграме <a href="tg://resolve?domain=ncca_bot">@ncca_bot</a> нажмите "старт", а затем вставьте скопированный ранее код.</p>
+
+        <p>Код действителен в течении <span id="countdown">02:00</span> минут!</p>
+
+        <script>
+          function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            setInterval(function () {
+              minutes = parseInt(timer / 60, 10);
+              seconds = parseInt(timer % 60, 10);
+
+              minutes = minutes < 10 ? "0" + minutes : minutes;
+              seconds = seconds < 10 ? "0" + seconds : seconds;
+
+              display.textContent = minutes + ":" + seconds;
+
+              if (--timer < 0) {
+                //timer = duration;
+                timer = 0;
+              }
+            }, 1000);
+          }
+
+          window.onload = function () {
+            // var fiveMinutes = 60 * 2;
+            var fiveMinutes = {{ countdown }};
+            var display = document.querySelector('#countdown');
+            startTimer(fiveMinutes, display);
+          };
+        </script>
+    {% endif %}
+{% endblock profile_content %}

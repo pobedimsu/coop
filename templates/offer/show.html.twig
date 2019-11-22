@@ -1,0 +1,218 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ offer }} - Предложение от {{ offer.user }} {% endblock %}
+
+{% block content %}
+    <p style="float: right; margin-top: 8px;">
+        <a href="{{ path('offers_my') }}" class="btn btn-primary">Мои предложения</a>
+        <a href="{{ path('offer_create') }}" class="btn btn-success">Добавить предложение</a>
+{#        <a href="#" class="btn btn-default">Назад</a>#}
+    </p>
+    <h2>Просмотр предложения</h2>
+    <div class="clear"></div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <p>Категория <a href="#">{{ offer.category }}</a></p>
+            <div class="clear"></div>
+
+            <h1>{{ offer.title }}</h1>
+
+            <p><img src="{{ path('image', {'filter': 'offers_list_thumbnail', 'id': offer.imageId ?:0 }) }}"></p>
+
+            <h3>
+                <span class="badge badge-secondary">
+                {% if offer.price == 0 %}
+                    Договорная
+                {% else %}
+                    {{ offer.price|number_format(0, ' ', ' ') }} ₽
+                {% endif %}
+                </span>
+
+                {% include 'offer/_status.html.twig' %}
+
+                {% if offer.isStatusAccessToOrder and offer.user != app.user %}
+                    <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#exampleModal"><i class="far fa-handshake"></i> Заключить сделку</button>
+                {% endif %}
+{#                <button type="button" class="btn btn-sm btn-outline-danger"><i class="far fa-heart"></i> В избравнное</button>#}
+            </h3>
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Новая сделка</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p><i class="fas fa-cart-plus"></i> {{ offer }}</p>
+
+                            <form id="myform" action="{{ path('deal_create') }}" method="post" >
+                                <input type="hidden" name="offer_id" value="{{ offer.id }}">
+
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Количество</label>
+                                    <input type="number" id="order-quantity" class="form-control" name="quantity" value="1" title="Максимум {{ offer.quantity }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Предложить цену за ед.</label>
+                                    <input type="text" id="order-price" class="form-control" name="price" value="{{ offer.price }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Комментарий</label>
+                                    <textarea class="form-control" id="message-text" name="comment" rows="4"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount">{{ offer.price }} ₽</strong></div>
+                                    <button type="button" class="btn btn-light" data-dismiss="modal">Закрыть</button>
+                                    <button type="submit" class="btn btn-success" id="form_submit">Предложить сделку</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+{#            <p>Статус: {% include 'offer/_status.html.twig' %}</p>#}
+
+            <p style="float: right;">Добавлено: {{ offer.createdAt|format_datetime }}</p>
+
+            {% if offer.quantity %}
+                <p>Количество: {{ offer.quantity }}</p>
+            {% endif %}
+            <div class="clear"></div>
+
+            {% if offer.shortDescription or offer.description %}
+{#                Описание:#}
+                <p>{{ offer.shortDescription }}</p>
+                {% if offer.description %}
+                    <p>{{ offer.description|nl2br }}</p>
+                {% endif %}
+            {% endif %}
+
+            {% if offer.user == app.user %}
+                <p>
+                    <a href="{{ path('offer_edit', {'id': offer.id}) }}" class="btn btn-sm btn-success">Редактировать</a>
+                </p>
+            {% endif %}
+
+            {% if offer.user.longitude and offer.user.latitude %}
+                <style type="text/css">
+                    #mapdiv {
+                        height: 500px;
+                        width: 100%;
+                    }
+                </style>
+
+                <div id="mapdiv"></div>
+
+                <script>
+                  var mymap = L.map('mapdiv', { attributionControl:false }).setView([{{ offer.user.latitude }}, {{ offer.user.longitude }}], 15);
+
+                  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    // __dummy
+                  }).addTo(mymap);
+
+                  var marker = L.marker([{{ offer.user.latitude }}, {{ offer.user.longitude }}]).addTo(mymap);
+
+                  //marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+                  marker.bindPopup("<b>{{ offer.user }}</b>")
+                </script>
+            {% endif %}
+
+        </div>
+
+        <div class="col-md-4">
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading">{{ offer.user }}
+                    <span style="float: right;"> <i class="fas fa-{{ offer.user.sex ? 'male' : 'female' }}"></i></span>
+                </h4>
+                <p>
+                    {% if offer.user.isSmoking %}
+                        <span class="badge badge-danger" title="Курит"><i class="fas fa-smoking"></i></span>
+                    {% else %}
+                        <span class="badge badge-light" title="Не курит"><i class="fas fa-smoking-ban"></i></span>
+                    {% endif %}
+
+                    {% if offer.user.isAlcohol %}
+                        <span class="badge badge-danger" title="Потребяет алкоголь"><i class="fas fa-wine-bottle"></i></span>
+                    {% else %}
+                        <span class="badge badge-light" title="Не потребяет алкоголь"><i class="fas fa-wine-bottle"></i></span>
+                    {% endif %}
+
+                    {% if offer.user.isMeatConsumption %}
+                        <span class="badge badge-danger" title="Потребяет мясо"><i class="fas fa-drumstick-bite"></i></span>
+                    {% else %}
+                        <span class="badge badge-light" title="Не потребяет мясо"><i class="fas fa-drumstick-bite"></i></span>
+                    {% endif %}
+                </p>
+{#                {% if offer.user != app.user %}#}
+                    <p><i class="far fa-paper-plane"></i>
+                        {% if offer.user.telegramUsername %}
+                            <a href="tg://resolve?domain={{ offer.user.telegramUsername }}">Написать сообщение в Телеграм</a>
+                        {% else %}
+                            <span style="color: red;">Телеграм не подключен</span>
+                        {% endif %}
+                    </p>
+{#                {% endif %}#}
+{#                <p><i class="fas fa-map-marker-alt"></i> Новосибирск  --- @todo</p>#}
+                <p><i class="far fa-calendar-check"></i> Участник с {{ offer.user.createdAt|format_date }}</p>
+                <p><i class="far fa-money-bill-alt"></i> Баланс: {{ app_balance(offer.user) }}</p>
+                <p><i class="far fa-handshake"></i> Кол-во сделок: {{ app_count_deals_for_user(offer.user) }}</p>
+                <p><i class="fas fa-boxes"></i> Кол-во предложений: {{ app_count_offers_for_user(offer.user) }}</p>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block js %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready( function() {
+          $('#myform').on('submit', function(event) {
+            console.log(this)
+            console.log($(this))
+            console.log($(this).serialize())
+
+            event.preventDefault();
+            $('#form_submit').attr('disabled', true);
+
+            $.post( $(this).attr('action'), $(this).serialize(), function(data) {
+              //console.log(data);
+              if(data.status == 'success') {
+                // Success code here
+                // location.reload();
+              } else {
+                // Error code here
+                new PNotify({
+                  title: '{{ 'Error'|trans }}!',
+                  text: data.message,
+                  type: 'error'
+                });
+
+                $('#form_submit').attr('disabled', false);
+              }
+            }, 'json')
+          });
+
+          $('#exampleModal').on('shown.bs.modal', function (e) {
+            $('#order-quantity').focus();
+          });
+
+          $('#order-quantity').bind('keyup mouseup', function () {
+            price = $('#order-price').val();
+            $('#order-amount').text(this.value * price + ' ₽');
+          });
+
+          $('#order-price').bind('keyup mouseup', function () {
+            price = $('#order-quantity').val();
+            $('#order-amount').text(this.value * price + ' ₽');
+          });
+        });
+    </script>
+
+{% endblock js %}

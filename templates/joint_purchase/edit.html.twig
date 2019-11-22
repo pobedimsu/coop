@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Редактирование совместной закупки{% endblock %}
+
+{% block content %}
+    <p style="float: right; margin-top: 8px;">
+        <a href="{{ path('jp_show', {'id': jp.id}) }}">&laquo; перейти к просмотру</a>
+
+        <a href="{{ path('jp_my') }}" class="btn btn-primary">Мои закупки</a>
+    </p>
+
+    <h4>Редактирование совместной закупки</h4>
+
+    <h1>{{ jp }}</h1>
+
+    <div class="row">
+        <div class="col-md-8">
+            {% block edit_form_content %}
+            <ul class="nav nav-pills">
+                <li class="active"><a href="#">Основные свойства</a></li>
+                <li ><a href="{{ path('jp_edit_products', {'id': jp.id}) }}">Товары</a></li>
+            </ul>
+
+            {{ form(form) }}
+
+            {% endblock edit_form_content %}
+        </div>
+
+        <div class="col-md-4">
+            {% include 'joint_purchase/_stats.html.twig' %}
+
+            {% include 'joint_purchase/_chanhe_status_links.html.twig' %}
+        </div>
+    </div>
+
+{% endblock %}

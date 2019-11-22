@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Спрос{% endblock %}
+
+{% block content %}
+
+    <a style="float: right; margin-top: 8px;" href="{{ path('demand_create') }}" class="btn btn-success">Добавить заявку на предложение</a>
+
+    <h1>Спрос</h1>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Картинка</th>
+            <th>Заявка</th>
+            <th>Описание</th>
+            <th>Создано</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for e in pagerfanta.currentPageResults %}
+            <tr>
+                <td style="width: 100px;"></td>
+                <td>
+                    <b><a href="{{ path('demand_show', {'id': e.id}) }}">{{ e.title }}</a></b>
+                </td>
+                <td>{{ e.description }}</td>
+                <td style="white-space: nowrap;">
+                    <a href="#">{{ e.user }}</a>
+
+                    {{ e.createdAt|date('Y-m-d H:i') }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if pagerfanta.haveToPaginate %}
+        <p class="pager-counter"> Страница: <span>{{ pagerfanta.currentPage }}</span> Записей на страницу: <span>{{ pagerfanta.maxPerPage }}</span></p>
+        {{ pagerfanta(pagerfanta, 'twitter_bootstrap4_translated', {'css_container_class': 'pagination pagination-centered'}) }}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% if offer.status == 1 %}
+    <span class="badge badge-success">{{ offer.statusAsText }}</span>
+{% elseif offer.status == 0 %}
+    <span class="badge badge-danger">{{ offer.statusAsText }}</span>
+{% elseif offer.status == 2 %}
+    <span class="badge badge-info">{{ offer.statusAsText }}</span>
+{% else %}
+    <span class="badge badge-light">{{ offer.statusAsText }}</span>
+{% endif %}

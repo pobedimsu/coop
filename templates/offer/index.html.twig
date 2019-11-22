@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Предложения{% endblock %}
+
+{% block content %}
+    <p style="float: right; margin-top: 8px;">
+        <a href="{{ path('offers_my') }}" class="btn btn-primary">Мои предложения</a>
+        <a href="{{ path('offer_create') }}" class="btn btn-success">Добавить предложение</a>
+    </p>
+
+    <h1>Предложения</h1>
+
+    <p>Всего: {{ offers|length }}</p>
+    <div class="py-1 bg-light">
+        <div class="container">
+            <div class="row">
+
+            {% for offer in offers %}
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+
+                        <a href="{{ path('offer_show', {'id': offer.id}) }}">
+                        <svg class="card-img-top"
+                             width="90%" height="180"
+                             xmlns="http://www.w3.org/2000/svg"
+                             preserveAspectRatio="xMidYMid slice"
+                             focusable="false"
+                             role="img"
+                             style=" background-image: url('{{ path('image', {'filter': 'offers_list_thumbnail', 'id': offer.imageId ?:0 }) }}');
+                                     background-repeat: no-repeat;
+                                     background-position: center;
+                             "
+                        >
+                        </svg>
+                        </a>
+
+                        <div class="card-body" style="padding-top: 0px !important;">
+                            <p class="card-text">
+                                <b>
+                                    <a href="{{ path('offer_show', {'id': offer.id}) }}">{{ offer.title }}</a>
+                                </b>
+
+                            </p>
+                            {% include 'offer/_status.html.twig' %}
+                            <p class="card-text">
+                                {{ offer.shortDescription }}
+                            </p>
+                            <p class="card-text">
+                                <b>
+                                    {% if offer.price == 0 %}
+                                        Договорная
+                                    {% else %}
+                                        {{ offer.price|number_format(0, ' ', ' ') }} ₽
+                                    {% endif %}
+                                </b>
+
+                                <span style="float: right;">{{ offer.quantity }} {{ offer.quantity ? offer.measureAsText : '' }}</span>
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                {{ offer.user }}
+{#                                <div class="btn-group">#}
+{#                                    <button type="button" class="btn btn-sm btn-outline-success">Сделка</button>#}
+{#                                    <button type="button" class="btn btn-sm btn-outline-warning" title="Добавить в избранное @todo "><i class="far fa-heart"></i></button>#}
+{#                                </div>#}
+                                <small class="text-muted">{{ offer.createdAt|date('d.m.Y H:i') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

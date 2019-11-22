@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Совместные закупки{% endblock %}
+
+{% block content %}
+    <p style="float: right; margin-top: 8px;">
+        <a href="{{ path('jp_my') }}" class="btn btn-primary">Мои закупки</a>
+        <a href="{{ path('jp_create') }}" class="btn btn-success">Создать cовместную закупку</a>
+    </p>
+
+    <h1>Открытые совместные закупки</h1>
+
+    <p>Всего: {{ jps|length }}</p>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+{#            <th>Картинка</th>#}
+            <th>Наименование</th>
+            <th>На сумму / собрано / осталось</th>
+            <th>Организатор</th>
+            <th>Дата создания</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for jp in jps %}
+            <tr {% if jp.status == 0 %} style="text-decoration:line-through;" {% endif %}>
+{#
+                <td><a href="{{ path('jp_show', {'id': jp.id}) }}" style="height: 70px; display: block;">
+                        <img src="{{ path('image', {'filter': '100x70', 'id': offer.imageId ?: 0}) }}" style="max-width: 100px; max-height: 70px;">
+                    </a>
+                </td>
+#}
+                <td>
+                    <a href="{{ path('jp_show', {'id': jp.id}) }}">{{ jp.title }}</a>
+                </td>
+                <td>
+                    {% set amount = 0 %}
+                    {% set collect = 0 %}
+
+                    {% for product in jp.products %}
+                        {% set amount = amount + (product.price * product.minQuantity) %}
+                        {% for orderLine in product.orderLines %}
+                            {% set collect = collect + (orderLine.quantity * product.price) %}
+                        {% endfor %}
+
+                    {% endfor %}
+
+                    {{ amount }} / {{ collect }} / {{ amount - collect }}
+                </td>
+                <td>
+                    {% if jp.organizer.telegramUsername %}
+                        <a href="tg://resolve?domain={{ jp.organizer.telegramUsername }}" title="Написать сообщение в Телеграм">{{ jp.organizer }}</a>
+                    {% else %}
+                        {{ jp.organizer }}
+                    {% endif %}
+                </td>
+                <td title="Обновлено: {{ jp.updatedAt|date('Y-M-d H:i') }}">{{ jp.createdAt|date('Y-M-d H:i') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
