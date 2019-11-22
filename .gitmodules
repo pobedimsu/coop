@@ -1,0 +1,3 @@
+[submodule "src-vendor/MediaBundle"]
+	path = src-vendor/MediaBundle
+	url = git@github.com:Smart-Core/MediaBundle.git
