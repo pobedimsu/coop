@@ -1,6 +1,24 @@
 Платформа для кооперации
 ========================
 
+Установка
+---------
+
+Получение кода
+```
+    git clone https://github.com/pobedimsu/coop.git
+    cd coop
+    git submodule update --init
+    cp .env .env.local
+    composer i
+```
+
+Редактирование настроек в .env.local
+
+
+Для разработчиков
+-----------------
+
 Получение последней версии песочницы:
 ```
     git pull;git submodule update --init
