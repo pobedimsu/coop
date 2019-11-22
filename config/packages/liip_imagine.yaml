@@ -1,0 +1,31 @@
+# See dos how to configure the bundle: https://symfony.com/doc/current/bundles/LiipImagineBundle/basic-usage.html
+liip_imagine:
+    # valid drivers options include "gd" or "gmagick" or "imagick"
+    driver: 'gd'
+    filter_sets: # Важно! символ подчеркивание игнорируется, а минус преобразуется в подчеркивание.
+        compress_original:
+            format: jpeg
+            quality: 90
+            filters:
+                downscale:
+                    max: [ 1200, 800 ]
+        100x70:
+            format: jpeg
+            quality: 82
+            filters:
+                thumbnail: { size: [100, 70], mode: inset }
+        100x100:
+            format: jpeg
+            quality: 82
+            filters:
+                thumbnail: { size: [100, 100], mode: inset }
+        200x200:
+            format: jpeg
+            quality: 82
+            filters:
+                thumbnail: { size: [200, 200], mode: inset }
+        offers_list_thumbnail:
+            format: jpeg
+            quality: 82
+            filters:
+                thumbnail: { size: [320, 170], mode: inset }

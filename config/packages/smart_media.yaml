@@ -1,0 +1,46 @@
+smart_media:
+    # применяется ко всем коллекциям, если у них не указано иное.
+    default_storage: lo
+    upload_filter: compress_original   # Фильтр применяемый к загружаемой картинке, перед сохранением в хранилище
+    default_filter: 200x200   # Фильтр применяемый к картинке по умолчанию
+    filename_pattern: '{hour}_{minutes}_{rand(10)}'
+    file_relative_path_pattern: '/{year}/{month}/{day}'
+    # Хранилища
+    storages:
+        my_first:
+            code: lo # двухсимвольный код
+            title: Локальное
+            provider: SmartCore\Bundle\MediaBundle\Provider\LocalProvider
+            relative_path: ''
+            arguments:
+                original_dir: "%kernel.project_dir%/usr/media_cloud"
+                filter_dir: "%kernel.project_dir%/usr/media_cloud"
+#        my_second:
+#            code: re
+#            provider: SmartCore\Bundle\MediaBundle\Provider\LocalProvider
+    # Коллекции
+    collections:
+        avatars:
+            code: av
+            storage: lo
+            title: Аватарки юзеров
+#            default_filter: compress_original
+            relative_path: '/avatars'
+            filename_pattern: '{hour}_{minutes}_{rand(10)}'
+            file_relative_path_pattern: '/{year}/{month}/{day}'
+        offers:
+            code: of
+            storage: lo
+            title: Предложения
+#            default_filter: compress_original
+            relative_path: '/offers/{user_id}'
+            filename_pattern: '{day}-{hour}_{minutes}_{rand(10)}'
+            file_relative_path_pattern: '/{year}/{month}'
+        joint_purchases_products:
+            code: jp
+            storage: lo
+            title: Товары совместных покупок
+#            default_filter: compress_original
+            relative_path: '/jp/{user_id}'
+            filename_pattern: '{day}-{hour}_{minutes}_{rand(10)}'
+            file_relative_path_pattern: '/{year}/{month}'

@@ -1,0 +1,6 @@
+doctrine:
+    dbal:
+        types:
+            uuid: 'Ramsey\Uuid\Doctrine\UuidType'
+        mapping_types:
+            uuid_binary: binary

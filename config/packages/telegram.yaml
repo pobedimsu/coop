@@ -1,0 +1,5 @@
+telegram_bot_api:
+    default: 'changer'
+    bots:
+        changer:
+            token: '%env(TG_BOT_TOKEN)%'
