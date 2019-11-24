@@ -63,20 +63,6 @@ class ZJointPurchaseController extends AbstractController
     }
 
     /**
-     * @Route("/{jp}/products/", name="jp_edit_products")
-     */
-    public function editProducts(JointPurchase $jp): Response
-    {
-        if ($jp->getOrganizer() != $this->getUser()) {
-            throw $this->createAccessDeniedException();
-        }
-
-        return $this->render('@JointPurchase/joint_purchase/edit_products.html.twig', [
-            'jp' => $jp,
-        ]);
-    }
-
-    /**
      * @Route("/{jp}/orders/", name="jp_orders")
      */
     public function orders(JointPurchase $jp, Request $request, EntityManagerInterface $em): Response

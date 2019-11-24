@@ -33,7 +33,7 @@
                 </td>
 #}
                 <td>
-                    <a href="{{ path('jp_show', {'id': jp.id}) }}">{{ jp.title }}</a>
+                    <a href="{{ path('jp_show', {'jp': jp.id}) }}">{{ jp.title }}</a>
                 </td>
                 <td>
                     {% set amount = 0 %}
@@ -57,10 +57,10 @@
 {#                    {% endfor %}#}
 
 {#                    <a href="#">{{ orders_count }}</a>#}
-                    <a href="{{ path('jp_orders', {'id': jp.id}) }}">{{ jp.orders|length }}</a>
+                    <a href="{{ path('jp_orders', {'jp': jp.id}) }}">{{ jp.orders|length }}</a>
                 </td>
                 <td>
-                    {% include 'joint_purchase/_status.html.twig' %}
+                    {% include '@JointPurchase/_status.html.twig' %}
                 </td>
                 <td title="Обновлено: {{ jp.updatedAt|date('Y-M-d H:i') }}">{{ jp.createdAt|date('Y-M-d H:i') }}</td>
             </tr>

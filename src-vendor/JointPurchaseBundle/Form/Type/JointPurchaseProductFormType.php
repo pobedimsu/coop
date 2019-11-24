@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Coop\JointPurchaseBundle\Form\Type;
 
+use App\Form\Type\ImageFormType; // @todo fix it!
 use Coop\JointPurchaseBundle\Entity\JointPurchaseProduct;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

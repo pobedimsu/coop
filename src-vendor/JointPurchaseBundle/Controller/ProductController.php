@@ -118,4 +118,18 @@ class ProductController extends AbstractController
             'jp' => $jp,
         ]);
     }
+
+    /**
+     * @Route("/{jp}/products/", name="jp_edit_products")
+     */
+    public function editProducts(JointPurchase $jp): Response
+    {
+        if ($jp->getOrganizer() != $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('@JointPurchase/product/edit_products.html.twig', [
+            'jp' => $jp,
+        ]);
+    }
 }

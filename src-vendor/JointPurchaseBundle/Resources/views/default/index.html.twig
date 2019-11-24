@@ -31,7 +31,7 @@
                 </td>
 #}
                 <td>
-                    <a href="{{ path('jp_show', {'id': jp.id}) }}">{{ jp.title }}</a>
+                    <a href="{{ path('jp_show', {'jp': jp.id}) }}">{{ jp.title }}</a>
                 </td>
                 <td>
                     {% set amount = 0 %}
@@ -39,9 +39,9 @@
 
                     {% for product in jp.products %}
                         {% set amount = amount + (product.price * product.minQuantity) %}
-{#                        {% for orderLine in product.orderLines %}#}
-{#                            {% set collect = collect + (orderLine.quantity * product.price) %}#}
-{#                        {% endfor %}#}
+                        {% for orderLine in product.orderLines %}
+                            {% set collect = collect + (orderLine.quantity * product.price) %}
+                        {% endfor %}
                     {% endfor %}
 
                     {{ amount }} / {{ collect }} / {{ amount - collect }}

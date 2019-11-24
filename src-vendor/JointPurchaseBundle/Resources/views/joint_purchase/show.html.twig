@@ -21,7 +21,7 @@
             {% if jp.organizer == app.user %}
                 <p>
                     <a href="{{ path('jp_edit', {'id': jp.id}) }}" class="btn btn-sm btn-success">Редактировать</a>
-                    <a href="{{ path('jp_orders', {'id': jp.id}) }}" class="btn btn-sm btn-info">Заказы</a>
+                    <a href="{{ path('jp_orders', {'jp': jp.id}) }}" class="btn btn-sm btn-info">Заказы</a>
                 </p>
             {% endif %}
 
@@ -184,7 +184,7 @@
         </div>
 
         <div class="col-md-4">
-            {% include 'joint_purchase/_stats.html.twig' %}
+            {% include '@JointPurchase/_stats.html.twig' %}
         </div>
     </div>
 
