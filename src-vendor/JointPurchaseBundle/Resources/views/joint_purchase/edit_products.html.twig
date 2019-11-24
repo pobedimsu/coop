@@ -8,7 +8,7 @@
     </ul>
 
     <div class="myform">
-        <a href="{{ path('jp_create_product', {'id': jp.id}) }}" class="btn-success btn">Добавить товар</a>
+        <a href="{{ path('jp_product_create', {'jp': jp.id}) }}" class="btn-success btn">Добавить товар</a>
 
         <table class="table table-bordered table-hover">
             <thead>
@@ -45,5 +45,4 @@
         </table>
 
     </div>
-
 {% endblock %}

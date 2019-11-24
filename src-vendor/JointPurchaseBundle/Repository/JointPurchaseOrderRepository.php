@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace Coop\JointPurchaseBundle\Repository;
 
-use App\Entity\JointPurchaseOrder;
 use Doctrine\ORM\EntityRepository;
 use Smart\CoreBundle\Doctrine\RepositoryTrait;
 

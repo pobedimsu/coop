@@ -32,6 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface
 {
+    use ColumnTrait\Uuid;
     use ColumnTrait\CreatedAt;
     use ColumnTrait\IsEnabled;
 
@@ -41,16 +42,6 @@ class User implements UserInterface
         self::SEX_MALE   => 'Мужской',
         self::SEX_FEMALE => 'Женский',
     ];
-
-    /**
-     * @var UuidInterface
-     *
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
-     */
-    protected $id;
 
     /**
      * @var string
@@ -235,14 +226,6 @@ class User implements UserInterface
     {
         // add $this->salt too if you don't use Bcrypt or Argon2i
         [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
-    }
-
-    /**
-     * @return UuidInterface
-     */
-    public function getId(): UuidInterface
-    {
-        return $this->id;
     }
 
     /**

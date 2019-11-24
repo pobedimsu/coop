@@ -26,9 +26,26 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    # @todo отрефакторить
+    Coop\JointPurchaseBundle\:
+        resource: '../src-vendor/JointPurchaseBundle/*'
+        exclude: '../src-vendor/JointPurchaseBundle/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    Coop\JointPurchaseBundle\Controller\:
+        resource: '../src-vendor/JointPurchaseBundle/Controller'
+        tags: ['controller.service_arguments']
+
     app.menu.main:
         class: App\Menu\MainMenu
         arguments: ['@knp_menu.factory']
         tags:
             - { name: knp_menu.menu_builder, method: top, alias: top } # The alias is what is used to retrieve the menu
             - { name: knp_menu.menu_builder, method: profile, alias: profile }
+
+imports:
+    - { resource: '_local.yaml', ignore_errors: true }
+
+doctrine:
+    orm:
+        resolve_target_entities:
+            Symfony\Component\Security\Core\User\UserInterface: 'App\Entity\User'

@@ -154,7 +154,7 @@
                                         {{ amount + (amount * order.jointPurchase.transportationCostInPercent / 100) | round }} {# @todo make twig function #}
                                     </p>
 
-                                    <form class="orders_forms myform" id="order_form_{{ order.id }}" action="{{ path('jp_admin_order_update') }}" method="post">
+                                    <form class="orders_forms myform" id="order_form_{{ order.id }}" action="{{ path('jp_api_admin_order_update') }}" method="post">
                                         <input type="hidden" name="order_id" value="{{ order.id }}">
 
                                         <div class="form-group">

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Form\Type;
+namespace Coop\JointPurchaseBundle\Form\Type;
 
-use App\Entity\JointPurchase;
+use Coop\JointPurchaseBundle\Entity\JointPurchase;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;

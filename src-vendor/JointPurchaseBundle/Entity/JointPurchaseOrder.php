@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace Coop\JointPurchaseBundle\Entity;
 
+use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
@@ -11,7 +12,7 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
 /**
  * Зваказы совместных закупок.
  *
- * @ORM\Entity(repositoryClass="App\Repository\JointPurchaseOrderRepository")
+ * @ORM\Entity(repositoryClass="Coop\JointPurchaseBundle\Repository\JointPurchaseOrderRepository")
  * @ORM\Table(name="joint_purchases_orders",
  *      indexes={
  *          @ORM\Index(columns={"created_at"}),
@@ -28,6 +29,7 @@ class JointPurchaseOrder
     use ColumnTrait\CreatedAt;
     use ColumnTrait\UpdatedAt;
     use ColumnTrait\Comment;
+    use ColumnTrait\User;
 
     /**
      * @var int|null
@@ -63,7 +65,7 @@ class JointPurchaseOrder
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     protected $user;

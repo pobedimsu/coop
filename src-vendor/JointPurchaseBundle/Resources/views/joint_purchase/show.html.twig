@@ -98,7 +98,7 @@
                                                     </div>
                                                     <div class="modal-body">
 
-                                                        <form class="orders_forms" id="order_form_{{ product.id }}" action="{{ path('jp_order_update') }}" method="post">
+                                                        <form class="orders_forms" id="order_form_{{ product.id }}" action="{{ path('jp_api_order_update') }}" method="post">
                                                             <input type="hidden" name="product" value="{{ product.id }}">
 
                                                             <div class="form-group">
@@ -111,7 +111,7 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount_{{ product.id }}">{{ my_quantity * product.price }} ₽</strong></div>
-                                                                {#                                                    <button type="button" class="btn btn-light" data-dismiss="modal">Закрыть</button>#}
+                                                                {#<button type="button" class="btn btn-light" data-dismiss="modal">Закрыть</button>#}
                                                                 <button type="submit" class="btn btn-success" id="form_submit_{{ product.id }}">Отправить</button>
                                                             </div>
                                                         </form>

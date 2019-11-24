@@ -4,7 +4,7 @@
     <ul class="nav nav-pills">
 {#                <li {% if show == 'active' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'active'}) }}">Активные</a></li>#}
         <li><a href="{{ path('jp_edit', {'id': jp.id}) }}">Основные свойства</a></li>
-        <li class="active"><a href="{{ path('jp_edit_products', {'id': jp.id}) }}">Товары</a></li>
+        <li class="active"><a href="{{ path('jp_edit_products', {'jp': jp.id}) }}">Товары</a></li>
     </ul>
 
     <div class="myform">

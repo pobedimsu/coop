@@ -39,10 +39,9 @@
 
                     {% for product in jp.products %}
                         {% set amount = amount + (product.price * product.minQuantity) %}
-                        {% for orderLine in product.orderLines %}
-                            {% set collect = collect + (orderLine.quantity * product.price) %}
-                        {% endfor %}
-
+{#                        {% for orderLine in product.orderLines %}#}
+{#                            {% set collect = collect + (orderLine.quantity * product.price) %}#}
+{#                        {% endfor %}#}
                     {% endfor %}
 
                     {{ amount }} / {{ collect }} / {{ amount - collect }}
