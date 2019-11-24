@@ -5,7 +5,7 @@ VAR="var"
 if [ ! -d "$VAR" ]; then
     mkdir $VAR
     mkdir $VAR/cache
-    mkdir $VAR/logs
+    mkdir $VAR/log
 fi
 
 if [ ! -d "usr" ]; then
@@ -19,4 +19,4 @@ fi
 chmod 777 usr
 chmod 777 $VAR
 chmod 777 $VAR/sessions
-chmod 666 $VAR/logs/*
+chmod 666 $VAR/log/*
