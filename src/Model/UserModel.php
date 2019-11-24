@@ -18,6 +18,13 @@ class UserModel implements UserInterface
     use ColumnTrait\IsEnabled;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=64, unique=true, nullable=true)
+     */
+    protected $api_token;
+
+    /**
      * @var string
      *
      * @ORM\Column(type="string", length=40, unique=true)
@@ -428,6 +435,26 @@ class UserModel implements UserInterface
     public function setTelegramUsername(?string $telegram_username): self
     {
         $this->telegram_username = $telegram_username;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getApiToken(): ?string
+    {
+        return $this->api_token;
+    }
+
+    /**
+     * @param string|null $api_token
+     *
+     * @return $this
+     */
+    public function setApiToken(?string $api_token): self
+    {
+        $this->api_token = $api_token;
 
         return $this;
     }
