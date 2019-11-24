@@ -8,25 +8,24 @@ use App\Entity\Deal;
 use App\Entity\Offer;
 use App\Entity\User;
 use App\Service\BillService;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
-    //use ContainerAwareTrait;
-
     protected $billService;
+    protected $tgBotName;
 
     /**
      * AppExtension constructor.
      *
      * @param BillService $billService
+     * @param             $tgBotName
      */
-    public function __construct(BillService $billService)
+    public function __construct(BillService $billService, $tgBotName)
     {
         $this->billService = $billService;
+        $this->tgBotName   = $tgBotName;
     }
 
     /**
@@ -45,6 +44,8 @@ class AppExtension extends AbstractExtension
             new TwigFunction('app_count_offers_for_user',       [$this, 'getCountOffersForUser']),
             new TwigFunction('app_count_offers_available_for_user', [$this, 'getCountOffersAvailableByUser']),
             new TwigFunction('app_count_active_deals_for_offer',    [$this, 'getCountActiveDealsForOffer']),
+
+            new TwigFunction('app_tg_bot_name',    [$this, 'getTgBotName']),
         ];
     }
 
@@ -140,5 +141,13 @@ class AppExtension extends AbstractExtension
     public function getCountOffersAvailableByUser(User $user): int
     {
         return $this->billService->getCountOffersAvailableByUser($user);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTgBotName(): ?string
+    {
+        return $this->tgBotName;
     }
 }

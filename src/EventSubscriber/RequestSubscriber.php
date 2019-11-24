@@ -20,16 +20,21 @@ class RequestSubscriber implements EventSubscriberInterface
     /** @var TokenStorageInterface */
     protected $token_storage;
 
+    /** @var string */
+    protected $tgBotName;
+
     /**
      * RequestSubscriber constructor.
      *
      * @param RouterInterface       $router
      * @param TokenStorageInterface $token_storage
+     * @param string|null           $tgBotName
      */
-    public function __construct(RouterInterface $router, TokenStorageInterface $token_storage)
+    public function __construct(RouterInterface $router, TokenStorageInterface $token_storage, ?string $tgBotName)
     {
         $this->router        = $router;
         $this->token_storage = $token_storage;
+        $this->tgBotName     = $tgBotName;
     }
 
     /**
@@ -57,7 +62,8 @@ class RequestSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if (empty($user->getTelegramUsername())) {
+        // Если указано имя чат-бота, то необходимо привязать тг аккаунт
+        if ($this->tgBotName and empty($user->getTelegramUsername())) {
             $route = 'profile_telegram';
 
             if ($route === $event->getRequest()->get('_route')) {

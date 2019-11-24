@@ -1,5 +1,5 @@
 telegram_bot_api:
-    default: 'changer'
+    default: 'coop'
     bots:
-        changer:
+        coop:
             token: '%env(TG_BOT_TOKEN)%'

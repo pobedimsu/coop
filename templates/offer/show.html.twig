@@ -149,23 +149,7 @@
                     <span style="float: right;"> <i class="fas fa-{{ offer.user.sex ? 'male' : 'female' }}"></i></span>
                 </h4>
                 <p>
-                    {% if offer.user.isSmoking %}
-                        <span class="badge badge-danger" title="Курит"><i class="fas fa-smoking"></i></span>
-                    {% else %}
-                        <span class="badge badge-light" title="Не курит"><i class="fas fa-smoking-ban"></i></span>
-                    {% endif %}
-
-                    {% if offer.user.isAlcohol %}
-                        <span class="badge badge-danger" title="Потребяет алкоголь"><i class="fas fa-wine-bottle"></i></span>
-                    {% else %}
-                        <span class="badge badge-light" title="Не потребяет алкоголь"><i class="fas fa-wine-bottle"></i></span>
-                    {% endif %}
-
-                    {% if offer.user.isMeatConsumption %}
-                        <span class="badge badge-danger" title="Потребяет мясо"><i class="fas fa-drumstick-bite"></i></span>
-                    {% else %}
-                        <span class="badge badge-light" title="Не потребяет мясо"><i class="fas fa-drumstick-bite"></i></span>
-                    {% endif %}
+                    {% include 'user/_anketa.html.twig' with {'user': offer.user} %}
                 </p>
 {#                {% if offer.user != app.user %}#}
                     <p><i class="far fa-paper-plane"></i>

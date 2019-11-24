@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Model\UserModel;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\UuidInterface;
-use Smart\CoreBundle\Doctrine\ColumnTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -30,75 +27,23 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @UniqueEntity(fields="username", message="Username is already exists")
  */
-class User implements UserInterface
+class User extends UserModel
 {
-    use ColumnTrait\Uuid;
-    use ColumnTrait\CreatedAt;
-    use ColumnTrait\IsEnabled;
-
-    const SEX_FEMALE = 0;
+    const SEX_NA     = 0;
     const SEX_MALE   = 1;
+    const SEX_FEMALE = 2;
     static protected $sex_values = [
+        self::SEX_NA     => 'Не указан',
         self::SEX_MALE   => 'Мужской',
         self::SEX_FEMALE => 'Женский',
     ];
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=40, unique=true)
-     * @Assert\NotNull(message="This value is not valid.")
-     */
-    private $username;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=190)
-     * @Assert\Length(min = 6, minMessage = "Password length must be at least {{ limit }} characters long")
-     */
-    private $password;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(type="array")
-     */
-    private $roles;
-
-    /**
-     * Имя
-     *
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=30)
-     * @Assert\NotNull(message="This value is not valid.")
-     */
-    protected $firstname;
-
-    /**
-     * Фамилия
-     *
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=30)
-     * @Assert\NotNull(message="This value is not valid.")
-     */
-    protected $lastname;
-
-    /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $last_login;
 
     /**
      * Пол
      *
      * @var int
      *
-     * @ORM\Column(type="smallint", nullable=false, options={"unsigned"=true, "default":1})
+     * @ORM\Column(type="smallint", nullable=false, options={"unsigned"=true, "default":0})
      * @Assert\NotNull(message="This value is not valid.")
      */
     protected $sex;
@@ -106,221 +51,86 @@ class User implements UserInterface
     /**
      * Курение
      *
-     * @var bool
+     * @var bool|null
      *
-     * @ORM\Column(type="boolean", nullable=false)
-     * @Assert\NotNull(message="This value is not valid.")
+     * @ORM\Column(type="boolean", nullable=true)
+     * Assert\NotNull(message="This value is not valid.")
      */
     protected $is_smoking;
 
     /**
      * Алкаголь
      *
-     * @var bool
+     * @var bool|null
      *
-     * @ORM\Column(type="boolean", nullable=false)
-     * @Assert\NotNull(message="This value is not valid.")
+     * @ORM\Column(type="boolean", nullable=true)
+     * Assert\NotNull(message="This value is not valid.")
      */
     protected $is_alcohol;
 
     /**
      * Потребление мяса
      *
-     * @var bool
+     * @var bool|null
      *
-     * @ORM\Column(type="boolean", nullable=false)
-     * @Assert\NotNull(message="This value is not valid.")
+     * @ORM\Column(type="boolean", nullable=true)
+     * Assert\NotNull(message="This value is not valid.")
      */
     protected $is_meat_consumption;
-
-    /**
-     * @var float|null
-     *
-     * @ORM\Column(type="decimal", precision=10, scale=8, nullable=true)
-     */
-    protected $latitude;
-
-    /**
-     * @var float|null
-     *
-     * @ORM\Column(type="decimal", precision=11, scale=8, nullable=true)
-     */
-    protected $longitude;
-
-    /**
-     * @var integer|null
-     *
-     * @ORM\Column(type="integer", nullable=true, unique=true)
-     */
-    protected $telegram_user_id;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
-    protected $telegram_username;
-
-    /**
-     * Пригласивший пользователь
-     *
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="invited_users")
-     */
-    protected $invited_by_user;
-
-    /**
-     * Приглашенные пользователи
-     *
-     * @var User[]|ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="User", mappedBy="invited_by_user", fetch="EXTRA_LAZY")
-     * @ORM\OrderBy({"id" = "DESC"})
-     */
-    protected $invited_users;
 
     /**
      * User constructor.
      */
     public function __construct()
     {
-        $this->created_at       = new \DateTime();
-        $this->invited_users    = new ArrayCollection();
-        $this->is_enabled       = true;
-        $this->is_alcohol       = false;
-        $this->is_meat_consumption = false;
-        $this->is_smoking       = false;
-        $this->has_children     = false;
-        $this->password         = '';
-        $this->sex              = 1;
-        $this->roles            = [];
-        $this->username         = '';
+        parent::__construct();
+
+        $this->is_alcohol       = null;
+        $this->is_meat_consumption = null;
+        $this->is_smoking       = null;
+        $this->sex              = self::SEX_NA;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString(): string
-    {
-        if (empty($this->getFirstname()) and empty($this->getLastname())) {
-            return $this->getUsername();
-        }
-
-        return $this->getFirstname().' '.$this->getLastname();
-    }
+    // Start SEX block of setters and getters
 
     /**
-     * {@inheritdoc}
-     */
-    public function serialize(): string
-    {
-        // add $this->salt too if you don't use Bcrypt or Argon2i
-        return serialize([$this->id, $this->username, $this->password]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function unserialize($serialized): void
-    {
-        // add $this->salt too if you don't use Bcrypt or Argon2i
-        [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
-    }
-
-    /**
-     * Returns the salt that was originally used to encode the password.
-     *
-     * {@inheritdoc}
-     */
-    public function getSalt(): ?string
-    {
-        // See "Do you need to use a Salt?" at https://symfony.com/doc/current/cookbook/security/entity_provider.html
-        // we're using bcrypt in security.yml to encode the password, so
-        // the salt value is built-in and you don't have to generate one
-
-        return null;
-    }
-
-    /**
-     * Removes sensitive data from the user.
-     *
-     * {@inheritdoc}
-     */
-    public function eraseCredentials(): void
-    {
-        // if you had a plainPassword property, you'd nullify it here
-        // $this->plainPassword = null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUsername(): string
-    {
-        return $this->username;
-    }
-
-    /**
-     * @param string $username
-     *
-     * @return $this
-     */
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    /**
-     * @param string $password
-     *
-     * @return $this
-     */
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Returns the roles or permissions granted to the user for security.
-     *
      * @return array
      */
-    public function getRoles(): array
+    static public function getSexFormChoices(): array
     {
-        $roles = $this->roles;
-
-        // guarantees that a user always has at least one role for security
-        if (empty($roles)) {
-            $roles[] = 'ROLE_USER';
-        }
-
-        return array_unique($roles);
-
+        return array_flip(self::$sex_values);
     }
 
     /**
-     * @param array $roles
-     *
-     * @return $this
+     * @return array
      */
-    public function setRoles(array $roles): self
+    static public function getSexValues(): array
     {
-        $this->roles = $roles;
+        return self::$sex_values;
+    }
 
-        return $this;
+    /**
+     * @return bool
+     */
+    static public function isSexExist($sex): bool
+    {
+        if (isset(self::$sex_values[$sex])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSexAsText(): string
+    {
+        if (isset(self::$sex_values[$this->sex])) {
+            return self::$sex_values[$this->sex];
+        }
+
+        return 'N/A';
     }
 
     /**
@@ -343,16 +153,18 @@ class User implements UserInterface
         return $this;
     }
 
+    // __End SEX block of setters and getters
+
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function isIsSmoking(): bool
+    public function getIsSmoking(): ?bool
     {
         return $this->is_smoking;
     }
 
     /**
-     * @param bool $is_smoking
+     * @param bool|null $is_smoking
      *
      * @return $this
      */
@@ -364,15 +176,15 @@ class User implements UserInterface
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function isIsAlcohol(): bool
+    public function getIsAlcohol(): ?bool
     {
         return $this->is_alcohol;
     }
 
     /**
-     * @param bool $is_alcohol
+     * @param bool|null $is_alcohol
      *
      * @return $this
      */
@@ -384,201 +196,21 @@ class User implements UserInterface
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function isIsMeatConsumption(): bool
+    public function getIsMeatConsumption(): ?bool
     {
         return $this->is_meat_consumption;
     }
 
     /**
-     * @param bool $is_meat_consumption
+     * @param bool|null $is_meat_consumption
      *
      * @return $this
      */
     public function setIsMeatConsumption(?bool $is_meat_consumption): self
     {
         $this->is_meat_consumption = $is_meat_consumption;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getFirstname(): ?string
-    {
-        return $this->firstname;
-    }
-
-    /**
-     * @param string|null $firstname
-     *
-     * @return $this
-     */
-    public function setFirstname(?string $firstname): self
-    {
-        $this->firstname = $firstname;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getLastname(): ?string
-    {
-        return $this->lastname;
-    }
-
-    /**
-     * @param string|null $lastname
-     *
-     * @return $this
-     */
-    public function setLastname(?string $lastname): self
-    {
-        $this->lastname = $lastname;
-
-        return $this;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getLatitude(): ?float
-    {
-        return $this->latitude ? (float) $this->latitude : null;
-    }
-
-    /**
-     * @param float|null $latitude
-     *
-     * @return $this
-     */
-    public function setLatitude(?float $latitude): self
-    {
-        $this->latitude = $latitude;
-
-        return $this;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getLongitude(): ?float
-    {
-        return $this->longitude ? (float) $this->longitude : null;
-    }
-
-    /**
-     * @param float|null $longitude
-     *
-     * @return $this
-     */
-    public function setLongitude(?float $longitude): self
-    {
-        $this->longitude = $longitude;
-
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getInvitedByUser(): ?self
-    {
-        return $this->invited_by_user;
-    }
-
-    /**
-     * @param User $invited_by_user
-     *
-     * @return $this
-     */
-    public function setInvitedByUser(User $invited_by_user): self
-    {
-        $this->invited_by_user = $invited_by_user;
-
-        return $this;
-    }
-
-    /**
-     * @return User[]|ArrayCollection
-     */
-    public function getInvitedUsers()
-    {
-        return $this->invited_users;
-    }
-
-    /**
-     * @param User[]|ArrayCollection $invited_users
-     *
-     * @return $this
-     */
-    public function setInvitedUsers($invited_users): self
-    {
-        $this->invited_users = $invited_users;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getLastLogin(): ?\DateTime
-    {
-        return $this->last_login;
-    }
-
-    /**
-     * @param \DateTime|null $last_login
-     *
-     * @return $this
-     */
-    public function setLastLogin(?\DateTime $last_login): self
-    {
-        $this->last_login = $last_login;
-
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getTelegramUserId(): ?int
-    {
-        return $this->telegram_user_id;
-    }
-
-    /**
-     * @param int|null $telegram_user_id
-     *
-     * @return $this
-     */
-    public function setTelegramUserId(?int $telegram_user_id): self
-    {
-        $this->telegram_user_id = $telegram_user_id;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getTelegramUsername(): ?string
-    {
-        return $this->telegram_username;
-    }
-
-    /**
-     * @param string|null $telegram_username
-     *
-     * @return $this
-     */
-    public function setTelegramUsername(?string $telegram_username): self
-    {
-        $this->telegram_username = $telegram_username;
 
         return $this;
     }
