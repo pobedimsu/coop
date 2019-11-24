@@ -61,7 +61,7 @@ class UserListCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var User[] $users */
-        $users = $this->em->getRepository(User::class)->findBy([], ['created_at' => 'DESC']);
+        $users = $this->em->getRepository(User::class)->findBy([], ['created_at' => 'ASC']);
 
         $rows = [];
         foreach ($users as $user) {
@@ -70,11 +70,12 @@ class UserListCommand extends Command
                 $user->__toString(),
                 $user->getTelegramUsername(),
                 $user->getApiToken() ? '+' : '',
+                (string) $user->getInvitedByUser(),
                 $user->getCreatedAt()->format('Y-m-d H:i'),
             ];
         }
 
-        $this->io->table(['Username', 'FIO', 'Telegram', 'API', 'Дата регистрации'], $rows);
+        $this->io->table(['Username', 'FIO', 'Telegram', 'API', 'Inviter', 'Дата регистрации'], $rows);
 
         $this->io->writeln("Всего: ".count($users));
     }
