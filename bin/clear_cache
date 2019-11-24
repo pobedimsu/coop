@@ -12,4 +12,7 @@ then
     rm -rf var/cache/dev
 fi
 
-find var/log -type f -exec chmod 666 {} \;
+if [ -d var/log ]
+then
+    find var/log -type f -exec chmod 666 {} \;
+fi
