@@ -19,4 +19,4 @@ fi
 chmod 777 usr
 chmod 777 $VAR
 chmod 777 $VAR/sessions
-#chmod 666 $VAR/log/*
+chmod 666 $VAR/log/*
