@@ -18,5 +18,7 @@ fi
 
 chmod 777 usr
 chmod 777 $VAR
+chmod 777 $VAR/cache
+chmod 777 $VAR/log
 chmod 777 $VAR/sessions
-chmod 666 $VAR/log/*
+find $VAR/log -type f -exec chmod 666 {} \;
