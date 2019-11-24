@@ -12,10 +12,20 @@ if [ ! -d "usr" ]; then
     mkdir usr
 fi
 
+if [ ! -d "config/secrets" ]; then
+    mkdir config/secrets
+fi
+
+if [ ! -d "config/secrets/dev" ]; then
+    mkdir config/secrets/dev
+fi
+
 if [ ! -d "$VAR/sessions" ]; then
     mkdir $VAR/sessions
 fi
 
+chmod 777 config/secrets
+chmod 777 config/secrets/dev
 chmod 777 usr
 chmod 777 $VAR
 chmod 777 $VAR/cache
