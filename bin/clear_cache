@@ -11,3 +11,5 @@ then
     echo "Clearing var/cache/dev..."
     rm -rf var/cache/dev
 fi
+
+find var/log -type f -exec chmod 666 {} \;
