@@ -20,8 +20,7 @@ class UserInviteFormType extends AbstractType
             ->add('password')
             ->add('firstname')
             ->add('lastname')
-            /*
-             * ->add('sex', ChoiceType::class, [
+            ->add('sex', ChoiceType::class, [
                 'choices' => [
                     '[выберите]' => null,
                     'Мужской' => User::SEX_MALE,
@@ -56,7 +55,6 @@ class UserInviteFormType extends AbstractType
                 'data' => null,
                 'choice_translation_domain' => false,
             ])
-            */
             ->add('create', SubmitType::class, ['attr' => ['class' => 'btn-success']])
             //->add('cancel', SubmitType::class, ['attr' => ['class' => 'btn-default', 'formnovalidate' => 'formnovalidate']]);
         ;
