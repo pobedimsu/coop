@@ -27,7 +27,7 @@ class Category
     use ColumnTrait\Position;
 
     /**
-     * Demand constructor.
+     * Category constructor.
      */
     public function __construct()
     {

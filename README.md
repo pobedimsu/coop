@@ -25,6 +25,7 @@
 Далее выполнить в консоле:
 ```    
     bin/console doctrine:schema:update --force
+    bin/console app:init
     bin/clear_cache
 ```
 
