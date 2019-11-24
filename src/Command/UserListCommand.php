@@ -72,10 +72,11 @@ class UserListCommand extends Command
                 $user->getApiToken() ? '+' : '',
                 (string) $user->getInvitedByUser(),
                 $user->getCreatedAt()->format('Y-m-d H:i'),
+                $user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d H:i') : '',
             ];
         }
 
-        $this->io->table(['Username', 'FIO', 'Telegram', 'API', 'Inviter', 'Дата регистрации'], $rows);
+        $this->io->table(['Username', 'FIO', 'Telegram', 'API', 'Inviter', 'Created At', 'Last login'], $rows);
 
         $this->io->writeln("Всего: ".count($users));
     }
