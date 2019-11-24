@@ -1,0 +1,22 @@
+#!/bin/bash
+
+VAR="var"
+
+if [ ! -d "$VAR" ]; then
+    mkdir $VAR
+    mkdir $VAR/cache
+    mkdir $VAR/logs
+fi
+
+if [ ! -d "usr" ]; then
+    mkdir usr
+fi
+
+if [ ! -d "$VAR/sessions" ]; then
+    mkdir $VAR/sessions
+fi
+
+chmod 777 usr
+chmod 777 $VAR
+chmod 777 $VAR/sessions
+chmod 666 $VAR/logs/*
