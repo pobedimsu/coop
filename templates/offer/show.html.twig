@@ -146,7 +146,9 @@
         <div class="col-md-4">
             <div class="alert alert-warning" role="alert">
                 <h4 class="alert-heading">{{ offer.user }}
-                    <span style="float: right;"> <i class="fas fa-{{ offer.user.sex ? 'male' : 'female' }}"></i></span>
+                    {% if offer.user.sex > 0%}
+                        <span style="float: right;"> <i class="fas fa-{{ offer.user.sex ? 'male' : 'female' }}"></i></span>
+                    {% endif %}
                 </h4>
                 <p>
                     {% include 'user/_anketa.html.twig' with {'user': offer.user} %}
