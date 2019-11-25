@@ -8,8 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\BillRepository")
- * @ORM\Table(name="bills",
+ * @ORM\Entity(repositoryClass="App\Repository\TransactionRepository")
+ * @ORM\Table(name="transactions",
  *      indexes={
  *          @ORM\Index(columns={"sum"}),
  *          @ORM\Index(columns={"created_at"}),
@@ -18,30 +18,36 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
  *      }
  * )
  */
-class Bill
+class Transaction
 {
     use ColumnTrait\Uuid;
     use ColumnTrait\CreatedAt;
     use ColumnTrait\Comment;
 
     /**
+     * От кого переходит сумма (покупатель)
+     *
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(nullable=false)
      */
-    protected $user;
+    protected $from_user;
+
+    /**
+     * Кому переходит сумма (продавец)
+     *
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $to_user;
 
     /**
      * @var int
      *
-     * @ORM\Column(type="integer")
-     */
-    protected $balance;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=false, options={"unsigned"=true, "default":0})
      */
     protected $sum;
 
@@ -53,40 +59,21 @@ class Bill
     protected $hash;
 
     /**
+     * Сделка на основании которой произведена транзакция
+     *
      * @var Deal
      *
-     * @ORM\ManyToOne(targetEntity="Deal", inversedBy="bills")
+     * @ORM\ManyToOne(targetEntity="Deal", inversedBy="transactions")
      */
     protected $deal;
 
     /**
-     * Bill constructor.
+     * Transaction constructor.
      */
     public function __construct()
     {
         $this->created_at = new \DateTime();
-        $this->balance    = 0;
         $this->hash       = null;
-    }
-
-    /**
-     * @return int
-     */
-    public function getBalance(): int
-    {
-        return $this->balance;
-    }
-
-    /**
-     * @param int $balance
-     *
-     * @return $this
-     */
-    public function setBalance($balance)
-    {
-        $this->balance = $balance;
-
-        return $this;
     }
 
     /**
@@ -152,19 +139,39 @@ class Bill
     /**
      * @return User
      */
-    public function getUser(): User
+    public function getFromUser(): User
     {
-        return $this->user;
+        return $this->from_user;
     }
 
     /**
-     * @param User $user
+     * @param User $from_user
      *
      * @return $this
      */
-    public function setUser(User $user): self
+    public function setFromUser(User $from_user): self
     {
-        $this->user = $user;
+        $this->from_user = $from_user;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getToUser(): User
+    {
+        return $this->to_user;
+    }
+
+    /**
+     * @param User $to_user
+     *
+     * @return $this
+     */
+    public function setToUser(User $to_user): self
+    {
+        $this->to_user = $to_user;
 
         return $this;
     }

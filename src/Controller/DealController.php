@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Bill;
 use App\Entity\Deal;
 use App\Entity\Offer;
+use App\Entity\Transaction;
 use App\Service\BillService;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,12 +49,6 @@ class DealController extends AbstractController
     }
 
     /**
-     * @param Request                $request
-     * @param EntityManagerInterface $em
-     * @param BillService            $billService
-     *
-     * @return JsonResponse
-     *
      * @Route("/deal/create", name="deal_create", methods={"POST"})
      */
     public function create(Request $request, EntityManagerInterface $em, BillService $billService): JsonResponse
@@ -62,12 +56,10 @@ class DealController extends AbstractController
         try {
             $offer = $em->find(Offer::class, $request->request->get('offer_id'));
         } catch (ConversionException $e) {
-            $data = [
+            return new JsonResponse([
                 'status' => 'error',
                 'message' => 'Предложение не найдено',
-            ];
-
-            return new JsonResponse($data);
+            ]);
         }
 
         if (empty($offer)) {
@@ -107,7 +99,7 @@ class DealController extends AbstractController
                 $em->persist($deal);
                 $em->flush();
 
-                $this->addFlash('success', 'Сделка добавлена');
+                $this->addFlash('success', 'Сделка добавлена'); // @todo remove
 
                 $data = [
                     'status' => 'success',
@@ -129,7 +121,6 @@ class DealController extends AbstractController
      * @param Deal                   $deal
      * @param Request                $request
      * @param EntityManagerInterface $em
-     * @param BillService            $billService
      *
      * @return Response|RedirectResponse
      * @throws \Doctrine\DBAL\DBALException
@@ -137,7 +128,7 @@ class DealController extends AbstractController
      *
      * @Route("/deal/{id}/", name="deal_show")
      */
-    public function show(Deal $deal, Request $request, EntityManagerInterface $em, BillService $billService): Response
+    public function show(Deal $deal, Request $request, EntityManagerInterface $em): Response
     {
         if ($deal->getContractorUser() == $this->getUser() or $deal->getDeclarantUser() == $this->getUser()) {
             // Это проверка на то, что сделка принадлежит отдному из аутентифицированных участников
@@ -207,43 +198,18 @@ class DealController extends AbstractController
                         $em->flush();
                     }
 
-                    // На счета зачисляются только сделки внутри системы.
+                    // В транзакциях учитываются только сделки внутри системы.
                     if ($deal->getStatus() == Deal::STATUS_COMPLETE) {
-                        $contractorBill = new Bill(); // Исполнитель
-                        $declarantBill  = new Bill(); // Заявитель
-
-                        $contractorBill
-                            ->setUser($deal->getContractorUser())
-                            ->setDeal($deal)
+                        $transaction = new Transaction();
+                        $transaction
+                            ->setFromUser($deal->getDeclarantUser()) // Заявитель (покупатель)
+                            ->setToUser($deal->getContractorUser())  // Исполнитель (продавец)
                             ->setSum($deal->getAmountCost())
-                            ->setComment('Успешное завершение сделки')
-                        ;
-
-                        $declarantBill
-                            ->setUser($deal->getDeclarantUser())
                             ->setDeal($deal)
-                            ->setSum(-$deal->getAmountCost())
                             ->setComment('Успешное завершение сделки')
                         ;
-
-                        $em->persist($contractorBill);
-                        $em->persist($declarantBill);
+                        $em->persist($transaction);
                         $em->flush();
-
-                        $billService->updateCurrentBalance($contractorBill);
-                        $billService->updateCurrentBalance($declarantBill);
-
-                        while (empty($contractorBill->getHash())) {
-                            if (empty($billService->generateBlockChain($contractorBill))) {
-                                sleep(1);
-                            }
-                        }
-
-                        while (empty($declarantBill->getHash())) {
-                            if (empty($billService->generateBlockChain($declarantBill))) { // @todo тут зацикливается...
-                                sleep(1);
-                            }
-                        }
                     }
 
                     $this->addFlash('success', 'Сделка завершена.');

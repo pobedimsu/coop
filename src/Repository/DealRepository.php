@@ -162,6 +162,8 @@ class DealRepository extends EntityRepository
     }
 
     /**
+     * Сумма "холда"
+     *
      * @param User $user
      *
      * @return int
@@ -186,6 +188,19 @@ class DealRepository extends EntityRepository
         ;
 
         return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Сумма "холда" (алиас)
+     *
+     * @param User $user
+     *
+     * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getHoldSum(User $user): int
+    {
+        return $this->sumActiveForDeclarantUser($user);
     }
 
     /**

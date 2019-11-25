@@ -29,6 +29,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Offer
 {
+    use ColumnTrait\Uuid;
     use ColumnTrait\CreatedAt;
     use ColumnTrait\UpdatedAt;
     use ColumnTrait\IsEnabled;
@@ -56,18 +57,8 @@ class Offer
         self::STATUS_AVAILABLE      => 'Есть в наличии',
         self::STATUS_ON_DEMAND      => 'Под заказ',
         self::STATUS_RESERVE        => 'Резерв',
-        self::STATUS_NOT_AVAILABLE  => 'Нет в наличии',
+        self::STATUS_NOT_AVAILABLE  => 'Нет в наличии', // не участвует в эмиссии
     ];
-
-    /**
-     * @var UuidInterface
-     *
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
-     */
-    protected $id;
 
     /**
      * @var bool
@@ -102,7 +93,7 @@ class Offer
      *
      * @var int
      *
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="smallint", nullable=false)
      */
     protected $measure;
 
@@ -137,6 +128,7 @@ class Offer
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(nullable=false)
      */
     protected $user;
 
@@ -165,14 +157,6 @@ class Offer
     public function __toString(): string
     {
         return $this->title;
-    }
-
-    /**
-     * @return UuidInterface
-     */
-    public function getId(): UuidInterface
-    {
-        return $this->id;
     }
 
     /**

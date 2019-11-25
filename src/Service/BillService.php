@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Entity\Bill;
 use App\Entity\Deal;
 use App\Entity\Offer;
+use App\Entity\Transaction;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -25,15 +26,7 @@ class BillService
     }
 
     /**
-     * @return EntityManagerInterface
-     */
-    public function getEm(): EntityManagerInterface
-    {
-        return $this->em;
-    }
-
-    /**
-     * Получение полного баланса: предложения и счета.
+     * Получение полного баланса.
      *
      * @param User $user
      *
@@ -42,13 +35,53 @@ class BillService
      */
     public function getBalance(User $user): int
     {
-        $deals_sum = $this->em->getRepository(Deal::class)->sumActiveForDeclarantUser($user);
-
-        return $this->getOffersBallance($user) + $this->getBillsBalance($user) - $deals_sum;
+        return $this->getOffersBallance($user) // эмиссия
+            + $this->getTransactionsIn($user) // входящие
+            - $this->getTransactionsOut($user) // исходящие
+            - $this->getHoldSum($user); // холд
     }
 
     /**
-     * Получение баланса только по заявленным предложениям.
+     * Сумма "холда"
+     *
+     * @param User $user
+     *
+     * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getHoldSum(User $user): int
+    {
+        return $this->em->getRepository(Deal::class)->getHoldSum($user);
+    }
+
+    /**
+     * Входящие транзакции
+     *
+     * @param User $user
+     *
+     * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getTransactionsIn(User $user): int
+    {
+        return $this->em->getRepository(Transaction::class)->getIncomingSum($user);
+    }
+
+    /**
+     * Входящие транзакции
+     *
+     * @param User $user
+     *
+     * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getTransactionsOut(User $user): int
+    {
+        return $this->em->getRepository(Transaction::class)->getOutgoingSum($user);
+    }
+
+    /**
+     * Получение баланса по заявленным предложениям (эмиссия).
      *
      * @param User $user
      *
@@ -57,12 +90,9 @@ class BillService
      */
     public function getOffersBallance(User $user): int
     {
+        $offers = $this->em->getRepository(Offer::class)->findBy(['user' => $user]);
+
         $sum = 0;
-
-        $offers = $this->em->getRepository(Offer::class)->findBy([
-            'user' => $user,
-        ]);
-
         foreach ($offers as $offer) {
             if ($offer->getStatus() == Offer::STATUS_NOT_AVAILABLE and empty($offer->getQuantityReserved())) {
                 continue;
@@ -75,24 +105,8 @@ class BillService
     }
 
     /**
-     * Получение баланса по счетам.
+     * Кол-во активных сделок по предложению
      *
-     * @param User $user
-     *
-     * @return int
-     */
-    public function getBillsBalance(User $user): int
-    {
-        $bill = $this->em->getRepository(Bill::class)->findOneBy(['user' => $user], ['id' => 'DESC']);
-
-        if (empty($bill)) {
-            return 0;
-        }
-
-        return $bill->getBalance();
-    }
-
-    /**
      * @param Item $item
      *
      * @return int
@@ -104,6 +118,8 @@ class BillService
     }
 
     /**
+     * Кол-во всех сделок по предложению
+     *
      * @param Offer $offer
      *
      * @return int
@@ -115,35 +131,16 @@ class BillService
     }
 
     /**
-     * @param Bill $bill
-     *
-     * @return int
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function updateCurrentBalance(Bill $bill)
-    {
-        $bill->setBalance(
-            $this->em->getRepository(Bill::class)->getCurrentBalanceByUser($bill->getUser())
-        );
-
-        //$this->updateUserBalance($bill->getUser(), $bill->getBalance());
-
-        $this->em->persist($bill);
-        $this->em->flush();
-        //$this->persist($bill->getUser(), true);
-
-        return $bill->getBalance();
-    }
-
-    /**
      * Генерация блок-чейн хеша для била
      *
      * @param Bill $bill
      *
      * @return null|string
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @deprecated переделать на транзакции
      */
-    public function generateBlockChain(Bill $bill)
+    public function __generateBlockChain(Bill $bill)
     {
         $prev_bill = $this->em->getRepository(Bill::class)->getPreviousBill($bill);
 
@@ -151,7 +148,7 @@ class BillService
             $prev_bill = null;
         }
 
-        $bill->setHash($this->getHashFromBill($bill, $prev_bill));
+        $bill->setHash($this->__getHashFromBill($bill, $prev_bill));
 
         $this->em->persist($bill);
         $this->em->flush();
@@ -165,8 +162,10 @@ class BillService
      *
      * @return null|string
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @deprecated переделать на транзакции
      */
-    public function getHashFromBill(Bill $bill, array $prev_bill = null): ?string
+    public function __getHashFromBill(Bill $bill, array $prev_bill = null): ?string
     {
         $deal = [];
         if (!empty($bill->getDeal())) {

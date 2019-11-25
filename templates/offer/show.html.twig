@@ -52,7 +52,7 @@
                 {% include 'offer/_status.html.twig' %}
 
                 {% if offer.isStatusAccessToOrder and offer.user != app.user %}
-                    <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#exampleModal"><i class="far fa-handshake"></i> Заключить сделку</button>
+                    <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#exampleModal"><i class="far fa-handshake"></i> Получить</button>
                 {% endif %}
 {#                <button type="button" class="btn btn-sm btn-outline-danger"><i class="far fa-heart"></i> В избравнное</button>#}
             </h3>
@@ -74,7 +74,7 @@
 
                                 <div class="form-group">
                                     <label for="recipient-name" class="col-form-label">Количество</label>
-                                    <input type="number" id="order-quantity" class="form-control" name="quantity" value="1" title="Максимум {{ offer.quantity }}">
+                                    <input type="number" id="order-quantity" class="form-control" min="1" name="quantity" value="1" title="Максимум {{ offer.quantity }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="message-text" class="col-form-label">Предложить цену за ед.</label>
@@ -87,7 +87,7 @@
                                 <div class="modal-footer">
                                     <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount">{{ offer.price }} ₽</strong></div>
                                     <button type="button" class="btn btn-light" data-dismiss="modal">Закрыть</button>
-                                    <button type="submit" class="btn btn-success" id="form_submit">Предложить сделку</button>
+                                    <button type="submit" class="btn btn-success" id="form_submit">Отправить запрос</button>
                                 </div>
                             </form>
                         </div>
@@ -153,7 +153,7 @@
                 <p>
                     {% include 'user/_anketa.html.twig' with {'user': offer.user} %}
                 </p>
-{#                {% if offer.user != app.user %}#}
+                {% if offer.user != app.user %}
                     <p><i class="far fa-paper-plane"></i>
                         {% if offer.user.telegramUsername %}
                             <a href="tg://resolve?domain={{ offer.user.telegramUsername }}">Написать сообщение в Телеграм</a>
@@ -161,16 +161,26 @@
                             <span style="color: red;">Телеграм не подключен</span>
                         {% endif %}
                     </p>
-{#                {% endif %}#}
+                {% endif %}
 {#                <p><i class="fas fa-map-marker-alt"></i> Новосибирск  --- @todo</p>#}
                 <p><i class="far fa-calendar-check"></i> Участник с {{ offer.user.createdAt|format_date }}</p>
-                <p><i class="far fa-money-bill-alt"></i> Баланс: {{ app_balance(offer.user) }}</p>
+                <p><i class="far fa-money-bill-alt"></i> Баланс:
+                    {{ app_balance(offer.user) }}
+                    <ul>
+                        <li>эмиссия: {{ app_offers_balance(offer.user) }}</li>
+                        <li>холд: {{ app_get_hold_sum(offer.user) }}</li>
+                        <li>транзакции: {{ app_transactions_in(offer.user) - app_transactions_out(offer.user) }}</li>
+                            <ul>
+                                <li>входящие: {{ app_transactions_in(offer.user) }}</li>
+                                <li>исходящие {{ app_transactions_out(offer.user) }}</li>
+                            </ul>
+                    </ul>
+                </p>
                 <p><i class="far fa-handshake"></i> Кол-во сделок: {{ app_count_deals_for_user(offer.user) }}</p>
                 <p><i class="fas fa-boxes"></i> Кол-во предложений: {{ app_count_offers_for_user(offer.user) }}</p>
             </div>
         </div>
     </div>
-
 {% endblock content %}
 
 {% block js %}
@@ -190,7 +200,7 @@
               //console.log(data);
               if(data.status == 'success') {
                 // Success code here
-                // location.reload();
+                location.reload();
               } else {
                 // Error code here
                 new PNotify({
@@ -219,5 +229,4 @@
           });
         });
     </script>
-
 {% endblock js %}

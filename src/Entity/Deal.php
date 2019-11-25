@@ -100,30 +100,36 @@ class Deal
      * @var Offer
      *
      * @ORM\ManyToOne(targetEntity="Offer")
+     * @ORM\JoinColumn(nullable=false)
      */
     protected $offer;
 
     /**
+     * Подрядчик, исполнитель, продавец
+     *
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(nullable=false)
      */
     protected $contractor_user;
 
     /**
+     * Заявитель, покупатель
+     *
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(nullable=false)
      */
     protected $declarant_user;
 
     /**
-     * @var Bill[]|ArrayCollection
+     * @var Transaction[]|ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Bill", mappedBy="deal", fetch="EXTRA_LAZY")
-     * @ORM\OrderBy({"id" = "DESC"})
+     * @ORM\OneToMany(targetEntity="Transaction", mappedBy="deal", fetch="EXTRA_LAZY")
      */
-    protected $bills;
+    protected $transactions;
 
     /**
      * Deal constructor.
@@ -132,7 +138,7 @@ class Deal
     {
         $this->created_at   = new \DateTime();
         $this->status       = self::STATUS_NEW;
-        $this->bills        = new ArrayCollection();
+        $this->transactions = new ArrayCollection();
     }
 
     /**
@@ -359,6 +365,26 @@ class Deal
     public function setDeclarantUser(User $declarant_user): self
     {
         $this->declarant_user = $declarant_user;
+
+        return $this;
+    }
+
+    /**
+     * @return Transaction[]|ArrayCollection
+     */
+    public function getTransactions()
+    {
+        return $this->transactions;
+    }
+
+    /**
+     * @param Transaction[]|ArrayCollection $transactions
+     *
+     * @return $this
+     */
+    public function setTransactions($transactions): self
+    {
+        $this->transactions = $transactions;
 
         return $this;
     }
