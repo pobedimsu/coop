@@ -128,7 +128,7 @@ class Offer
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(nullable=false)
+     * ORM\JoinColumn(nullable=false)
      */
     protected $user;
 
