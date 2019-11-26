@@ -118,14 +118,6 @@ class DealController extends AbstractController
     }
 
     /**
-     * @param Deal                   $deal
-     * @param Request                $request
-     * @param EntityManagerInterface $em
-     *
-     * @return Response|RedirectResponse
-     * @throws \Doctrine\DBAL\DBALException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
      * @Route("/deal/{id}/", name="deal_show")
      */
     public function show(Deal $deal, Request $request, EntityManagerInterface $em): Response

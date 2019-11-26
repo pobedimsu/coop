@@ -33,12 +33,6 @@ class OfferController extends AbstractController
     }
 
     /**
-     * @param Request                $request
-     * @param EntityManagerInterface $em
-     * @param MediaCloudService      $mc
-     *
-     * @return Response|RedirectResponse
-     *
      * @Route("/create/", name="offer_create")
      */
     public function create(Request $request, EntityManagerInterface $em, MediaCloudService $mc): Response
@@ -80,13 +74,6 @@ class OfferController extends AbstractController
     }
 
     /**
-     * @param Offer                  $offer
-     * @param Request                $request
-     * @param EntityManagerInterface $em
-     * @param MediaCloudService      $mc
-     *
-     * @return RedirectResponse|Response
-     *
      * @Route("/{id}/edit/", name="offer_edit")
      */
     public function edit(Offer $offer, Request $request, EntityManagerInterface $em, MediaCloudService $mc): Response
@@ -144,10 +131,6 @@ class OfferController extends AbstractController
     }
 
     /**
-     * @param EntityManagerInterface $em
-     *
-     * @return Response
-     *
      * @Route("/my/", name="offers_my")
      */
     public function my(EntityManagerInterface $em): Response
@@ -160,10 +143,6 @@ class OfferController extends AbstractController
     }
 
     /**
-     * @param EntityManagerInterface $em
-     *
-     * @return Response
-     *
      * @Route("/{id}/", name="offer_show")
      */
     public function show(string $id, EntityManagerInterface $em): Response

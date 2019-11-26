@@ -26,11 +26,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserController extends AbstractController
 {
     /**
-     * @param Request                $request
-     * @param EntityManagerInterface $em
-     *
-     * @return RedirectResponse|Response
-     *
      * @Route("/", name="profile")
      */
     public function profile(Request $request, EntityManagerInterface $em): Response
@@ -66,12 +61,6 @@ class UserController extends AbstractController
     }
 
     /**
-     * @param Request                      $request
-     * @param EntityManagerInterface       $em
-     * @param UserPasswordEncoderInterface $encoder
-     *
-     * @return RedirectResponse|Response
-     *
      * @Route("/password/", name="profile_password")
      */
     public function password(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder): Response
@@ -122,11 +111,6 @@ class UserController extends AbstractController
     }
 
     /**
-     * @param Request                $request
-     * @param EntityManagerInterface $em
-     *
-     * @return Response|RedirectResponse
-     *
      * @Route("/geoposition/", name="profile_geoposition")
      */
     public function geoposition(Request $request, EntityManagerInterface $em): Response
