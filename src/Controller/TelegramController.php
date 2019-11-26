@@ -9,30 +9,21 @@ use Borsaco\TelegramBotApiBundle\Service\Bot;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Cache\ItemInterface;
 use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Traits\Telegram;
 
 class TelegramController extends AbstractController
 {
     /**
-     * @param Request                $request
-     * @param Bot                    $bot
-     * @param EntityManagerInterface $em
-     * @param KernelInterface        $kernel - не искользуется
-     *
-     * @return Response
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Telegram\Bot\Exceptions\TelegramSDKException
      *
      * @Route("/telegram/", name="telegram")
      */
-    public function index(Request $request, Bot $bot, EntityManagerInterface $em, KernelInterface $kernel): Response
+    public function index(Request $request, Bot $bot, EntityManagerInterface $em): Response
     {
         if ($request->getMethod() == 'POST') {
             $tg = $bot->getBot();
@@ -53,8 +44,6 @@ class TelegramController extends AbstractController
                 return new Response($e->getMessage());
             }
 
-            //$user = $em->getRepository(User::class)->findOneBy(['id']);
-
             if($text) {
                 if ($text == '/start') {
                     $reply = 'Добро пожаловать!';
@@ -63,6 +52,7 @@ class TelegramController extends AbstractController
                         $reply .= "\n\nУ вас не задано имя пользователя. Пожалуйста, укажите его в настройках телеграма";
                     }
 
+                    /*
                     $keyboard = Keyboard::make()
                         ->setResizeKeyboard(true)
                         ->setOneTimeKeyboard(false)
@@ -70,9 +60,10 @@ class TelegramController extends AbstractController
                             Keyboard::button(['text' => 'Баланс']),
                             Keyboard::button(['text' => 'Предложения']),
                             Keyboard::button(['text' => 'Сделки']),
-                        //                        Keyboard::inlineButton(['text' => 'Test', 'url' => 'https://www.google.com']),
+                        // Keyboard::inlineButton(['text' => 'Test', 'url' => 'https://www.google.com']),
                         );
                     $keyboard = Keyboard::remove();
+                    */
 
                     $telegram->sendMessage([
                         'chat_id' => $chat_id,
@@ -124,11 +115,6 @@ class TelegramController extends AbstractController
             } else {
                 $tg->sendMessage(['chat_id' => $chat_id, 'text' => 'Отправьте текстовое сообщение']);
             }
-
-//            ob_start();
-//            var_dump($result);
-//
-//            file_put_contents($kernel->getLogDir().'/tg.log', ob_get_clean());
         }
 
         return new Response('<html><body></body></html>');
