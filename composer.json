@@ -4,6 +4,7 @@
     "require": {
         "php": "^7.3",
         "ext-ctype": "*",
+        "ext-gd": "*",
         "ext-iconv": "*",
         "borsaco/telegram-bot-api-bundle": "*",
         "doctrine/doctrine-bundle": "*",
