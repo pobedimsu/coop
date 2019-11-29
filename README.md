@@ -4,7 +4,10 @@
 Системные требования
 --------------------
 
-* PHP v7.3
+* PHP v7.3 c расширениями:
+    * ctype
+    * gd
+    * iconv    
 * [Composer](https://getcomposer.org/)
 * MariaDB (скоро MySQL и PostgreSQL)
 
