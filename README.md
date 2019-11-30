@@ -11,6 +11,12 @@
 * [Composer](https://getcomposer.org/)
 * MariaDB (скоро MySQL и PostgreSQL)
 
+Чтобы узнать соотвествует соответствие системным требованиямм, можно выполнить команду:
+
+```
+composer check-platform-reqs
+```
+
 Установка
 ---------
 
@@ -18,11 +24,11 @@
 
 Получение кода:
 ```
-    git clone https://github.com/pobedimsu/coop.git
-    cd coop
-    git submodule update --init
-    cp .env .env.local
-    composer i
+git clone https://github.com/pobedimsu/coop.git
+cd coop
+git submodule update --init
+cp .env .env.local
+composer i
 ```
 
 Создать БД в MariaDB или MySQL.
@@ -34,18 +40,18 @@
 
 Далее выполнить в консоле:
 ```    
-    bin/console doctrine:schema:update --force
-    bin/console app:init
+bin/console doctrine:schema:update --force
+bin/console app:init
 ```
 
 В завершени нужно создать первого пользователя
 ```    
-    bin/console user:add
+bin/console user:add
 ```
 
 В случае, если будут проблеммы с доступак к файлам, то нужно обнулить кеш
 ```    
-     bin/clear_cache
+bin/clear_cache
 ```
 
 
