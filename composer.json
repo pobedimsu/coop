@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-gd": "*",
         "ext-iconv": "*",
+        "ext-intl": "*",
         "borsaco/telegram-bot-api-bundle": "*",
         "doctrine/doctrine-bundle": "*",
         "knplabs/knp-menu-bundle": "*",
