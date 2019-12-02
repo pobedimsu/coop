@@ -87,7 +87,7 @@ class UserRoleDemoteCommand extends Command
 
         $user = $this->em->getRepository(User::class)->findOneBy(['username' => $username]);
 
-        if (empty($username)) {
+        if (empty($user)) {
             $this->io->warning('User not found');
 
             return;
