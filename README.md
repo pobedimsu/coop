@@ -8,6 +8,13 @@
     * ctype
     * gd
     * iconv    
+    * intl
+    * json 
+    * mbstring 
+    * PDO
+    * SimpleXML
+    * tokenizer 
+    * xml
 * [Composer](https://getcomposer.org/)
 * MariaDB (скоро MySQL и PostgreSQL)
 
