@@ -1,0 +1,13 @@
+services:
+    smart_core.texter.twig.extension:
+        class: SmartCore\Bundle\TexterBundle\Twig\TexterExtension
+        arguments:
+            - '@doctrine.orm.default_entity_manager'
+#            - '@doctrine_cache.providers.smart_texter'
+        tags:
+            - { name: twig.extension }
+
+    smart_core.texter.manager:
+        class: SmartCore\Bundle\TexterBundle\Manager\TexterManager
+        arguments: [ '@service_container' ]
+        public: true

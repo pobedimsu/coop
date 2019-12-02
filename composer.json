@@ -38,6 +38,8 @@
     "require-dev": {
     },
     "config": {
+        "apcu-autoloader": true,
+        "component-dir": "public/components",
         "preferred-install": {
             "*": "dist"
         },
@@ -47,6 +49,7 @@
         "psr-4": {
             "App\\": "src/",
             "SmartCore\\Bundle\\MediaBundle\\": "src-vendor/MediaBundle/",
+            "SmartCore\\Bundle\\TexterBundle\\": "src-vendor/TexterBundle/",
             "Coop\\JointPurchaseBundle\\": "src-vendor/JointPurchaseBundle/",
             "Borsaco\\TelegramBotApiBundle\\": "src-overload/Borsaco/TelegramBotApiBundle/"
         }

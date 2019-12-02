@@ -65,18 +65,33 @@ class UserListCommand extends Command
 
         $rows = [];
         foreach ($users as $user) {
+            $roles = '';
+
+            foreach ($user->getRoles() as $key => $role) {
+                if ($role == 'ROLE_USER') {
+                    $role = '';
+                }
+
+                $roles .= $role;
+
+                if (count($user->getRoles()) > $key + 1) {
+                    $roles .= "\n";
+                }
+            }
+
             $rows[] = [
                 $user->getUsername(),
                 $user->__toString(),
                 $user->getTelegramUsername(),
-                $user->getApiToken() ? '+' : '',
                 (string) $user->getInvitedByUser(),
+                $user->getApiToken() ? '+' : '',
+                $roles,
                 $user->getCreatedAt()->format('Y-m-d H:i'),
                 $user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d H:i') : '',
             ];
         }
 
-        $this->io->table(['Username', 'FIO', 'Telegram', 'API', 'Inviter', 'Created At', 'Last login'], $rows);
+        $this->io->table(['Username', 'FIO', 'Telegram', 'Inviter', 'API', 'Roles', 'Created At', 'Last login'], $rows);
 
         $this->io->writeln("Всего: ".count($users));
     }

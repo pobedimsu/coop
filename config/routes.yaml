@@ -2,3 +2,7 @@ jp_controllers:
     resource: '../src-vendor/JointPurchaseBundle/Controller/'
     type:     annotation
     prefix:   jp
+
+smart_texter:
+    resource: '@SmartTexterBundle/Resources/config/routing_admin.yml'
+    prefix:   /admin/texter/

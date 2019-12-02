@@ -1,0 +1,46 @@
+{% extends '@SmartTexter/layout.html.twig' %}
+
+{% block smart_texter_content %}
+
+    {#<p><a href="{{ path('smart_texter_admin_create') }}" class="btn btn-success">Добавить текст</a></p>#}
+
+    {#<p>Всего текстов: {{ pagerfanta.count }}</p>#}
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Текст</th>
+            <th>Дата создания</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for text in pagerfanta.currentPageResults %}
+            <tr>
+                <td>
+                    <a href="{{ path('smart_texter_admin_edit', {'id': text.id}) }}" title="Редактировать">
+                        {{ text.name }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('smart_texter_admin_edit', {'id': text.id}) }}" title="Редактировать">
+                        {{ text.announce }}
+                    </a>
+                </td>
+                <td>{{ text.createdAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% block smart_texter_paginator %}
+        {% if pagerfanta.haveToPaginate %}
+            {{ pagerfanta(pagerfanta, 'twitter_bootstrap_translated', {
+                    'routeName': 'smart_texter_admin_index',
+                    'css_container_class': 'pagination pagination-centered',
+                })
+            }}
+        {% endif %}
+    {% endblock smart_texter_paginator %}
+
+{% endblock smart_texter_content %}

@@ -1,0 +1,23 @@
+
+{{ form_start(form, {
+    'attr': {'class': "_form-horizontal"}
+}) }}
+
+<fieldset>
+    {#<legend>{{ form_label(form) }}</legend>#}
+    {{ form_errors(form) }}
+    {{ form_widget(form.text, {
+            'attr': {
+                'class': 'input-block-level wysiwyg',
+                'data-theme': 'advanced',
+            }
+        })
+    }}
+    <br />
+    {{ form_rest(form) }}
+</fieldset>
+{{ form_end(form) }}
+
+{#{{ elfinder_tinymce_init4('tinymce4', {'width': 980, 'height': 430, 'title': 'Файловый менеджер' }) }}#}
+{#{{ elfinder_tinymce_init() }}#}
+{{ tinymce_init() }}

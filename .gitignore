@@ -4,6 +4,7 @@
 /.env.local
 /.env.local.php
 /.env.*.local
+/public/components/
 /public/bundles/
 /var/
 /usr/

@@ -1,0 +1,9 @@
+{% extends '@SmartTexter/layout.html.twig' %}
+
+{% block smart_texter_content %}
+
+    <legend>Текст &laquo;<strong>{{ form.vars.data.name }}</strong>&raquo;</legend>
+
+    {% include '@SmartTexter/Admin/_form.html.twig' %}
+
+{% endblock smart_texter_content %}

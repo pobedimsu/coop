@@ -11,6 +11,7 @@ return [
     Smart\CoreBundle\SmartCoreBundle::class => ['all' => true],
     SmartCore\Bundle\DbDumperBundle\SmartDbDumperBundle::class => ['all' => true],
     SmartCore\Bundle\MediaBundle\SmartMediaBundle::class => ['all' => true],
+    SmartCore\Bundle\TexterBundle\SmartTexterBundle::class => ['all' => true],
     Symfony\Bundle\SecurityBundle\SecurityBundle::class => ['all' => true],
     Knp\Bundle\MenuBundle\KnpMenuBundle::class => ['all' => true],
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
@@ -22,4 +23,5 @@ return [
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
     Borsaco\TelegramBotApiBundle\TelegramBotApiBundle::class => ['all' => true],
     Coop\JointPurchaseBundle\JointPurchaseBundle::class => ['all' => true],
+    Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle::class => ['all' => true],
 ];

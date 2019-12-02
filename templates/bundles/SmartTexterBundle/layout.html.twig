@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ 'Texts'|trans }} / {{ parent() }} {% endblock %}
+
+{% block content %}
+    {{ parent() }}
+
+    {% block smart_texter_content '' %}
+
+{% endblock %}

@@ -7,6 +7,7 @@ namespace App\Command;
 use App\Entity\Category;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use SmartCore\Bundle\TexterBundle\Entity\Text;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -61,6 +62,7 @@ class InitCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $isUpdated = false;
         $categories = $this->em->getRepository(Category::class)->findBy([]);
 
         if (empty($categories)) {
@@ -74,7 +76,27 @@ class InitCommand extends Command
             $this->em->flush();
 
             $this->io->writeln("<info>Создана 'Первая категория'</info>");
-        } else {
+
+            $isUpdated = true;
+        }
+
+        $homepageText = $this->em->getRepository(Text::class)->findOneBy(['name' => 'homepage']);
+
+        if (empty($homepageText)) {
+            $homepageText = new Text();
+            $homepageText
+                ->setName('homepage')
+                ->setText('<h1>Главная</h1>')
+            ;
+            $this->em->persist($homepageText);
+            $this->em->flush();
+
+            $this->io->writeln("<info>Создан текст 'homepage'</info>");
+
+            $isUpdated = true;
+        }
+
+        if (!$isUpdated) {
             $this->io->writeln('Инициализация не требуется');
         }
     }

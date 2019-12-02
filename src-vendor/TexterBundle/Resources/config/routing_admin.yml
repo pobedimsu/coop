@@ -1,0 +1,13 @@
+smart_texter_admin_index:
+    path: /
+    defaults: { _controller: SmartTexterBundle:Admin:index }
+
+#smart_texter_admin_create:
+#    path: /create/
+#    defaults: { _controller: SmartTexterBundle:Admin:create }
+
+smart_texter_admin_edit:
+    path: /{id}/
+    defaults: { _controller: SmartTexterBundle:Admin:edit }
+    requirements:
+        id: \d+
