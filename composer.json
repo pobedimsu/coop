@@ -32,6 +32,7 @@
         "symfony/translation": "4.4.*",
         "symfony/validator": "4.4.*",
         "symfony/yaml": "4.4.*",
+        "stfalcon/tinymce-bundle": "*",
         "vich/uploader-bundle": "*",
         "white-october/pagerfanta-bundle": "*"
     },
