@@ -24,4 +24,5 @@ return [
     Borsaco\TelegramBotApiBundle\TelegramBotApiBundle::class => ['all' => true],
     Coop\JointPurchaseBundle\JointPurchaseBundle::class => ['all' => true],
     Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle::class => ['all' => true],
+    Nelmio\CorsBundle\NelmioCorsBundle::class => ['all' => true],
 ];
