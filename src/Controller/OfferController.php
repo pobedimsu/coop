@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Offer;
 use App\Form\Type\OfferFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,11 +24,19 @@ class OfferController extends AbstractController
     /**
      * @Route("/", name="offers")
      */
-    public function index(EntityManagerInterface $em): Response
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
-        $offers = $em->getRepository(Offer::class)->findBy([], ['created_at' => 'DESC']);
+        $offers = $em->getRepository(Offer::class)
+            ->getFindQueryBuilder([
+                'category' => $request->query->get('category'),
+                'search' => $request->query->get('search'),
+            ])
+            ->getQuery()
+            ->getResult()
+        ;
 
         return $this->render('offer/index.html.twig', [
+            'categories' => $em->getRepository(Category::class)->findBy([], ['position' => 'ASC', 'title' => 'ASC']),
             'offers' => $offers,
         ]);
     }

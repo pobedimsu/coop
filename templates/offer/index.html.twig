@@ -10,7 +10,31 @@
 
     <h1>Предложения</h1>
 
+    <form method="get">
+    <table width="100%">
+        <tr>
+            <td style="width: 180px;">
+                <select name="category" class="form-control">
+                    <option value="">Любоая категория</option>
+                    {% for c in categories %}
+                        <option value="{{ c.id }}"
+                           {% if app.request.query.get('category') == c.id %} selected {% endif %}
+                        >{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <input name="search" value="{{ app.request.query.get('search') }}" class="form-control" type="text" placeholder="Поиск по предложениям">
+            </td>
+            <td style="width: 50px;">
+                <button>Найти</button>
+            </td>
+        </tr>
+    </table>
+    </form>
+
     <p>Всего: {{ offers|length }}</p>
+
     <div class="py-1 bg-light">
         <div class="container">
             <div class="row">
