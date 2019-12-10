@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
+use App\Entity\Category;
 use App\Entity\Offer;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -19,7 +22,14 @@ class OfferFormType extends AbstractType
     {
         $builder
             ->add('title', null, ['attr' => ['autofocus' => true]])
-            ->add('category')
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e')
+                        ->orderBy('e.position', 'ASC')
+                        ->addOrderBy('e.title', 'ASC');
+                },
+            ])
             ->add('image_id', ImageFormType::class, [
                 'mapped' => true,
                 'required' => false,

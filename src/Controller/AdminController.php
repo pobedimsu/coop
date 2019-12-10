@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Category;
+use App\Form\Type\CategoryFormType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,5 +23,69 @@ class AdminController extends AbstractController
     public function index(): Response
     {
         return $this->render('admin/index.html.twig');
+    }
+
+    /**
+     * @Route("/category/", name="admin_category")
+     */
+    public function categoryIndex(Request $request, EntityManagerInterface $em): Response
+    {
+        $categories = $em->getRepository(Category::class)->findBy([], ['position' => 'ASC', 'title' => 'ASC']);
+
+        $form = $this->createForm(CategoryFormType::class);
+        $form->remove('update');
+        $form->remove('cancel');
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('admin_category');
+            }
+
+            if ($form->get('create')->isClicked() and $form->isValid()) {
+                $em->persist($form->getData());
+                $em->flush();
+
+                $this->addFlash('success', 'Категория создана');
+
+                return $this->redirectToRoute('admin_category');
+            }
+        }
+
+        return $this->render('admin/category/index.html.twig', [
+            'categories' => $categories,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/category/{id}/", name="admin_category_edit")
+     */
+    public function categoryEdit(Category $category, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(CategoryFormType::class, $category);
+        $form->remove('create');
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('admin_category');
+            }
+
+            if ($form->get('update')->isClicked() and $form->isValid()) {
+                $em->persist($category);
+                $em->flush();
+
+                $this->addFlash('success', 'Категория обновлена');
+
+                return $this->redirectToRoute('admin_category');
+            }
+        }
+
+        return $this->render('admin/category/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }
