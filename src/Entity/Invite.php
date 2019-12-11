@@ -39,6 +39,7 @@ class Invite
     public function __construct(User $user = null)
     {
         $this->created_at = new \DateTime();
+        $this->is_used = false;
 
         if ($user) {
             $this->setUser($user);
