@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Entity\Invite;
 use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -114,6 +115,15 @@ class UserModel implements UserInterface
      * @ORM\ManyToOne(targetEntity="User", inversedBy="invited_users")
      */
     protected $invited_by_user;
+
+    /**
+     * Приглашение
+     *
+     * @var Invite|null
+     *
+     * @ORM\OneToOne(targetEntity="Invite", cascade={"persist"})
+     */
+    protected $invite;
 
     /**
      * Приглашенные пользователи
@@ -497,6 +507,28 @@ class UserModel implements UserInterface
     public function setApiToken(?string $api_token): self
     {
         $this->api_token = $api_token;
+
+        return $this;
+    }
+
+    /**
+     * @return Invite|null
+     */
+    public function getInvite(): ?Invite
+    {
+        return $this->invite;
+    }
+
+    /**
+     * @param Invite $invite
+     *
+     * @return $this
+     */
+    public function setInvite(Invite $invite): self
+    {
+        $invite->setIsUsed(true);
+
+        $this->invite = $invite;
 
         return $this;
     }
