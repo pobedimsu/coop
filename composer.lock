@@ -1077,16 +1077,16 @@
         },
         {
             "name": "doctrine/persistence",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/persistence.git",
-                "reference": "43526ae63312942e5316100bb3ed589ba1aba491"
+                "reference": "fb81d2bccc0b891393367c8bb1fcc4cf8efcc761"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/persistence/zipball/43526ae63312942e5316100bb3ed589ba1aba491",
-                "reference": "43526ae63312942e5316100bb3ed589ba1aba491",
+                "url": "https://api.github.com/repos/doctrine/persistence/zipball/fb81d2bccc0b891393367c8bb1fcc4cf8efcc761",
+                "reference": "fb81d2bccc0b891393367c8bb1fcc4cf8efcc761",
                 "shasum": ""
             },
             "require": {
@@ -1101,19 +1101,20 @@
                 "doctrine/common": "<2.10@dev"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^5.0",
-                "phpstan/phpstan": "^0.8",
+                "doctrine/coding-standard": "^6.0",
+                "phpstan/phpstan": "^0.11",
                 "phpunit/phpunit": "^7.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2.x-dev"
+                    "dev-master": "1.3.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Doctrine\\Common\\": "lib/Doctrine/Common"
+                    "Doctrine\\Common\\": "lib/Doctrine/Common",
+                    "Doctrine\\Persistence\\": "lib/Doctrine/Persistence"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1155,7 +1156,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2019-04-23T12:39:21+00:00"
+            "time": "2019-12-12T14:01:13+00:00"
         },
         {
             "name": "doctrine/reflection",
@@ -1284,16 +1285,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.11.0",
+            "version": "8.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "356a97b1601edde8256dace68fe7ffeec0d777f9"
+                "reference": "f6a367f08e323edc1c27546d8d5818bb016d812e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/356a97b1601edde8256dace68fe7ffeec0d777f9",
-                "reference": "356a97b1601edde8256dace68fe7ffeec0d777f9",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/f6a367f08e323edc1c27546d8d5818bb016d812e",
+                "reference": "f6a367f08e323edc1c27546d8d5818bb016d812e",
                 "shasum": ""
             },
             "require": {
@@ -1348,7 +1349,7 @@
                 "phonenumber",
                 "validation"
             ],
-            "time": "2019-11-26T16:09:47+00:00"
+            "time": "2019-12-11T10:03:19+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -3301,16 +3302,16 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v5.5.1",
+            "version": "v5.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "dfc2c4df9f7d465a65c770e9feb578fe071636f7"
+                "reference": "92acfcc610e2180c52790ec3ff2e893f67e76b32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/dfc2c4df9f7d465a65c770e9feb578fe071636f7",
-                "reference": "dfc2c4df9f7d465a65c770e9feb578fe071636f7",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/92acfcc610e2180c52790ec3ff2e893f67e76b32",
+                "reference": "92acfcc610e2180c52790ec3ff2e893f67e76b32",
                 "shasum": ""
             },
             "require": {
@@ -3375,7 +3376,7 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2019-10-16T18:54:45+00:00"
+            "time": "2019-12-12T16:21:49+00:00"
         },
         {
             "name": "smart-core/core-bundle",
@@ -3521,12 +3522,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/stfalcon/TinymceBundle.git",
-                "reference": "3455d81e5d1acf58cd3f500ab7573b95b3659b39"
+                "reference": "e72bc3df1c2c0ef8378b967f4cd3196009b855ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stfalcon/TinymceBundle/zipball/3455d81e5d1acf58cd3f500ab7573b95b3659b39",
-                "reference": "3455d81e5d1acf58cd3f500ab7573b95b3659b39",
+                "url": "https://api.github.com/repos/stfalcon/TinymceBundle/zipball/e72bc3df1c2c0ef8378b967f4cd3196009b855ff",
+                "reference": "e72bc3df1c2c0ef8378b967f4cd3196009b855ff",
                 "shasum": ""
             },
             "require": {
