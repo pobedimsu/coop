@@ -7,7 +7,6 @@ return [
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
     Symfony\Bundle\WebProfilerBundle\WebProfilerBundle::class => ['dev' => true, 'test' => true],
-    Misd\PhoneNumberBundle\MisdPhoneNumberBundle::class => ['all' => true],
     Smart\CoreBundle\SmartCoreBundle::class => ['all' => true],
     SmartCore\Bundle\DbDumperBundle\SmartDbDumperBundle::class => ['all' => true],
     SmartCore\Bundle\MediaBundle\SmartMediaBundle::class => ['all' => true],
