@@ -81,18 +81,6 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
-    "easycorp/easy-log-handler": {
-        "version": "1.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "1.0",
-            "ref": "70062abc2cd58794d2a90274502f81b55cd9951b"
-        },
-        "files": [
-            "./config/packages/dev/easy_log_handler.yaml"
-        ]
-    },
     "guzzlehttp/guzzle": {
         "version": "6.3.3"
     },
@@ -565,6 +553,9 @@
         "files": [
             "./config/packages/vich_uploader.yaml"
         ]
+    },
+    "voku/portable-ascii": {
+        "version": "1.4.10"
     },
     "webmozart/assert": {
         "version": "1.4.0"
