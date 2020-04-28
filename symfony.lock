@@ -1,4 +1,7 @@
 {
+    "behat/transliterator": {
+        "version": "v1.3.0"
+    },
     "borsaco/telegram-bot-api-bundle": {
         "version": "1.0.2"
     },
@@ -80,6 +83,9 @@
     },
     "doctrine/reflection": {
         "version": "v1.0.0"
+    },
+    "gedmo/doctrine-extensions": {
+        "version": "v2.4.39"
     },
     "guzzlehttp/guzzle": {
         "version": "6.3.3"

@@ -39,6 +39,13 @@ services:
             - { name: knp_menu.menu_builder, method: top, alias: top } # The alias is what is used to retrieve the menu
             - { name: knp_menu.menu_builder, method: profile, alias: profile }
 
+    gedmo.listener.tree:
+        class: Gedmo\Tree\TreeListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
     # @todo отрефакторить
     Coop\JointPurchaseBundle\:
         resource: '../src-vendor/JointPurchaseBundle/*'
