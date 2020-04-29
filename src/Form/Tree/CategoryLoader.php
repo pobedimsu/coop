@@ -103,6 +103,10 @@ class CategoryLoader implements EntityLoaderInterface
      */
     public function getEntitiesByIds($identifier, array $values)
     {
+        if (isset($values[0]) and empty($values[0])) {
+            return [];
+        }
+
         return $this->repo->findBy(
             [$identifier => $values]
         );

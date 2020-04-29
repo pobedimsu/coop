@@ -39,8 +39,31 @@ services:
             - { name: knp_menu.menu_builder, method: top, alias: top } # The alias is what is used to retrieve the menu
             - { name: knp_menu.menu_builder, method: profile, alias: profile }
 
-    gedmo.listener.tree:
-        class: Gedmo\Tree\TreeListener
+    Gedmo\Loggable\LoggableListener:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    Gedmo\Sortable\SortableListener:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    Gedmo\Sluggable\SluggableListener:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    Gedmo\Timestampable\TimestampableListener:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    Gedmo\Tree\TreeListener:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
         calls:

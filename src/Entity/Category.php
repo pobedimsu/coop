@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
@@ -24,11 +25,19 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
 class Category
 {
     use ColumnTrait\Id;
-    use ColumnTrait\NameUnique;
     use ColumnTrait\TitleNotBlank;
     use ColumnTrait\Description;
     use ColumnTrait\CreatedAt;
     use ColumnTrait\Position;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=190, unique=true, nullable=true)
+     * @Gedmo\Slug(fields={"title"})
+     * Assert\NotBlank()
+     */
+    protected $name;
 
     /**
      * This parameter is optional for the closure strategy
@@ -68,9 +77,6 @@ class Category
         $this->position   = 0;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->title;
@@ -128,6 +134,18 @@ class Category
     public function setFormTitle(string $form_title): self
     {
         $this->form_title = $form_title;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
