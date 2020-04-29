@@ -1,0 +1,12 @@
+# @todo
+smart_media:
+    cache: apc # file, memcache
+    providers:
+        local:
+            class: SmartCore\Bundle\MediaBundle\Provider\LocalProvider
+            original_dir: '%kernel.project_dir%/usr/media_cloud'
+            #original_dir: '%kernel.project_dir%/public'
+            filter_dir: '%kernel.project_dir%/public'
+        remote:
+            class: SmartCore\Bundle\MediaBundle\Provider\RemoteProvider
+            base_url: http://example.com

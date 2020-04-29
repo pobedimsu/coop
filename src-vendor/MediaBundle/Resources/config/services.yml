@@ -1,0 +1,36 @@
+parameters:
+    smart_media.local.provider: SmartCore\Bundle\MediaBundle\Provider\LocalProvider
+
+services:
+    SmartCore\Bundle\MediaBundle\Service\MediaCloudService:
+        arguments: [ '@service_container', '@doctrine.orm.entity_manager', "%smart_media.config%" ]
+        public: true
+
+    smart_media:
+        alias: SmartCore\Bundle\MediaBundle\Service\MediaCloudService
+
+    smart_imagine_configuration:
+        alias: liip_imagine.filter.configuration
+        public: true
+
+    smart_media.generator:
+        public: true
+        class: SmartCore\Bundle\MediaBundle\Service\GeneratorService
+
+    smart_media.twig.extension:
+        class: SmartCore\Bundle\MediaBundle\Twig\MediaExtension
+        arguments: [ '@smart_media' ]
+        tags:
+            - { name: twig.extension }
+
+    smart_media.stats_command:
+        class: SmartCore\Bundle\MediaBundle\Command\StatsCommand
+        arguments: ['@smart_media']
+        tags:
+            - { name: console.command, command: 'smart:media:stats' }
+
+    smart_media.filters_purge_command:
+        class: SmartCore\Bundle\MediaBundle\Command\FiltersPurgeCommand
+        arguments: ['@doctrine.orm.entity_manager', '@smart_media']
+        tags:
+            - { name: console.command, command: 'smart:media:filters:purge' }

@@ -1,0 +1,22 @@
+{
+    "name": "smart-core/media-bundle",
+    "description": "Symfony Media Cloud Storage Bundle.",
+    "keywords": ["media", "bundle"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Artem Ryzhkov",
+            "email": "artem@smart-core.org",
+            "homepage": "http://smart-core.org"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.1",
+        "ext-gd": "*",
+        "liip/imagine-bundle": "*"
+    },
+    "autoload": {
+        "psr-4": { "SmartCore\\Bundle\\MediaBundle\\": "" }
+    }
+}
