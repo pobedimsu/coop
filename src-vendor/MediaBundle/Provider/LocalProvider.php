@@ -4,6 +4,7 @@ namespace SmartCore\Bundle\MediaBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
 use Liip\ImagineBundle\Model\FileBinary;
+use Psr\Log\LoggerInterface;
 use SmartCore\Bundle\MediaBundle\Entity\Collection;
 use SmartCore\Bundle\MediaBundle\Entity\File;
 use SmartCore\Bundle\MediaBundle\Entity\FileTransformed;
@@ -14,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service_locator;
 
 class LocalProvider implements ProviderInterface
 {
@@ -34,6 +36,8 @@ class LocalProvider implements ProviderInterface
     /** @var Request */
     protected $request;
 
+    protected $logger;
+
     /**
      * Используется только метод generateRelativePath
      *
@@ -45,11 +49,8 @@ class LocalProvider implements ProviderInterface
 
     /**
      * LocalProvider constructor.
-     *
-     * @param ContainerInterface $container
-     * @param array              $arguments
      */
-    public function __construct(ContainerInterface $container, array $arguments = [])
+    public function __construct(ContainerInterface $container, array $arguments = [], LoggerInterface $logger)
     {
         if (isset($arguments['filter_dir'])) {
             $this->filter_dir = $arguments['filter_dir'];
@@ -67,6 +68,7 @@ class LocalProvider implements ProviderInterface
         $this->em           = $container->get('doctrine.orm.entity_manager');
         $this->generator    = $container->get('smart_media.generator');
         $this->request      = $container->get('request_stack')->getCurrentRequest();
+        $this->logger       = $logger;
     }
 
     /**
@@ -165,7 +167,7 @@ class LocalProvider implements ProviderInterface
      *
      * ok
      */
-    public function generateTransformedFile(int $id, $filter)
+    public function generateTransformedFile($id, $filter)
     {
         /** @var File $file */
         $file = $this->em->find(File::class, $id);
@@ -223,7 +225,7 @@ class LocalProvider implements ProviderInterface
 
 //        return null;
     }
-    
+
     /**
      * @param File $file
      *
@@ -247,7 +249,7 @@ class LocalProvider implements ProviderInterface
     }
 
     /**
-     * @param int $id
+     * @param string $id
      *
      * @return bool
      *
@@ -260,23 +262,29 @@ class LocalProvider implements ProviderInterface
         /** @var File $file */
         $file = $this->em->find(File::class, $id);
 
+        $this->logger->info('file to remove', [serialize($file)]);
+
         if (!$file) {
             return false;
         }
 
         /** @var FileTransformed $fileTransformed */
         foreach ($file->getFilesTransformed() as $fileTransformed) {
+            $this->logger->info('fileTransformed to remove', [serialize($fileTransformed)]);
+
             $fullPath = $this->getFileTransformedPath($file, $fileTransformed->getFilter());
 
+            $this->logger->info('$fullPath to remove', [serialize($fullPath)]);
+
             if (file_exists($fullPath)) {
-                @unlink($fullPath);
+                unlink($fullPath);
             }
         }
 
         // Удаление оригинала.
         $fullPath = $this->getFilePath($file, 'orig');
 
-        @unlink($fullPath);
+        unlink($fullPath);
 
         return true;
     }

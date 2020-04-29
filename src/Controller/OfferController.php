@@ -111,13 +111,13 @@ class OfferController extends AbstractController
                     // $fileId = $mc->upload('of', $image); @todo
 
                     if ($oldImage) {
-                        $mc->getCollection('of')->remove((int) $oldImage);
+                        $mc->getCollection('of')->remove($oldImage);
                         // $mc->remove('of', (int) $oldImage); @todo
                     }
 
                     $offer->setImageId((string) $fileId);
                 } elseif (isset($_POST['_delete_']['image_id'])) {
-                    $mc->getCollection('of')->remove((int) $oldImage);
+                    $mc->getCollection('of')->remove($oldImage);
 
                     $offer->setImageId(null);
                 } else {
@@ -157,6 +157,10 @@ class OfferController extends AbstractController
     public function show(string $id, EntityManagerInterface $em): Response
     {
         $offer = $em->getRepository(Offer::class)->findOneBy(['id' => $id]);
+
+        if (empty($offer)) {
+            return $this->redirectToRoute('offers');
+        }
 
         return $this->render('offer/show.html.twig', [
             'offer' => $offer,

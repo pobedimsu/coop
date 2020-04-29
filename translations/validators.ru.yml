@@ -1,5 +1,5 @@
 Password length must be at least {{ limit }} characters long: Пароль должен быть не менее {{ limit }} символов
-Please upload a valid image: Пожалуйста, загрузите файл изображения
+Please upload a valid image: Пожалуйста, загрузите файл изображения (.jpeg)
 The password fields must match.: Пароли должны совпадать
 Title must be unique: Заголовок должен быть уникальным
 Username is already exists: Логин уже занят

@@ -3,7 +3,7 @@ parameters:
 
 services:
     SmartCore\Bundle\MediaBundle\Service\MediaCloudService:
-        arguments: [ '@service_container', '@doctrine.orm.entity_manager', "%smart_media.config%" ]
+        arguments: [ '@service_container', '@doctrine.orm.entity_manager', "%smart_media.config%", '@logger' ]
         public: true
 
     smart_media:

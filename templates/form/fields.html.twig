@@ -2,12 +2,16 @@
     {% apply spaceless %}
         {% if data is not empty %}
 {#            {{ smart_media_img(data, '100x100') }}#}
-            <img src="{{ path('image', {'filter': '100x70', 'id': data}) }}" _width="100" height="70">
+{#            {{ dump(data) }}#}
 
-            <input type="checkbox" name="_delete_[{{ name }}]" id="{{ id ~ 'remove'}}"/>
-            <label for="{{ id ~ 'remove'}}" style="display: inline;">
-                Удалить</label>
-            <br/>
+            {% if data.filename is not defined  %}
+                <img src="{{ path('image', {'filter': '100x70', 'id': data}) }}" _width="100" height="70">
+                <input type="checkbox" name="_delete_[{{ name }}]" id="{{ id ~ 'remove'}}"/>
+                <label for="{{ id ~ 'remove'}}" style="display: inline;">
+                    Удалить</label>
+                <br/>
+            {% endif %}
+
         {% endif %}
 
         {{ block('form_widget_simple') }}

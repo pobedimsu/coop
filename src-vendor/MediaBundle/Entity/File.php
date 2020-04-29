@@ -22,7 +22,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class File
 {
-    use ColumnTrait\Id;
+    use ColumnTrait\Uuid;
+//    use ColumnTrait\Id;
     use ColumnTrait\CreatedAt;
     use ColumnTrait\Description;
 

@@ -5,10 +5,10 @@ liip_imagine:
     filter_sets: # Важно! символ подчеркивание игнорируется, а минус преобразуется в подчеркивание.
         compress_original:
             format: jpeg
-            quality: 90
+            quality: 86
             filters:
                 downscale:
-                    max: [ 1200, 800 ]
+                    max: [ 1000, 600 ]
         100x70:
             format: jpeg
             quality: 82

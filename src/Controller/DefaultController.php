@@ -30,7 +30,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/img/{filter}/{id}", name="image")
      */
-    public function image(string $filter, int $id, MediaCloudService $mcs, EntityManagerInterface $em, KernelInterface $kernel): Response
+    public function image(string $filter, string $id, MediaCloudService $mcs, EntityManagerInterface $em, KernelInterface $kernel): Response
     {
         $file = $em->getRepository(File::class)->find($id, 0);
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SmartCore\Bundle\MediaBundle\Service;
 
+use Psr\Log\LoggerInterface;
 use SmartCore\Bundle\MediaBundle\Provider\ProviderInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -24,13 +25,11 @@ class MediaStorage
 
     protected $providerClass;
     protected $arguments;
+    protected $logger;
 
-    /**
-     * Constructor.
-     */
-    public function __construct()
+    public function __construct(LoggerInterface $logger)
     {
-
+        $this->logger = $logger;
     }
 
     /**
@@ -108,7 +107,7 @@ class MediaStorage
     {
         $providerClass = $this->getProviderClass();
 
-        $provider = new $providerClass($this->container, $this->getArguments());
+        $provider = new $providerClass($this->container, $this->getArguments(), $this->logger);
 
         return $provider;
     }

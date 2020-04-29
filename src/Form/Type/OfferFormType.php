@@ -30,7 +30,7 @@ class OfferFormType extends AbstractType
                 'label' => 'Image',
                 'constraints' => [
                     new File([
-                        'maxSize' => '8196k',
+                        'maxSize' => '16000k',
                         'mimeTypes' => [
                             'image/jpeg',
                             'image/png',

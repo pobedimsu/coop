@@ -22,23 +22,23 @@ smart_media:
     collections:
         avatars:
             code: av
-            storage: lo
+#            storage: lo
             title: Аватарки юзеров
 #            default_filter: compress_original
             relative_path: '/avatars'
             filename_pattern: '{hour}_{minutes}_{rand(10)}'
-            file_relative_path_pattern: '/{year}/{month}/{day}'
+            file_relative_path_pattern: '/{year}/{month}'
         offers:
             code: of
-            storage: lo
+#            storage: lo
             title: Предложения
 #            default_filter: compress_original
             relative_path: '/offers/{user_id}'
-            filename_pattern: '{day}-{hour}_{minutes}_{rand(10)}'
-            file_relative_path_pattern: '/{year}/{month}'
+            filename_pattern: '{hour}_{minutes}_{rand(10)}'
+            file_relative_path_pattern: '/{year}/{month}/{day}'
         joint_purchases_products:
             code: jp
-            storage: lo
+#            storage: lo
             title: Товары совместных покупок
 #            default_filter: compress_original
             relative_path: '/jp/{user_id}'

@@ -7,6 +7,7 @@ namespace SmartCore\Bundle\MediaBundle\Service;
 use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use SmartCore\Bundle\MediaBundle\Entity\Collection;
 use SmartCore\Bundle\MediaBundle\Entity\File;
 use SmartCore\Bundle\MediaBundle\Entity\Storage;
@@ -35,20 +36,20 @@ class MediaCloudService
      */
     protected $storages;
 
-    /**
-     * MediaCloudService constructor.
-     *
-     * @param ContainerInterface     $container
-     * @param EntityManagerInterface $em
-     * @param array                  $config
-     */
-    public function __construct(ContainerInterface $container, EntityManagerInterface $em, array $config)
-    {
+    protected $logger;
+
+    public function __construct(
+        ContainerInterface $container,
+        EntityManagerInterface $em,
+        array $config,
+        LoggerInterface $logger
+    ) {
         $this->config = $config;
+        $this->logger = $logger;
 
         // storages
         foreach ($config['storages'] as $name => $val) {
-            $ms = new MediaStorage();
+            $ms = new MediaStorage($logger);
             $ms->setCode($val['code'])
                 ->setTitle($val['title'])
                 ->setRelativePath($val['relative_path'])
@@ -93,7 +94,7 @@ class MediaCloudService
                 ->setUploadFilter($val['upload_filter'])
                 ->setFilenamePattern($val['filename_pattern'])
                 ->setFileRelativePathPattern($val['file_relative_path_pattern'])
-                ->setStorage($this->storages[$val['storage']])
+                ->setStorage(isset($val['storage']) ? $this->storages[$val['storage']] : $this->storages[$config['default_storage']])
             ;
 
             $this->collections[$val['code']] = $mc;

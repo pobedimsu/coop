@@ -99,7 +99,7 @@ abstract class AbstractCollectionService
     public function remove($id)
     {
         if (empty($id)) {
-            return;
+            return false;
         }
 
         $this->getProvider()->remove($id);
@@ -120,7 +120,7 @@ abstract class AbstractCollectionService
      *
      * @return mixed|null
      */
-    public function generateTransformedFile(int $id, $filter)
+    public function generateTransformedFile($id, $filter)
     {
         return $this->getProvider()->generateTransformedFile($id, $filter);
     }
