@@ -39,6 +39,12 @@ db-schema-drop:
 db-schema-update:
 	docker-compose run --rm php php bin/console doctrine:schema:update --force
 
+db-du:
+	docker-compose run --rm php php bin/console db:du
+
+db-re:
+	docker-compose run --rm php php bin/console db:re
+
 wait-db:
 	until docker-compose exec -T db pg_isready --timeout=0 --dbname=sonm ; do sleep 1 ; done
 
