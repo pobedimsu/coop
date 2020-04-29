@@ -59,14 +59,14 @@ class AdminController extends AbstractController
             'rootClose' => '</ol>',
             'childOpen' => '<li>',
             'childClose' => '</li>',
-            'childSort' => [
-                'field' => 'position',
-                'dir' => 'asc',
+            'childSorts' => [
+                ['field' => 'position', 'dir' => 'asc'],
+                ['field' => 'title', 'dir' => 'asc']
             ],
             'nodeDecorator' => function($node) {
                 $path = $this->generateUrl('admin_category_edit', ['id' => $node['id']]);
 
-                return '<a href="'.$path.'">'.$node['title'].'</a> ('.$node['name'].')';
+                return '<a href="'.$path.'">'.$node['title'].'</a> ('.$node['name'].') pos: '.$node['position'];
             }
         ];
 

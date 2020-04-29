@@ -56,10 +56,16 @@ class Category
      */
     protected $children;
 
+    /**
+     * Для отображения в формах. Не маппится в БД.
+     */
+    protected $form_title = '';
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->level      = 1;
+        $this->position   = 0;
     }
 
     /**
@@ -110,6 +116,18 @@ class Category
     public function setChildren($children): self
     {
         $this->children = $children;
+
+        return $this;
+    }
+
+    public function getFormTitle(): string
+    {
+        return $this->form_title;
+    }
+
+    public function setFormTitle(string $form_title): self
+    {
+        $this->form_title = $form_title;
 
         return $this;
     }

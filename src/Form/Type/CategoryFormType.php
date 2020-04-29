@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\Category;
+use App\Form\Tree\CategoryTreeType;
+use App\Repository\CategoryRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,8 +19,13 @@ class CategoryFormType extends AbstractType
         $builder
             ->add('title', null, ['attr' => ['autofocus' => true]])
             ->add('name', null, ['attr' => ['placeholder' => 'Техническое имя на енг без пробелов и спецсимволов']])
+            /*
             ->add('parent', null, [
                 'label' => 'Parent category',
+                'class'         => Category::class,
+                'query_builder' => function (CategoryRepository $er) {
+                    return $er->childrenHierarchy(null, false, [], false);
+                },
                 'choice_label' => function (Category $category) {
                     $prefix = '';
                     for ($i = 1; $i < $category->getLevel(); $i++) {
@@ -28,6 +35,8 @@ class CategoryFormType extends AbstractType
                     return $prefix . (string) $category;
                 }
             ])
+            */
+            ->add('parent', CategoryTreeType::class, ['label' => 'Parent category'])
             ->add('position')
 
             ->add('create', SubmitType::class, ['attr' => ['class' => 'btn-success']])

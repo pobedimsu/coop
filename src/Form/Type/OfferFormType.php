@@ -6,6 +6,7 @@ namespace App\Form\Type;
 
 use App\Entity\Category;
 use App\Entity\Offer;
+use App\Form\Tree\CategoryTreeType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -22,16 +23,7 @@ class OfferFormType extends AbstractType
     {
         $builder
             ->add('title', null, ['attr' => ['autofocus' => true]])
-            ->add('category', null, [
-                'choice_label' => function (Category $category) {
-                    $prefix = '';
-                    for ($i = 1; $i < $category->getLevel(); $i++) {
-                        $prefix .= '⋅⋅ ';
-                    }
-
-                    return $prefix . (string) $category;
-                }
-            ])
+            ->add('category', CategoryTreeType::class)
             ->add('image_id', ImageFormType::class, [
                 'mapped' => true,
                 'required' => false,
