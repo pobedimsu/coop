@@ -36,7 +36,7 @@ class OfferController extends AbstractController
         ;
 
         return $this->render('offer/index.html.twig', [
-            'categories' => $em->getRepository(Category::class)->findBy([], ['position' => 'ASC', 'title' => 'ASC']),
+            'categories' => $em->getRepository(Category::class)->childrenHierarchyList(),
             'offers' => $offers,
         ]);
     }

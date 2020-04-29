@@ -19,8 +19,19 @@
                     {% for c in categories %}
                         <option value="{{ c.id }}"
                            {% if app.request.query.get('category') == c.id %} selected {% endif %}
-                        >{{ c }}</option>
+                        >
+                            {% set prefix = '' %}
+                            {% for i in 1..c.level %}
+                                {% if i > 1 %}
+                                    {% set prefix = prefix ~ '&nbsp;' %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {{ prefix|raw }}
+                            {{ c.title }}
+                        </option>
                     {% endfor %}
+
                 </select>
             </td>
             <td>

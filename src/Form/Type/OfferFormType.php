@@ -22,13 +22,15 @@ class OfferFormType extends AbstractType
     {
         $builder
             ->add('title', null, ['attr' => ['autofocus' => true]])
-            ->add('category', EntityType::class, [
-                'class' => Category::class,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('e')
-                        ->orderBy('e.position', 'ASC')
-                        ->addOrderBy('e.title', 'ASC');
-                },
+            ->add('category', null, [
+                'choice_label' => function (Category $category) {
+                    $prefix = '';
+                    for ($i = 1; $i < $category->getLevel(); $i++) {
+                        $prefix .= '⋅⋅ ';
+                    }
+
+                    return $prefix . (string) $category;
+                }
             ])
             ->add('image_id', ImageFormType::class, [
                 'mapped' => true,

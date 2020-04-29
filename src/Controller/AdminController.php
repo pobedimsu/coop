@@ -39,7 +39,7 @@ class AdminController extends AbstractController
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
 
-            if ($form->get('cancel')->isClicked()) {
+            if ($form->has('cancel') and $form->get('cancel')->isClicked()) {
                 return $this->redirectToRoute('admin_category');
             }
 
@@ -53,8 +53,28 @@ class AdminController extends AbstractController
             }
         }
 
+        $options = [
+            'decorate' => true,
+            'rootOpen' => '<ol>',
+            'rootClose' => '</ol>',
+            'childOpen' => '<li>',
+            'childClose' => '</li>',
+            'childSort' => [
+                'field' => 'position',
+                'dir' => 'asc',
+            ],
+            'nodeDecorator' => function($node) {
+                $path = $this->generateUrl('admin_category_edit', ['id' => $node['id']]);
+
+                return '<a href="'.$path.'">'.$node['title'].'</a> ('.$node['name'].')';
+            }
+        ];
+
+        $htmlTree = $em->getRepository(Category::class)->childrenHierarchy(null,false, $options);
+
         return $this->render('admin/category/index.html.twig', [
             'categories' => $categories,
+            'html_tree' => $htmlTree,
             'form' => $form->createView(),
         ]);
     }
