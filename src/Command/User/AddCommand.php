@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Command\User;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -18,13 +18,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-class UserAddCommand extends Command
+class AddCommand extends Command
 {
     protected static $defaultName = 'user:add';
 
-    /**
-     * @var SymfonyStyle
-     */
     private $io;
 
     private $entityManager;
@@ -32,14 +29,6 @@ class UserAddCommand extends Command
     private $validator;
     private $users;
 
-    /**
-     * UserAddCommand constructor.
-     *
-     * @param EntityManagerInterface       $em
-     * @param UserPasswordEncoderInterface $encoder
-     * @param UserValidator                $validator
-     * @param UserRepository               $users
-     */
     public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, UserValidator $validator, UserRepository $users)
     {
         parent::__construct();
@@ -56,33 +45,17 @@ class UserAddCommand extends Command
             ->setDescription('Create a user')
             ->addArgument('username', InputArgument::OPTIONAL, 'The username of the new user')
             ->addArgument('password', InputArgument::OPTIONAL, 'The plain password of the new user')
+//            ->addArgument('email', InputArgument::OPTIONAL, 'The email of the new user')
             ->addArgument('firstname', InputArgument::OPTIONAL, 'Firstname')
             ->addArgument('lastname', InputArgument::OPTIONAL, 'Lastname')
         ;
     }
 
-    /**
-     * This optional method is the first one executed for a command after configure()
-     * and is useful to initialize properties based on the input arguments and options.
-     */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        // SymfonyStyle is an optional feature that Symfony provides so you can
-        // apply a consistent look to the commands of your application.
-        // See https://symfony.com/doc/current/console/style.html
         $this->io = new SymfonyStyle($input, $output);
     }
 
-    /**
-     * This method is executed after initialize() and before execute(). Its purpose
-     * is to check if some of the options/arguments are missing and interactively
-     * ask the user for those values.
-     *
-     * This method is completely optional. If you are developing an internal console
-     * command, you probably should not implement this method because it requires
-     * quite a lot of work. However, if the command is meant to be used by external
-     * users, this method is a nice way to fall back and prevent errors.
-     */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         $username = $input->getArgument('username');
@@ -92,6 +65,16 @@ class UserAddCommand extends Command
             $username = $this->io->ask('Username', null, [$this->validator, 'validateUsername']);
             $input->setArgument('username', $username);
         }
+
+        /*
+        $email = $input->getArgument('email');
+        if (null !== $email) {
+            $this->io->text(' > <info>Email</info>: '.$email);
+        } else {
+            $email = $this->io->ask('Email', null, [$this->validator, 'validateEmail']);
+            $input->setArgument('email', $email);
+        }
+        */
 
         $firstname = $input->getArgument('firstname');
         if (null !== $firstname) {
@@ -124,7 +107,8 @@ class UserAddCommand extends Command
         $stopwatch = new Stopwatch();
         $stopwatch->start('add-user-command');
 
-        $username = $input->getArgument('username');
+//        $email         = $input->getArgument('email');
+        $username      = $input->getArgument('username');
         $plainPassword = $input->getArgument('password');
 
         // make sure to validate the user data is correct
@@ -133,6 +117,7 @@ class UserAddCommand extends Command
         // create the user and encode its password
         $user = new User();
         $user
+//            ->setEmail($email)
             ->setUsername($username)
             ->setFirstname($input->getArgument('firstname'))
             ->setLastname($input->getArgument('lastname'))
@@ -148,9 +133,12 @@ class UserAddCommand extends Command
         $this->io->success(sprintf('%s was successfully created: %s', 'User', $user->getUsername()));
 
         $event = $stopwatch->stop('add-user-command');
+
         if ($output->isVerbose()) {
             $this->io->comment(sprintf('New user database id: %d / Elapsed time: %.2f ms / Consumed memory: %.2f MB', $user->getId(), $event->getDuration(), $event->getMemory() / (1024 ** 2)));
         }
+
+        return 0;
     }
 
     private function validateUserData($username, $plainPassword): void

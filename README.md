@@ -16,7 +16,7 @@
     * tokenizer 
     * xml
 * [Composer](https://getcomposer.org/)
-* MariaDB (скоро MySQL и PostgreSQL)
+* СУБД: MariaDB, MySQL, PostgreSQL
 
 Чтобы узнать соотвествует соответствие системным требованиямм, можно выполнить команду:
 
@@ -27,18 +27,15 @@ composer check-platform-reqs
 Установка
 ---------
 
-Первым делом необходимо зарегистрироваться на Github и подключить свой SSH ключ вот тут https://github.com/settings/keys (этот момент временный, пока используются подмодули гита, в дальнейшем пакеты будут подтягиваться композером) 
-
 Получение кода:
 ```
 git clone https://github.com/pobedimsu/coop.git
 cd coop
-git submodule update --init
 cp .env .env.local
 composer i
 ```
 
-Создать БД в MariaDB или MySQL.
+Создать БД.
 
 Отредактировать настройки в ```.env.local```
 

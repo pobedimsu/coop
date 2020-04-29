@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Entity\Category;
-use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use SmartCore\Bundle\TexterBundle\Entity\Text;
 use Symfony\Component\Console\Command\Command;
@@ -30,11 +29,6 @@ class InitCommand extends Command
         ;
     }
 
-    /**
-     * WitnessListCommand constructor.
-     *
-     * @param EntityManagerInterface $em
-     */
     public function __construct(EntityManagerInterface $em)
     {
         parent::__construct();
@@ -42,24 +36,11 @@ class InitCommand extends Command
         $this->em = $em;
     }
 
-    /**
-     * This optional method is the first one executed for a command after configure()
-     * and is useful to initialize properties based on the input arguments and options.
-     */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        // SymfonyStyle is an optional feature that Symfony provides so you can
-        // apply a consistent look to the commands of your application.
-        // See https://symfony.com/doc/current/console/style.html
         $this->io = new SymfonyStyle($input, $output);
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $isUpdated = false;
@@ -99,5 +80,7 @@ class InitCommand extends Command
         if (!$isUpdated) {
             $this->io->writeln('Инициализация не требуется');
         }
+
+        return 0;
     }
 }
