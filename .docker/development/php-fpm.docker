@@ -86,6 +86,8 @@ RUN pecl install oauth && docker-php-ext-enable oauth
 # COPY ./php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 # COPY ./php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
+COPY ./php/global.ini /usr/local/etc/php/conf.d/global.ini
+
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
