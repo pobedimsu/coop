@@ -22,8 +22,10 @@ services:
             APP_ENV: dev
             APP_DEBUG: 1
             DATABASE_URL: 'pgsql://coop:1234@db:5432/coop?serverVersion=12.2'
+#            DATABASE_URL: 'mysql://coop:1234@dbmysql:3306/coop?serverVersion=5.7'
+#            DATABASE_URL: 'mysql://coop:1234@dbmysql:3306/coop?serverVersion=mariadb-10.3.20'
 #        depends_on:
-#            - db
+#            - dbmysql
     db:
         build:
             context: ./.docker/development
@@ -37,6 +39,27 @@ services:
             - 5433:5432
         volumes:
             - coop-db:/var/lib/postgresql/data
+#            - ./var/lib/postgresql/data:/var/lib/postgresql/data
+#    dbmysql:
+#        user: "1000:50"
+#        build:
+#            context: ./.docker/development
+#            dockerfile: mariadb.docker
+#        restart: always
+#        environment:
+#            MYSQL_DB: coop
+#            MYSQL_USER: coop
+#            MYSQL_PASSWORD: 1234
+#            MYSQL_ROOT_PASSWORD: 1234
+#        ports:
+#            - 3366:3306
+#        volumes:
+#            - coop-db-mysql:/var/lib/mysql/data
+##            - ./var/lib/mysql/data:/var/lib/mysql/data
+#        command:
+#            'mysqld --innodb-flush-method=fsync'
+
 volumes:
     composer:
     coop-db:
+#    coop-db-mysql:
