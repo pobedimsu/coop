@@ -1,0 +1,115 @@
+FROM php:7.3-fpm-alpine
+
+RUN rm -rf /var/cache/apk/* && \
+    rm -rf /tmp/*
+
+RUN apk update
+
+RUN apk add --no-cache \
+    autoconf \
+    bash \
+    binutils \
+    bzip2-dev \
+    curl \
+    curl-dev \
+    dpkg \
+    dpkg-dev \
+    g++ \
+    gcc \
+    git \
+    gmp-dev \
+    gnu-libiconv \
+    grep \
+    file \
+    freetype \
+    freetype-dev \
+    icu-dev \
+    jpeg \
+    jpeg-dev \
+    m4 \
+    make \
+    mysql-client \
+    perl \
+    libjpeg-turbo \
+    libjpeg-turbo-dev \
+    libmemcached-dev \
+    libmcrypt-dev \
+    libpng \
+    libpng-dev \
+    libsodium-dev \
+    libxpm \
+    libxpm-dev \
+    libxml2-dev \
+    libzip-dev \
+    postgresql-dev \
+    postgresql-client \
+    re2c \
+    recode-dev \
+    sqlite-dev \
+    tzdata \
+    unzip \
+    zip
+
+RUN apk add --no-cache imagemagick imagemagick-dev \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick
+
+# GD For PHP 7.3
+RUN docker-php-ext-configure gd --with-gd \
+        --with-freetype-dir=/usr \
+        --with-jpeg-dir=/usr \
+        --with-png-dir=/usr \
+        --with-xpm-dir=/usr/lib/x86_64-linux-gnu \
+    && docker-php-ext-install -j$(nproc) gd
+
+# GD For PHP 7.4
+# RUN docker-php-ext-configure gd --enable-gd --with-jpeg --with-freetype --with-xpm && docker-php-ext-install -j$(nproc) gd
+
+RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
+
+RUN docker-php-ext-install -j$(nproc) bcmath \
+    && docker-php-ext-install -j$(nproc) bz2 \
+    && docker-php-ext-install -j$(nproc) exif \
+    && docker-php-ext-install -j$(nproc) gmp \
+    && docker-php-ext-install -j$(nproc) intl \
+    && docker-php-ext-install -j$(nproc) mysqli \
+    && docker-php-ext-install -j$(nproc) opcache \
+    && docker-php-ext-install -j$(nproc) pgsql \
+    && docker-php-ext-install -j$(nproc) pdo_pgsql \
+    && docker-php-ext-install -j$(nproc) pdo_mysql \
+    && docker-php-ext-install -j$(nproc) soap \
+    && docker-php-ext-install -j$(nproc) sockets \
+    && docker-php-ext-install -j$(nproc) zip
+
+RUN pecl install apcu \
+    && pecl install memcached \
+    && pecl install redis \
+    && pecl install timezonedb
+
+RUN docker-php-ext-enable apcu \
+    && docker-php-ext-enable memcached \
+    && docker-php-ext-enable redis \
+    && docker-php-ext-enable timezonedb
+
+
+        # RUN pecl install xdebug && docker-php-ext-enable xdebug
+
+        # RUN apk add --no-cache librabbitmq
+        #     && pecl install amqp
+        #     && docker-php-ext-enable amqp
+
+
+RUN apk add --no-cache imap imap-dev c-client openssl-dev krb5 krb5-dev
+RUN PHP_OPENSSL=yes docker-php-ext-configure imap --with-kerberos --with-imap --with-imap-ssl && docker-php-ext-install -j$(nproc) imap
+
+# не работает :(
+# RUN pecl install dbase && docker-php-ext-enable dbase
+
+# COPY ./php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+# COPY ./php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet
+
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+WORKDIR /app

@@ -1,0 +1,42 @@
+version: '3.7'
+services:
+    nginx:
+        build:
+            context: ./.docker/development
+            dockerfile: nginx.docker
+        volumes:
+            - ./:/app
+        depends_on:
+            - php
+        ports:
+            - "${WEB_PORT}:80"
+    php:
+        build:
+            context: ./.docker/development
+            dockerfile: php-fpm.docker
+#            dockerfile: php-fpm-alpine.docker
+        volumes:
+            - ./:/app
+            - composer:/root/.composer/cache
+        environment:
+            APP_ENV: dev
+            APP_DEBUG: 1
+            DATABASE_URL: 'pgsql://coop:1234@db:5432/coop?serverVersion=12.2'
+#        depends_on:
+#            - db
+    db:
+        build:
+            context: ./.docker/development
+            dockerfile: postgres.docker
+        restart: unless-stopped # always
+        environment:
+            POSTGRES_USER: coop
+            POSTGRES_PASSWORD: 1234
+            POSTGRES_DB: coop
+        ports:
+            - 5433:5432
+        volumes:
+            - coop-db:/var/lib/postgresql/data
+volumes:
+    composer:
+    coop-db:

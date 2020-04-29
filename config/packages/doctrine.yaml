@@ -1,13 +1,13 @@
 doctrine:
     dbal:
         # configure these for your database server
-        driver: 'pdo_mysql'
-        server_version: 'mariadb-10.3.17'
-        charset: utf8mb4
-        default_table_options:
-            charset: utf8mb4
-            collate: utf8mb4_unicode_ci
-        unix_socket: /var/run/mysqld/mysqld.sock
+#        driver: 'pdo_mysql'
+#        driver: 'pdo_pgsql'
+#        charset: utf8mb4
+#        default_table_options:
+#            charset: utf8mb4
+#            collate: utf8mb4_unicode_ci
+#        unix_socket: /var/run/mysqld/mysqld.sock
 
         url: '%env(resolve:DATABASE_URL)%'
     orm:

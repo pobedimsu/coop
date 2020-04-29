@@ -73,6 +73,7 @@
     "scripts": {
         "auto-scripts": {
             "sh bin/clear_cache": "script",
+            "rm -rf public/bundles": "script",
             "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
             "sh bin/init_dirs": "script"
         },
