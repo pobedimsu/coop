@@ -12,8 +12,8 @@ class TexterEditFormType extends TexterFormType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('save',   SubmitType::class, ['attr' => [ 'class' => 'btn btn-primary' ]])
-            ->add('cancel', SubmitType::class, ['attr' => ['formnovalidate' => 'formnovalidate']])
+            ->add('save',   SubmitType::class, ['attr' => ['class' => 'btn btn-primary' ]])
+            ->add('cancel', SubmitType::class, ['attr' => ['class' => 'btn-light', 'formnovalidate' => 'formnovalidate']])
         ;
     }
 
