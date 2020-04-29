@@ -36,7 +36,7 @@ class CategoryFormType extends AbstractType
                 }
             ])
             */
-            ->add('parent', CategoryTreeType::class, ['label' => 'Parent category'])
+            ->add('parent', CategoryTreeType::class, ['label' => 'Parent category', 'required' => false])
             ->add('position')
 
             ->add('create', SubmitType::class, ['attr' => ['class' => 'btn-success']])

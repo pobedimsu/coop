@@ -77,7 +77,6 @@ class CategoryTreeType extends DoctrineType
             'class'         => Category::class,
             'choice_loader' => $choiceLoader,
             'only_active'   => false,
-            'required'      => false,
         ]);
     }
 
