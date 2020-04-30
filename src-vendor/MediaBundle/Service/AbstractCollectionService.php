@@ -106,8 +106,6 @@ abstract class AbstractCollectionService
 
         $file = $this->em->find(File::class, $id);
 
-        file_put_contents("e:/test.log", serialize($file));
-
         if (!empty($file)) {
             $this->em->remove($file);
             $this->em->flush();
