@@ -130,7 +130,6 @@ class OfferController extends AbstractController
                 $this->addFlash('success', 'Предложение обновлено.');
 
                 return $this->redirectToRoute('offer_show', ['id' => $offer->getId()]);
-                //return $this->redirectToRoute('offers_my');
             }
         }
 

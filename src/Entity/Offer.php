@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Doctrine\StatusTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\UuidInterface;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -35,6 +35,8 @@ class Offer
     use ColumnTrait\IsEnabled;
     use ColumnTrait\TitleNotBlank;
     use ColumnTrait\Description;
+
+    use StatusTrait;
 
     const MEASURE_NONE  = 0;
     const MEASURE_PIECE = 1;
@@ -80,13 +82,6 @@ class Offer
      * @ORM\Column(type="text", nullable=true)
      */
     protected $short_description;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="smallint", nullable=false)
-     */
-    protected $status;
 
     /**
      * Еденицы измерения
@@ -223,42 +218,6 @@ class Offer
     }
 
     /**
-     * @return int
-     */
-    public function getStatus(): int
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param int $status
-     *
-     * @return $this
-     */
-    public function setStatus(int $status): self
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStatusAsText(): string
-    {
-        return self::$status_values[$this->status];
-    }
-
-    /**
-     * @return array
-     */
-    static public function getStatusChoiceValues(): array
-    {
-        return self::$status_values;
-    }
-
-    /**
      * @return bool
      */
     public function isStatusAccessToOrder(): bool
@@ -301,11 +260,19 @@ class Offer
     /**
      * @return array
      */
-    static public function getMeasureChoiceValues(): array
+    static public function getMeasureValues(): array
     {
         return self::$measure_values;
     }
-    
+
+    /**
+     * @return array
+     */
+    static public function getMeasureFormChoices(): array
+    {
+        return array_flip(self::$measure_values);
+    }
+
     /**
      * @return int|null
      */

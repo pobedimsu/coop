@@ -8,6 +8,7 @@ use Coop\JointPurchaseBundle\Entity\JointPurchase;
 use Coop\JointPurchaseBundle\Entity\JointPurchaseProduct;
 use Coop\JointPurchaseBundle\Form\Type\JointPurchaseProductFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SmartCore\Bundle\MediaBundle\Service\MediaCloudService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
@@ -18,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends AbstractController
 {
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/{jp}/create_product/", name="jp_product_create")
      */
     public function create(JointPurchase $jp, Request $request, EntityManagerInterface $em, MediaCloudService $mc): Response
@@ -61,6 +63,7 @@ class ProductController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/product/{id}/edit/", name="jp_edit_product")
      */
     public function edit(JointPurchaseProduct $product, Request $request, EntityManagerInterface $em, MediaCloudService $mc): Response
@@ -91,20 +94,20 @@ class ProductController extends AbstractController
                     // $fileId = $mc->upload('of', $image); @todo
 
                     if ($oldImage) {
-                        $mc->getCollection('jp')->remove((int) $oldImage);
+                        $mc->getCollection('jp')->remove($oldImage);
                         // $mc->remove('of', (int) $oldImage); @todo
                     }
 
                     $product->setImageId((string) $fileId);
                 } elseif (isset($_POST['_delete_']['image_id'])) {
-                    $mc->getCollection('jp')->remove((int) $oldImage);
+                    $mc->getCollection('jp')->remove($oldImage);
 
                     $product->setImageId(null);
                 } else {
                     $product->setImageId((string) $oldImage);
                 }
 
-                $em->persist($form->getData());
+                $em->persist($product);
                 $em->flush();
 
                 $this->addFlash('success', 'Товар обновлён');
@@ -120,6 +123,7 @@ class ProductController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/{jp}/products/", name="jp_edit_products")
      */
     public function editProducts(JointPurchase $jp): Response

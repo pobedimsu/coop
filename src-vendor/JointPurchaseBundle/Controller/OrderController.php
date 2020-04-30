@@ -6,11 +6,10 @@ namespace Coop\JointPurchaseBundle\Controller;
 
 use Coop\JointPurchaseBundle\Entity\JointPurchase;
 use Coop\JointPurchaseBundle\Entity\JointPurchaseOrder;
-use Coop\JointPurchaseBundle\Entity\JointPurchaseOrderLine;
-use Coop\JointPurchaseBundle\Entity\JointPurchaseProduct;
 use Coop\JointPurchaseBundle\Form\Type\JointPurchaseFormType;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/orders/my/", name="jp_my_orders")
      */
     public function my(EntityManagerInterface $em): Response
@@ -31,6 +31,7 @@ class OrderController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/order/{id}/edit/", name="jp_edit")
      */
     public function edit(JointPurchase $jp, Request $request, EntityManagerInterface $em): Response

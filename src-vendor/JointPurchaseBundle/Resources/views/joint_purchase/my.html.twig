@@ -3,10 +3,12 @@
 {% block title %}Мои cовместные закупки{% endblock %}
 
 {% block content %}
-    <p style="float: right; margin-top: 8px;">
-        <a href="{{ path('jp_my_orders') }}" class="btn btn-primary">Мои заявки</a>
-        <a href="{{ path('jp_create') }}" class="btn btn-success">Создать cовместную закупку</a>
-    </p>
+    {% if app.user %}
+        <p style="float: right; margin-top: 8px;">
+            <a href="{{ path('jp_my_orders') }}" class="btn btn-primary">Мои заявки</a>
+            <a href="{{ path('jp_create') }}" class="btn btn-success">Создать cовместную закупку</a>
+        </p>
+    {% endif %}
 
     <h1>Мои cовместные закупки</h1>
 
@@ -33,7 +35,7 @@
                 </td>
 #}
                 <td>
-                    <a href="{{ path('jp_show', {'jp': jp.id}) }}">{{ jp.title }}</a>
+                    <a href="{{ path('jp_show', {'id': jp.id}) }}">{{ jp.title }}</a>
                 </td>
                 <td>
                     {% set amount = 0 %}

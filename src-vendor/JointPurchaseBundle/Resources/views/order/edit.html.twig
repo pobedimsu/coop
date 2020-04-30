@@ -4,7 +4,7 @@
 
 {% block content %}
     <p style="float: right; margin-top: 8px;">
-        <a href="{{ path('jp_show', {'jp': jp.id}) }}">&laquo; перейти к просмотру</a>
+        <a href="{{ path('jp_show', {'id': jp.id}) }}">&laquo; перейти к просмотру</a>
 
         <a href="{{ path('jp_my') }}" class="btn btn-primary">Мои закупки</a>
     </p>
@@ -27,9 +27,9 @@
         </div>
 
         <div class="col-md-4">
-            {% include '@JointPurchase/_stats.html.twig' %}
-
             {% include '@JointPurchase/_change_status_links.html.twig' %}
+
+            {% include '@JointPurchase/_stats.html.twig' %}
 
             {% include '@JointPurchase/_create_tg_chat_help.html.twig' %}
         </div>

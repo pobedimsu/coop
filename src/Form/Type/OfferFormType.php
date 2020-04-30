@@ -43,12 +43,12 @@ class OfferFormType extends AbstractType
             ->add('description', null, ['attr' => ['rows' => 10]])
             ->add('price')
             ->add('measure', ChoiceType::class, [
-                'choices' => array_flip(Offer::getMeasureChoiceValues()),
+                'choices' => Offer::getMeasureFormChoices(),
                 'choice_translation_domain' => false,
             ])
             ->add('quantity')
             ->add('status', ChoiceType::class, [
-                'choices' => array_flip(Offer::getStatusChoiceValues()),
+                'choices' => Offer::getStatusFormChoices(),
                 'choice_translation_domain' => false,
             ])
 

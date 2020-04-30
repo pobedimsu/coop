@@ -31,7 +31,7 @@ class JointPurchaseFormType extends AbstractType
             ->add('telegram_chat_link')
 
             ->add('create', SubmitType::class, ['attr' => ['class' => 'btn-success']])
-            ->add('update', SubmitType::class, ['attr' => ['class' => 'btn-success']])
+            ->add('update', SubmitType::class, ['attr' => ['class' => 'btn-success'], 'label' => 'Save'])
             ->add('cancel', SubmitType::class, ['attr' => ['class' => 'btn-light', 'formnovalidate' => 'formnovalidate']])
         ;
     }

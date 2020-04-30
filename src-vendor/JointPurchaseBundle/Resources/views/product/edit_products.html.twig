@@ -23,7 +23,8 @@
             <tbody>
             {% for product in jp.products %}
                 <tr>
-                    <td><a href="{{ path('jp_show', {'jp': jp.id}) }}" style="height: 70px; display: block;">
+                    <td>
+                        <a href="{{ path('jp_edit_product', {'id': product.id}) }}" style="height: 70px; display: block;">
                              <img src="{{ path('image', {'filter': '100x70', 'id': product.imageId ?: 0}) }}" style="max-width: 100px; max-height: 70px;">
                         </a>
                     </td>

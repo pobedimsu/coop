@@ -7,6 +7,7 @@ namespace Coop\JointPurchaseBundle\Controller;
 use Coop\JointPurchaseBundle\Entity\JointPurchase;
 use Coop\JointPurchaseBundle\Form\Type\JointPurchaseFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ZJointPurchaseController extends AbstractController
 {
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/create/", name="jp_create")
      */
     public function create(Request $request, EntityManagerInterface $em): Response
@@ -51,6 +53,7 @@ class ZJointPurchaseController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/my/", name="jp_my")
      */
     public function my(EntityManagerInterface $em): Response
@@ -63,6 +66,7 @@ class ZJointPurchaseController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/{jp}/orders/", name="jp_orders")
      */
     public function orders(JointPurchase $jp, Request $request, EntityManagerInterface $em): Response
@@ -78,7 +82,8 @@ class ZJointPurchaseController extends AbstractController
     }
 
     /**
-     * @Route("/{jp}/", name="jp_show")
+     * @IsGranted("ROLE_USER")
+     * @Route("/{id}/", name="jp_show")
      */
     public function show(JointPurchase $jp, Request $request): Response
     {

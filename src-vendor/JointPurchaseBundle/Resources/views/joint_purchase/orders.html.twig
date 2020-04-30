@@ -3,13 +3,14 @@
 {% block title %}Заказы по закупке: {{ jp }}{% endblock %}
 
 {% block content %}
-    <p style="float: right; margin-top: 8px;">
-        <a href="{{ path('jp_my') }}" class="btn btn-info">Мои закупки</a>
-        <a href="{{ path('jp_create') }}" class="btn btn-success">Создать cовместную закупку</a>
-    </p>
+    {% if app.user %}
+        <p style="float: right; margin-top: 8px;">
+            <a href="{{ path('jp_my') }}" class="btn btn-info">Мои закупки</a>
+            <a href="{{ path('jp_create') }}" class="btn btn-success">Создать cовместную закупку</a>
+        </p>
+    {% endif %}
 
-    <h1>Заказы по закупке: <a href="{{ path('jp_show', {'jp': jp.id}) }}">{{ jp }}</a></h1>
-
+    <h1>Заказы по закупке: <a href="{{ path('jp_show', {'id': jp.id}) }}">{{ jp }}</a></h1>
 
     <p>
         Собрана сумма: <strong>
@@ -91,7 +92,7 @@
                         {% set amount = 0 %}
                         {% for line in order.lines %}
                             <li>
-                                <b><a href="{{ path('jp_show', {'jp': order.jointPurchase.id}) }}#{{ line.product.id }}">{{ line }}</a></b>
+                                <b><a href="{{ path('jp_show', {'id': order.jointPurchase.id}) }}#{{ line.product.id }}">{{ line }}</a></b>
 
                                 {{ line.quantity }} x {{ line.product.price }} = {{ line.quantity * line.product.price }}
 

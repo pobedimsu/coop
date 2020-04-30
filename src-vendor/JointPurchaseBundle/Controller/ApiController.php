@@ -21,6 +21,15 @@ class ApiController extends AbstractController
      */
     public function orderUpdate(Request $request, EntityManagerInterface $em): JsonResponse
     {
+        if (empty($this->getUser())) {
+            $data = [
+                'status' => 'error',
+                'message' => 'Для заказа нужно войти на сайт',
+            ];
+
+            return new JsonResponse($data);
+        }
+
         try {
             $product = $em->find(JointPurchaseProduct::class, $request->request->get('product'));
         } catch (ConversionException $e) {
