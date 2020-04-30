@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Security\Core\User\UserInterface;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service_locator;
 
@@ -201,7 +202,8 @@ class LocalProvider implements ProviderInterface
                 throw new \RuntimeException(sprintf("Unable to create the %s directory.\n", dirname($path)));
             }
 
-            $originalImage = new FileBinary($path_orig, $file->getMimeType(), ExtensionGuesser::getInstance()->guess($file->getMimeType()));
+            //$originalImage = new FileBinary($path_orig, $file->getMimeType(), ExtensionGuesser::getInstance()->guess($file->getMimeType()));
+            $originalImage = new FileBinary($path_orig, $file->getMimeType(), MimeTypes::getDefault()->guessMimeType($path_orig));
 
             $imagineFilterManager = $this->container->get('liip_imagine.filter.manager');
             $transformedImage = $imagineFilterManager->applyFilter($originalImage, $filter, $runtimeConfig)->getContent();
@@ -262,7 +264,7 @@ class LocalProvider implements ProviderInterface
         /** @var File $file */
         $file = $this->em->find(File::class, $id);
 
-        $this->logger->info('file to remove', [serialize($file)]);
+//        $this->logger->info('file to remove', [serialize($file)]);
 
         if (!$file) {
             return false;
@@ -270,21 +272,21 @@ class LocalProvider implements ProviderInterface
 
         /** @var FileTransformed $fileTransformed */
         foreach ($file->getFilesTransformed() as $fileTransformed) {
-            $this->logger->info('fileTransformed to remove', [serialize($fileTransformed)]);
+//            $this->logger->info('fileTransformed to remove', [serialize($fileTransformed)]);
 
             $fullPath = $this->getFileTransformedPath($file, $fileTransformed->getFilter());
 
-            $this->logger->info('$fullPath to remove', [serialize($fullPath)]);
+//            $this->logger->info('$fullPath to remove', [serialize($fullPath)]);
 
             if (file_exists($fullPath)) {
-                unlink($fullPath);
+                @unlink($fullPath);
             }
         }
 
         // Удаление оригинала.
         $fullPath = $this->getFilePath($file, 'orig');
 
-        unlink($fullPath);
+        @unlink($fullPath);
 
         return true;
     }

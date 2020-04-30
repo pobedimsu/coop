@@ -107,7 +107,8 @@ class File
     /**
      * @var FileTransformed[]
      *
-     * @ORM\OneToMany(targetEntity="FileTransformed", mappedBy="file", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="FileTransformed", mappedBy="file", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $filesTransformed;
 

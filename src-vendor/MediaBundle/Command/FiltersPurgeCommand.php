@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SmartCore\Bundle\MediaBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,11 +19,6 @@ class FiltersPurgeCommand extends Command
     protected $em;
     protected $mcs;
 
-    /**
-     * StatsCommand constructor.
-     *
-     * @param EntityManagerInterface $em
-     */
     public function __construct(EntityManagerInterface $em, MediaCloudService $mcs)
     {
         parent::__construct();
@@ -54,5 +51,7 @@ class FiltersPurgeCommand extends Command
         foreach ($this->mcs->getCollections() as $collection) {
             $collection->purgeTransformedFiles();
         }
+
+        return 0;
     }
 }

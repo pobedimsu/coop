@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SmartCore\Bundle\MediaBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,15 +20,8 @@ class StatsCommand extends Command
     protected static $defaultName = 'smart:media:stats';
 
     protected $em;
-
-    /** @var MediaCloudService */
     protected $mc;
 
-    /**
-     * StatsCommand constructor.
-     *
-     * @param EntityManagerInterface $em
-     */
     public function __construct(MediaCloudService $mc)
     {
         parent::__construct();
@@ -64,7 +59,7 @@ class StatsCommand extends Command
 
         foreach ($this->mc->getCollections() as $collection) {
             $size = round($em->getRepository(File::class)->summarySize($collection->getCode()) / 1024 / 1024, 2);
-            $filtersSize = round($em->getRepository(FileTransformed::class)->summarySize($collection) / 1024 / 1024, 2);
+            $filtersSize = round($em->getRepository(FileTransformed::class)->summarySize($collection->getCode()) / 1024 / 1024, 2);
             $sum = $size + $filtersSize;
 
             $totalSize += $sum;
@@ -84,5 +79,7 @@ class StatsCommand extends Command
         $table->render();
 
         $output->writeln('Total size: '.$totalSize.' MB');
+
+        return 0;
     }
 }

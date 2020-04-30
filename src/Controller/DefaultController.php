@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\ORM\EntityManagerInterface;
 use SmartCore\Bundle\MediaBundle\Entity\File;
 use SmartCore\Bundle\MediaBundle\Provider\LocalProvider;
@@ -32,7 +33,13 @@ class DefaultController extends AbstractController
      */
     public function image(string $filter, string $id, MediaCloudService $mcs, EntityManagerInterface $em, KernelInterface $kernel): Response
     {
-        $file = $em->getRepository(File::class)->find($id, 0);
+        if (!empty($id)) {
+            try {
+                $file = $em->getRepository(File::class)->find($id, 0);
+            } catch (ConversionException $e) {
+                // dummy
+            }
+        }
 
         if (empty($file)) {
             $path = $kernel->getProjectDir().'/public/assets/image-not-found-png-6-300x200.png';

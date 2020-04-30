@@ -39,10 +39,6 @@ class MediaCollection extends AbstractCollectionService
 
     protected $user_id;
 
-    /**
-     * @param ContainerInterface $container
-     * @param int|null $id
-     */
     public function __construct(ContainerInterface $container = null, $id = null)
     {
         parent::__construct($container->get('doctrine.orm.entity_manager'));
@@ -61,20 +57,13 @@ class MediaCollection extends AbstractCollectionService
         }
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->title;
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\File\File $file
-     * @param Category|int $category
-     * @param array $tags
-     *
-     * @return int - ID файла в коллекции.
+     * @return mixed - ID файла в коллекции.
      */
     public function upload(\Symfony\Component\HttpFoundation\File\File $file, $category = null, array $tags = null)
     {

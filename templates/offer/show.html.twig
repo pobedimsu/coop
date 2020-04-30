@@ -18,26 +18,30 @@
             <h1>{{ offer.title }}</h1>
 
             <p>
-                <a href="#" data-toggle="modal" data-target="#image_modal_{{ offer.id }}">
-                    <img src="{{ path('image', {'filter': 'offers_list_thumbnail', 'id': offer.imageId ?:0 }) }}">
-                </a>
-                <br>
+                {% if offer.imageId %}
+                    <a href="#" data-toggle="modal" data-target="#image_modal_{{ offer.id }}">
+                        <img src="{{ path('image', {'filter': 'offers_list_thumbnail', 'id': offer.imageId ?:0 }) }}">
+                    </a>
+                    <br>
 
-                <div class="modal fade" id="image_modal_{{ offer.id }}" tabindex="-1" role="dialog" aria-labelledby="order_modal_label" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 1200px !important; max-height: 800px !important;">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="order_modal_label">{{ offer }}</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body" style="text-align: center;">
-                                <img src="{{ path('image', {'filter': 'compress_original', 'id': offer.imageId ?:0 }) }}" class="img-fluid">
+                    <div class="modal fade" id="image_modal_{{ offer.id }}" tabindex="-1" role="dialog" aria-labelledby="order_modal_label" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 1200px !important; max-height: 800px !important;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="order_modal_label">{{ offer }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" style="text-align: center;">
+                                    <img src="{{ path('image', {'filter': 'compress_original', 'id': offer.imageId ?:0 }) }}" class="img-fluid">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {% else %}
+                    <img src="{{ path('image', {'filter': 'offers_list_thumbnail', 'id': offer.imageId ?:0 }) }}">
+                {% endif %}
             </p>
 
             <h3>

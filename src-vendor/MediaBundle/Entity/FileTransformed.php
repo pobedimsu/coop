@@ -25,7 +25,7 @@ class FileTransformed
     /**
      * @var File
      *
-     * @ORM\ManyToOne(targetEntity="File", inversedBy="filesTransformed", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="File", inversedBy="filesTransformed", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     protected $file;

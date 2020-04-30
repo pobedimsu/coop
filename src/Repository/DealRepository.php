@@ -164,15 +164,12 @@ class DealRepository extends EntityRepository
     /**
      * Сумма "холда"
      *
-     * @param User $user
-     *
-     * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function sumActiveForDeclarantUser(User $user): int
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('sum(e.amount_cost)');
+        $qb->select('SUM(e.amount_cost)');
         $qb->where('e.declarant_user = :user');
         $qb->andWhere($qb->expr()->orX(
             $qb->expr()->eq('e.status', ':status_new'),
@@ -193,9 +190,6 @@ class DealRepository extends EntityRepository
     /**
      * Сумма "холда" (алиас)
      *
-     * @param User $user
-     *
-     * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getHoldSum(User $user): int
@@ -204,9 +198,6 @@ class DealRepository extends EntityRepository
     }
 
     /**
-     * @param Offer $offer
-     *
-     * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countForOffer(Offer $offer): int
@@ -220,9 +211,6 @@ class DealRepository extends EntityRepository
     }
 
     /**
-     * @param User $user
-     *
-     * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countForUser(User $user): int
