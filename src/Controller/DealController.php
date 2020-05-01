@@ -7,15 +7,16 @@ namespace App\Controller;
 use App\Entity\Deal;
 use App\Entity\Offer;
 use App\Entity\Transaction;
+use App\Event\DealEvent;
 use App\Service\BillService;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class DealController extends AbstractController
 {
@@ -51,7 +52,7 @@ class DealController extends AbstractController
     /**
      * @Route("/deal/create", name="deal_create", methods={"POST"})
      */
-    public function create(Request $request, EntityManagerInterface $em, BillService $billService): JsonResponse
+    public function create(Request $request, EntityManagerInterface $em, BillService $billService, EventDispatcherInterface $dispatcher): JsonResponse
     {
         try {
             $offer = $em->find(Offer::class, $request->request->get('offer_id'));
@@ -101,6 +102,8 @@ class DealController extends AbstractController
 
                 $this->addFlash('success', 'Сделка добавлена'); // @todo remove
 
+                $dispatcher->dispatch($deal, DealEvent::CREATED);
+
                 $data = [
                     'status' => 'success',
                 ];
@@ -120,10 +123,10 @@ class DealController extends AbstractController
     /**
      * @Route("/deal/{id}/", name="deal_show")
      */
-    public function show(Deal $deal, Request $request, EntityManagerInterface $em): Response
+    public function show(Deal $deal, Request $request, EntityManagerInterface $em, EventDispatcherInterface $dispatcher): Response
     {
         if ($deal->getContractorUser() == $this->getUser() or $deal->getDeclarantUser() == $this->getUser()) {
-            // Это проверка на то, что сделка принадлежит отдному из аутентифицированных участников
+            // Проверка на то, что сделка принадлежит отдному из аутентифицированных участников
         } else {
             return $this->redirectToRoute('deals');
         }
@@ -139,6 +142,8 @@ class DealController extends AbstractController
 
                     $em->persist($deal);
                     $em->flush();
+
+                    $dispatcher->dispatch($deal, DealEvent::CANCELED_BY_CONTRACTOR);
                 }
 
                 if ($deal->getDeclarantUser() == $this->getUser()) {
@@ -146,6 +151,8 @@ class DealController extends AbstractController
 
                     $em->persist($deal);
                     $em->flush();
+
+                    $dispatcher->dispatch($deal, DealEvent::CANCELED_BY_DECLARANT);
                 }
 
                 if (!empty($offer->getQuantity()) and $quantity_reserved > 0) {

@@ -4,22 +4,19 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\Bill;
 use App\Entity\Deal;
 use App\Entity\Offer;
 use App\Entity\Transaction;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * @todo refactor
+ */
 class BillService
 {
     protected $em;
 
-    /**
-     * BillService constructor.
-     *
-     * @param EntityManagerInterface $em
-     */
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;

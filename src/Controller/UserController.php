@@ -167,6 +167,7 @@ class UserController extends AbstractController
                 return random_int(10000, 99999);
             });
 
+            // Сохранение к кеше user_id
             $user_id = $cache->get('connect_telegram_account_code'.$code, function (ItemInterface $item) {
                 $item->expiresAfter(60 * 2);
 
