@@ -37,7 +37,7 @@ class DealSubscriber implements EventSubscriberInterface
 
     public function sendUpdatedNotify(Deal $deal): void
     {
-        $text = 'Изменение заспроса на: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getQuantity() . ')';
+        $text = 'Изменение запроса на: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getQuantity() . ')';
 
         $this->telegram->sendMessage($deal->getContractorUser(), $text);
     }
