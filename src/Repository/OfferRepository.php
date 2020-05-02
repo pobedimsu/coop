@@ -13,24 +13,21 @@ class OfferRepository extends EntityRepository
 {
     use RepositoryTrait\FindByQuery;
 
-    /**
-     * @param array $filters
-     *
-     * @return QueryBuilder
-     */
     public function getFindQueryBuilder(array $filters = []): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('c');
+        $qb = $this->createQueryBuilder('e');
 
         if (!empty($filters['category']) and $filters['category'] >= 1) {
-            $qb->andWhere('c.category = :category');
+            $qb->andWhere('e.category = :category');
             $qb->setParameter('category', $filters['category']);
         }
 
         if (!empty($filters['search']) and strlen($filters['search']) >= 3) {
-            $qb->andWhere('c.title LIKE :search');
+            $qb->andWhere('e.title LIKE :search');
             $qb->setParameter('search', '%'.$filters['search'].'%');
         }
+
+        $qb->orderBy('e.created_at', 'DESC');
 
         return $qb;
     }

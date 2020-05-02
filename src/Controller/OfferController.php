@@ -143,7 +143,7 @@ class OfferController extends AbstractController
      */
     public function my(EntityManagerInterface $em): Response
     {
-        $offers = $em->getRepository(Offer::class)->findBy(['user' => $this->getUser()]);
+        $offers = $em->getRepository(Offer::class)->findBy(['user' => $this->getUser()], ['created_at' => 'DESC']);
 
         return $this->render('offer/my.html.twig', [
             'offers' => $offers,
