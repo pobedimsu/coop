@@ -58,26 +58,6 @@ bin/console user:add
 bin/clear_cache
 ```
 
-
-Для разработчиков
------------------
-
-Получение последней версии песочницы:
-```
-    git pull;git submodule update --init
-``` 
-
-Обновление подмодулей из удалённых репозиториев:
-```
-    git submodule update --remote
-``` 
-
-Решение проблемы с detached head, переключение всех подмодулей в master:
-```
-    git submodule foreach 'git checkout master'
-``` 
-
-
 @TODO
 -----
 
