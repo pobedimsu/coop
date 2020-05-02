@@ -29,21 +29,21 @@ class DealSubscriber implements EventSubscriberInterface
 
     public function sendCreatedNotify(Deal $deal): void
     {
-        $text = 'У вас новая заявка на: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getOffer()->getQuantity() . ')';
+        $text = 'У вас новая заявка на: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getQuantity() . ')';
 
         $this->telegram->sendMessage($deal->getDeclarantUser(), $text);
     }
 
     public function sendCanceledByContractorNotify(Deal $deal): void
     {
-        $text = 'Заявка отменена: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getOffer()->getQuantity() . ')';
+        $text = 'Заявка отменена: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getQuantity() . ')';
 
         $this->telegram->sendMessage($deal->getDeclarantUser(), $text);
     }
 
     public function sendCanceledByDeclarantNotify(Deal $deal): void
     {
-        $text = 'Заявка отменена: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getOffer()->getQuantity() . ')';
+        $text = 'Заявка отменена: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getQuantity() . ')';
 
         $this->telegram->sendMessage($deal->getContractorUser(), $text);
     }
