@@ -31,7 +31,7 @@ class DealSubscriber implements EventSubscriberInterface
     {
         $text = 'У вас новая заявка на: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getQuantity() . ')';
 
-        $this->telegram->sendMessage($deal->getDeclarantUser(), $text);
+        $this->telegram->sendMessage($deal->getContractorUser(), $text);
     }
 
     public function sendCanceledByContractorNotify(Deal $deal): void
