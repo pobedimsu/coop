@@ -4,8 +4,20 @@
 
 {% block content %}
     {% set offer = deal.offer %}
+    {% set show = false %}
 
-    <h1>Просмотр сделки</h1>
+    <h1>Мои сделки</h1>
+
+    <ul class="nav nav-pills">
+        <li {% if show == 'active' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'active'}) }}">Активные</a></li>
+        <li {% if show == 'in' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'in'}) }}">Входящие</a></li>
+        <li {% if show == 'out' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'out'}) }}">Исходящие</a></li>
+        <li {% if show == 'complete' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'complete'}) }}">Завешенные</a></li>
+        <li {% if show == 'canceled' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'canceled'}) }}">Отменённые</a></li>
+        <li {% if show == 'all' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'all'}) }}">Все</a></li>
+    </ul>
+
+    <h2>Просмотр сделки</h2>
 
 <div class="row">
     <div class="col-md-8">
@@ -88,7 +100,7 @@
     {% endif %}
         </div>
 
-        <a href="{{ path('deals', {'tab': 'in'}) }}"><< назад к списку входящих запросов</a>
+{#        <a href="{{ path('deals', {'tab': 'in'}) }}"><< назад к списку входящих запросов</a>#}
     </div>
 
     <div class="col-md-4">
