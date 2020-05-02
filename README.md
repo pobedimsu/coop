@@ -58,6 +58,32 @@ bin/console user:add
 bin/clear_cache
 ```
 
+Запуск в Docker
+---------------
+
+Документация тут [docker.md](doc/docker.md) 
+
+Дополнительные команды
+----------------------
+
+Посмотреть список всех пользователей:
+```
+bin/console user:list
+```
+
+Назначить роль пользователю, например: ROLE_SUPER_ADMIN
+```
+bin/console user:role:promote <username> <role>
+```
+
+Для запуска команд в докере, нужно перед командой написать: `docker-compose run php` итого формат будет такой: 
+
+```
+docker-compose run php <command>
+# например:
+docker-compose run php bin/console user:list
+```
+
 @TODO
 -----
 
