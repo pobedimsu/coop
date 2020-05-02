@@ -39,8 +39,12 @@ class OfferFormType extends AbstractType
                     ])
                 ]
             ])
-            ->add('short_description', null, ['attr' => ['rows' => 2]])
-            ->add('description', null, ['attr' => ['rows' => 10]])
+            ->add('short_description', null, [
+                'attr' => ['rows' => 2, 'placeholder' => 'будет отображаться в общем списке предложений. Максимаольная длина 160 символов.'],
+            ])
+            ->add('description', null, [
+                'attr' => ['rows' => 10, 'placeholder' => 'будет отображаться при полном просмотре предложения'],
+            ])
             ->add('price')
             ->add('measure', ChoiceType::class, [
                 'choices' => Offer::getMeasureFormChoices(),

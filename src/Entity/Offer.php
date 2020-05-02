@@ -8,6 +8,7 @@ use App\Doctrine\StatusTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OfferRepository")
@@ -80,6 +81,7 @@ class Offer
      * @var string|null
      *
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(max = 160)
      */
     protected $short_description;
 
