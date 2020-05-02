@@ -22,6 +22,7 @@ class DealSubscriber implements EventSubscriberInterface
     {
         return [
             DealEvent::CREATED  => 'sendCreatedNotify',
+            DealEvent::UPDATED  => 'sendUpdatedNotify',
             DealEvent::CANCELED_BY_CONTRACTOR => 'sendCanceledByContractorNotify',
             DealEvent::CANCELED_BY_DECLARANT  => 'sendCanceledByDeclarantNotify',
         ];
@@ -30,6 +31,13 @@ class DealSubscriber implements EventSubscriberInterface
     public function sendCreatedNotify(Deal $deal): void
     {
         $text = 'У вас новая заявка на: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getQuantity() . ')';
+
+        $this->telegram->sendMessage($deal->getContractorUser(), $text);
+    }
+
+    public function sendUpdatedNotify(Deal $deal): void
+    {
+        $text = 'Изменение заспроса на: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getQuantity() . ')';
 
         $this->telegram->sendMessage($deal->getContractorUser(), $text);
     }

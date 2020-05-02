@@ -84,7 +84,18 @@ class DealController extends AbstractController
             } elseif ($offer->getQuantity() and $quantity > $offer->getQuantity() - (int) $offer->getQuantityReserved()) {
                 $error_msg = 'Количество не должно превышать имеющееся в наличии';
             } else {
-                $deal = new Deal();
+                $isNew = false;
+                $deal = $em->getRepository(Deal::class)->findOneBy([
+                    'declarant_user' => $this->getUser(),
+                    'offer' => $offer,
+                    'status' => Deal::STATUS_NEW, // @todo возможно надо ещё и STATUS_VIEW
+                ]);
+
+                if (empty($deal)) {
+                    $deal = new Deal();
+                    $isNew = true;
+                }
+
                 $deal
                     ->setOffer($offer)
                     ->setCost($price)
@@ -102,7 +113,11 @@ class DealController extends AbstractController
 
                 $this->addFlash('success', 'Сделка добавлена'); // @todo remove
 
-                $dispatcher->dispatch($deal, DealEvent::CREATED);
+                if ($isNew) {
+                    $dispatcher->dispatch($deal, DealEvent::CREATED);
+                } else {
+                    $dispatcher->dispatch($deal, DealEvent::UPDATED);
+                }
 
                 $data = [
                     'status' => 'success',

@@ -12,6 +12,9 @@ class DealEvent extends Event
     // Создание сделки
     const CREATED  = 'app.deal_created';
 
+    // Обновление сделки
+    const UPDATED  = 'app.deal_updated';
+
     // Отмена сделки
     const CANCELED = 'app.deal_canceled';
 
