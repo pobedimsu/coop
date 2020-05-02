@@ -17,6 +17,12 @@ class UserFormType extends AbstractType
         $builder
             ->add('firstname', null, ['attr' => ['autofocus' => true]])
             ->add('lastname')
+            ->add('description', null, [
+                'attr' => [
+                    'rows' => 10,
+                    'placeholder' => 'любая дополнительная информация, которая будет видна всем пользовалелям при просмотре профиля',
+                ],
+            ])
             ->add('update', SubmitType::class, ['attr' => ['class' => 'btn-success']])
         ;
     }

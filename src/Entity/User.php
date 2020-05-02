@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Model\UserModel;
 use Doctrine\ORM\Mapping as ORM;
+use Smart\CoreBundle\Doctrine\ColumnTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -29,6 +30,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User extends UserModel
 {
+    use ColumnTrait\Description;
+
     const SEX_NA     = 0;
     const SEX_MALE   = 1;
     const SEX_FEMALE = 2;
