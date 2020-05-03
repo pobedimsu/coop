@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Invite;
 use App\Entity\User;
+use App\Event\InviteEvent;
 use App\Form\Type\UserInviteFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
@@ -19,6 +20,7 @@ use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterfac
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @Route("/invite")
@@ -108,7 +110,8 @@ class InviteController extends AbstractController
         EntityManagerInterface $em,
         $isUserForm,
         AuthenticationManagerInterface $authenticationManager,
-        TokenStorageInterface $tokenStorage
+        TokenStorageInterface $tokenStorage,
+        EventDispatcherInterface $dispatcher
     ): Response {
         // Не существующий инвайт
         try {
@@ -177,6 +180,8 @@ class InviteController extends AbstractController
                 $tokenStorage->setToken($token);
 
                 $this->addFlash('success', 'Регистрация прошла успено.');
+
+                $dispatcher->dispatch($user->getInvite(), InviteEvent::REGISTER);
 
                 return $this->redirectToRoute('homepage');
             }
