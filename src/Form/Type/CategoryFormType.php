@@ -19,23 +19,6 @@ class CategoryFormType extends AbstractType
         $builder
             ->add('title', null, ['attr' => ['autofocus' => true]])
             ->add('name', null, ['attr' => ['placeholder' => 'Техническое имя на енг без пробелов и спецсимволов']])
-            /*
-            ->add('parent', null, [
-                'label' => 'Parent category',
-                'class'         => Category::class,
-                'query_builder' => function (CategoryRepository $er) {
-                    return $er->childrenHierarchy(null, false, [], false);
-                },
-                'choice_label' => function (Category $category) {
-                    $prefix = '';
-                    for ($i = 1; $i < $category->getLevel(); $i++) {
-                        $prefix .= '⋅⋅ ';
-                    }
-
-                    return $prefix . (string) $category;
-                }
-            ])
-            */
             ->add('parent', CategoryTreeType::class, ['label' => 'Parent category', 'required' => false])
             ->add('position')
 

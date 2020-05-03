@@ -18,13 +18,6 @@ class AppExtension extends AbstractExtension
     protected $tgBotName;
     protected $em;
 
-    /**
-     * AppExtension constructor.
-     *
-     * @param BillService            $billService
-     * @param EntityManagerInterface $em
-     * @param                        $tgBotName
-     */
     public function __construct(BillService $billService, EntityManagerInterface $em, $tgBotName)
     {
         $this->billService = $billService;
@@ -32,19 +25,11 @@ class AppExtension extends AbstractExtension
         $this->em          = $em;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'twig.app';
     }
 
-    /**
-     * Returns a list of functions to add to the existing list.
-     *
-     * @return array An array of functions
-     */
     public function getFunctions(): array
     {
         return [
@@ -64,9 +49,6 @@ class AppExtension extends AbstractExtension
     }
 
     /**
-     * @param User|null $user
-     *
-     * @return int
      * @throws \Exception
      */
     public function getBalance(?User $user = null): int
@@ -75,9 +57,6 @@ class AppExtension extends AbstractExtension
     }
 
     /**
-     * @param User|null $user
-     *
-     * @return int
      * @throws \Exception
      */
     public function getOffersBallance(?User $user = null): int
@@ -85,30 +64,17 @@ class AppExtension extends AbstractExtension
         return $this->billService->getOffersBallance($user);
     }
 
-    /**
-     * @param Item $item
-     *
-     * @return int
-     */
     public function getCountAllDealsForOffer(Offer $offer): int
     {
         return $this->billService->getCountAllDealsForOffer($offer);
     }
 
-    /**
-     * @param Item $item
-     *
-     * @return int
-     */
     public function getCountActiveDealsForOffer(Offer $offer): int
     {
         return $this->billService->getCountActiveDealsForOffer($offer);
     }
 
     /**
-     * @param User $user
-     *
-     * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getCountAllDealsForUser(User $user): int
@@ -116,21 +82,11 @@ class AppExtension extends AbstractExtension
         return $this->em->getRepository(Deal::class)->countForUser($user);
     }
 
-    /**
-     * @param User $user
-     *
-     * @return int
-     */
     public function getCountOffersForUser(User $user): int
     {
         return $this->billService->getCountOffersByUser($user);
     }
 
-    /**
-     * @param User $user
-     *
-     * @return int
-     */
     public function getCountOffersAvailableByUser(User $user): int
     {
         return $this->billService->getCountOffersAvailableByUser($user);
@@ -139,9 +95,6 @@ class AppExtension extends AbstractExtension
     /**
      * Сумма "холда"
      *
-     * @param User $user
-     *
-     * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getHoldSum(User $user): int
@@ -151,10 +104,6 @@ class AppExtension extends AbstractExtension
 
     /**
      * Входящие транзакции
-     *
-     * @param User $user
-     *
-     * @return int
      */
     public function getTransactionsIn(User $user): int
     {
@@ -163,19 +112,12 @@ class AppExtension extends AbstractExtension
 
     /**
      * Исодящие транзакции
-     *
-     * @param User $user
-     *
-     * @return int
      */
     public function getTransactionsOut(User $user): int
     {
         return $this->billService->getTransactionsOut($user);
     }
 
-    /**
-     * @return string|null
-     */
     public function getTgBotName(): ?string
     {
         return $this->tgBotName;

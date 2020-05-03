@@ -14,19 +14,11 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
  */
 class Tag
 {
+    use ColumnTrait\Uuid;
     use ColumnTrait\CreatedAt;
     use ColumnTrait\UpdatedAt;
     use ColumnTrait\Description;
-
-    /**
-     * @var UuidInterface
-     *
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
-     */
-    protected $id;
+    use ColumnTrait\User;
 
     /**
      * @var string
@@ -35,35 +27,14 @@ class Tag
      */
     protected $title;
 
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="User")
-     */
-    protected $user;
-
-    /**
-     * Tag constructor.
-     */
     public function __construct()
     {
         $this->created_at = new \DateTime();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->title;
-    }
-
-    /**
-     * @return UuidInterface
-     */
-    public function getId(): UuidInterface
-    {
-        return $this->id;
     }
 
     /**
@@ -82,26 +53,6 @@ class Tag
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
-    public function setUser(User $user): self
-    {
-        $this->user = $user;
 
         return $this;
     }

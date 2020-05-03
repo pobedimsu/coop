@@ -9,6 +9,8 @@ use Ramsey\Uuid\UuidInterface;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 
 /**
+ * Спрос
+ *
  * @ORM\Entity(repositoryClass="App\Repository\DemandRepository")
  * @ORM\Table(name="demands",
  *      indexes={

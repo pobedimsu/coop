@@ -36,6 +36,7 @@ class Offer
     use ColumnTrait\IsEnabled;
     use ColumnTrait\TitleNotBlank;
     use ColumnTrait\Description;
+    use ColumnTrait\User;
 
     use StatusTrait;
 
@@ -122,14 +123,6 @@ class Offer
     protected $image_id;
 
     /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="User")
-     * ORM\JoinColumn(nullable=false)
-     */
-    protected $user;
-
-    /**
      * @var Category
      *
      * @ORM\ManyToOne(targetEntity="Category")
@@ -137,9 +130,6 @@ class Offer
      */
     protected $category;
 
-    /**
-     * Offer constructor.
-     */
     public function __construct()
     {
         $this->created_at = new \DateTime();
@@ -148,9 +138,6 @@ class Offer
         $this->status     = self::STATUS_AVAILABLE;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->title;
@@ -167,37 +154,11 @@ class Offer
         }
     }
 
-    /**
-     * @return User
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
-    public function setUser(User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
     public function getPrice(): ?int
     {
         return $this->price;
     }
 
-    /**
-     * @return int
-     */
     public function getPriceTotal(): ?int
     {
         if (empty($this->quantity)) {
@@ -207,11 +168,6 @@ class Offer
         return $this->price * $this->quantity;
     }
 
-    /**
-     * @param int $price
-     *
-     * @return $this
-     */
     public function setPrice(?int $price): self
     {
         $this->price = $price;
@@ -219,9 +175,6 @@ class Offer
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isStatusAccessToOrder(): bool
     {
         if ($this->status == self::STATUS_AVAILABLE or $this->status == self::STATUS_ON_DEMAND) {
@@ -231,27 +184,16 @@ class Offer
         return false;
     }
 
-    /**
-     * @return int
-     */
     public function getMeasure(): int
     {
         return $this->measure;
     }
 
-    /**
-     * @return string
-     */
     public function getMeasureAsText(): string
     {
         return self::$measure_values[$this->measure];
     }
 
-    /**
-     * @param int $measure
-     *
-     * @return $this
-     */
     public function setMeasure(int $measure): self
     {
         $this->measure = $measure;
@@ -259,35 +201,21 @@ class Offer
         return $this;
     }
 
-    /**
-     * @return array
-     */
     static public function getMeasureValues(): array
     {
         return self::$measure_values;
     }
 
-    /**
-     * @return array
-     */
     static public function getMeasureFormChoices(): array
     {
         return array_flip(self::$measure_values);
     }
 
-    /**
-     * @return int|null
-     */
     public function getQuantity(): ?int
     {
         return $this->quantity;
     }
 
-    /**
-     * @param int|null $quantity
-     *
-     * @return $this
-     */
     public function setQuantity(?int $quantity): self
     {
         $this->quantity = $quantity;
@@ -295,19 +223,11 @@ class Offer
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getQuantityReserved(): ?int
     {
         return $this->quantity_reserved;
     }
 
-    /**
-     * @param int|null $quantity_reserved
-     *
-     * @return $this
-     */
     public function setQuantityReserved(?int $quantity_reserved): self
     {
         $this->quantity_reserved = $quantity_reserved;
@@ -315,19 +235,11 @@ class Offer
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getImageId(): ?string
     {
         return $this->image_id;
     }
 
-    /**
-     * @param string|null $image_id
-     *
-     * @return $this
-     */
     public function setImageId(?string $image_id): self
     {
         $this->image_id = $image_id;
@@ -335,19 +247,11 @@ class Offer
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getShortDescription(): ?string
     {
         return $this->short_description;
     }
 
-    /**
-     * @param string|null $short_description
-     *
-     * @return $this
-     */
     public function setShortDescription(?string $short_description): self
     {
         $this->short_description = $short_description;
@@ -355,19 +259,11 @@ class Offer
         return $this;
     }
 
-    /**
-     * @return Category
-     */
     public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    /**
-     * @param Category $category
-     *
-     * @return $this
-     */
     public function setCategory(Category $category): self
     {
         $this->category = $category;

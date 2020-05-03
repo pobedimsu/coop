@@ -18,7 +18,6 @@ class InitCommand extends Command
 {
     protected static $defaultName = 'app:init';
 
-    /** @var SymfonyStyle */
     private $io;
     private $em;
 

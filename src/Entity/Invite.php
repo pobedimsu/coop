@@ -31,11 +31,6 @@ class Invite
      */
     protected $is_used;
 
-    /**
-     * Invite constructor.
-     *
-     * @param User|null $user
-     */
     public function __construct(User $user = null)
     {
         $this->created_at = new \DateTime();
@@ -46,27 +41,16 @@ class Invite
         }
     }
 
-    /**
-     * @return bool
-     */
     public function isUsed(): bool
     {
         return $this->is_used;
     }
 
-    /**
-     * @return bool
-     */
     public function getIsUsed(): bool
     {
         return $this->is_used;
     }
 
-    /**
-     * @param bool $is_used
-     *
-     * @return $this
-     */
     public function setIsUsed(bool $is_used): self
     {
         $this->is_used = $is_used;

@@ -6,6 +6,7 @@ namespace App\Model;
 
 use App\Entity\Invite;
 use App\Entity\User;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
@@ -135,9 +136,6 @@ class UserModel implements UserInterface
      */
     protected $invited_users;
 
-    /**
-     * UserModel constructor.
-     */
     public function __construct()
     {
         $this->created_at       = new \DateTime();
@@ -148,9 +146,6 @@ class UserModel implements UserInterface
         $this->username         = '';
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         if (empty($this->getFirstname()) and empty($this->getLastname())) {
@@ -203,19 +198,11 @@ class UserModel implements UserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return string
-     */
     public function getUsername(): string
     {
         return $this->username;
     }
 
-    /**
-     * @param string $username
-     *
-     * @return $this
-     */
     public function setUsername(string $username): self
     {
         $this->username = $username;
@@ -223,19 +210,11 @@ class UserModel implements UserInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    /**
-     * @param string $password
-     *
-     * @return $this
-     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -283,8 +262,6 @@ class UserModel implements UserInterface
 
     /**
      * Returns the roles or permissions granted to the user for security.
-     *
-     * @return array
      */
     public function getRoles(): array
     {
@@ -299,11 +276,6 @@ class UserModel implements UserInterface
 
     }
 
-    /**
-     * @param array $roles
-     *
-     * @return $this
-     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -311,19 +283,11 @@ class UserModel implements UserInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getFirstname(): ?string
     {
         return $this->firstname;
     }
 
-    /**
-     * @param string|null $firstname
-     *
-     * @return $this
-     */
     public function setFirstname(?string $firstname): self
     {
         $this->firstname = $firstname;
@@ -331,19 +295,11 @@ class UserModel implements UserInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getLastname(): ?string
     {
         return $this->lastname;
     }
 
-    /**
-     * @param string|null $lastname
-     *
-     * @return $this
-     */
     public function setLastname(?string $lastname): self
     {
         $this->lastname = $lastname;
@@ -351,19 +307,11 @@ class UserModel implements UserInterface
         return $this;
     }
 
-    /**
-     * @return float|null
-     */
     public function getLatitude(): ?float
     {
         return $this->latitude ? (float) $this->latitude : null;
     }
 
-    /**
-     * @param float|null $latitude
-     *
-     * @return $this
-     */
     public function setLatitude(?float $latitude): self
     {
         $this->latitude = $latitude;
@@ -371,19 +319,11 @@ class UserModel implements UserInterface
         return $this;
     }
 
-    /**
-     * @return float|null
-     */
     public function getLongitude(): ?float
     {
         return $this->longitude ? (float) $this->longitude : null;
     }
 
-    /**
-     * @param float|null $longitude
-     *
-     * @return $this
-     */
     public function setLongitude(?float $longitude): self
     {
         $this->longitude = $longitude;
@@ -391,19 +331,11 @@ class UserModel implements UserInterface
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getInvitedByUser(): ?self
     {
         return $this->invited_by_user;
     }
 
-    /**
-     * @param User $invited_by_user
-     *
-     * @return $this
-     */
     public function setInvitedByUser(User $invited_by_user): self
     {
         $this->invited_by_user = $invited_by_user;
@@ -412,9 +344,9 @@ class UserModel implements UserInterface
     }
 
     /**
-     * @return User[]|ArrayCollection
+     * @return User[]|Collection
      */
-    public function getInvitedUsers()
+    public function getInvitedUsers(): Collection
     {
         return $this->invited_users;
     }
@@ -431,19 +363,11 @@ class UserModel implements UserInterface
         return $this;
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getLastLogin(): ?\DateTime
     {
         return $this->last_login;
     }
 
-    /**
-     * @param \DateTime|null $last_login
-     *
-     * @return $this
-     */
     public function setLastLogin(?\DateTime $last_login): self
     {
         $this->last_login = $last_login;
@@ -451,19 +375,11 @@ class UserModel implements UserInterface
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getTelegramUserId(): ?int
     {
         return $this->telegram_user_id;
     }
 
-    /**
-     * @param int|null $telegram_user_id
-     *
-     * @return $this
-     */
     public function setTelegramUserId(?int $telegram_user_id): self
     {
         $this->telegram_user_id = $telegram_user_id;
@@ -471,19 +387,11 @@ class UserModel implements UserInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getTelegramUsername(): ?string
     {
         return $this->telegram_username;
     }
 
-    /**
-     * @param string|null $telegram_username
-     *
-     * @return $this
-     */
     public function setTelegramUsername(?string $telegram_username): self
     {
         $this->telegram_username = $telegram_username;
@@ -491,19 +399,11 @@ class UserModel implements UserInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getApiToken(): ?string
     {
         return $this->api_token;
     }
 
-    /**
-     * @param string|null $api_token
-     *
-     * @return $this
-     */
     public function setApiToken(?string $api_token): self
     {
         $this->api_token = $api_token;
@@ -511,19 +411,11 @@ class UserModel implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Invite|null
-     */
     public function getInvite(): ?Invite
     {
         return $this->invite;
     }
 
-    /**
-     * @param Invite $invite
-     *
-     * @return $this
-     */
     public function setInvite(Invite $invite): self
     {
         $invite->setIsUsed(true);

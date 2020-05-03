@@ -14,9 +14,6 @@ class TransactionRepository extends EntityRepository
     use RepositoryTrait\FindByQuery;
 
     /**
-     * @param User $user
-     *
-     * @return int
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -33,9 +30,6 @@ class TransactionRepository extends EntityRepository
     }
 
     /**
-     * @param User $user
-     *
-     * @return int
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */

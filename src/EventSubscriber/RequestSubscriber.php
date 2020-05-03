@@ -23,13 +23,6 @@ class RequestSubscriber implements EventSubscriberInterface
     /** @var string */
     protected $tgBotName;
 
-    /**
-     * RequestSubscriber constructor.
-     *
-     * @param RouterInterface       $router
-     * @param TokenStorageInterface $token_storage
-     * @param string|null           $tgBotName
-     */
     public function __construct(RouterInterface $router, TokenStorageInterface $token_storage, ?string $tgBotName)
     {
         $this->router        = $router;
@@ -37,9 +30,6 @@ class RequestSubscriber implements EventSubscriberInterface
         $this->tgBotName     = $tgBotName;
     }
 
-    /**
-     * @return array
-     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -47,9 +37,6 @@ class RequestSubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param RequestEvent $event
-     */
     public function onKernelRequest(RequestEvent $event): void
     {
         if (null === $token = $this->token_storage->getToken()) {

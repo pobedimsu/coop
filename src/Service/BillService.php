@@ -25,9 +25,6 @@ class BillService
     /**
      * Получение полного баланса.
      *
-     * @param User $user
-     *
-     * @return int
      * @throws \Exception
      */
     public function getBalance(User $user): int
@@ -41,9 +38,6 @@ class BillService
     /**
      * Сумма "холда"
      *
-     * @param User $user
-     *
-     * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getHoldSum(User $user): int
@@ -54,9 +48,6 @@ class BillService
     /**
      * Входящие транзакции
      *
-     * @param User $user
-     *
-     * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getTransactionsIn(User $user): int
@@ -67,9 +58,6 @@ class BillService
     /**
      * Входящие транзакции
      *
-     * @param User $user
-     *
-     * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getTransactionsOut(User $user): int
@@ -80,9 +68,6 @@ class BillService
     /**
      * Получение баланса по заявленным предложениям (эмиссия).
      *
-     * @param User $user
-     *
-     * @return int
      * @throws \Exception
      */
     public function getOffersBallance(User $user): int
@@ -104,9 +89,6 @@ class BillService
     /**
      * Кол-во активных сделок по предложению
      *
-     * @param Item $item
-     *
-     * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getCountActiveDealsForOffer(Offer $offer): int
@@ -117,9 +99,6 @@ class BillService
     /**
      * Кол-во всех сделок по предложению
      *
-     * @param Offer $offer
-     *
-     * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getCountAllDealsForOffer(Offer $offer): int
@@ -195,9 +174,6 @@ class BillService
     }
 
     /**
-     * @param User $user
-     *
-     * @return int
      * @throws \Exception
      */
     public function getCountOffersByUser(User $user): int
@@ -210,9 +186,6 @@ class BillService
     }
 
     /**
-     * @param User $user
-     *
-     * @return int
      * @throws \Exception
      */
     public function getCountOffersAvailableByUser(User $user): int

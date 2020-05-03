@@ -111,12 +111,7 @@ class ApiController extends AbstractController
         return new JsonResponse($data);
     }
 
-    /**
-     * @param $length
-     *
-     * @return string
-     */
-    protected function gneratetToken($length): string
+    protected function gneratetToken(int $length): string
     {
         $token = "";
         $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

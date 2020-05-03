@@ -67,88 +67,53 @@ class Transaction
      */
     protected $deal;
 
-    /**
-     * Transaction constructor.
-     */
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->hash       = null;
     }
 
-    /**
-     * @return int
-     */
     public function getSum(): int
     {
         return $this->sum;
     }
 
-    /**
-     * @param int $sum
-     *
-     * @return $this
-     */
-    public function setSum($sum)
+    public function setSum($sum): self
     {
         $this->sum = $sum;
 
         return $this;
     }
 
-    /**
-     * @return Deal
-     */
     public function getDeal(): Deal
     {
         return $this->deal;
     }
 
-    /**
-     * @param Deal $deal
-     *
-     * @return $this
-     */
-    public function setDeal($deal)
+    public function setDeal(Deal $deal): self
     {
         $this->deal = $deal;
 
         return $this;
     }
 
-    /**
-     * @return null|string
-     */
     public function getHash(): ?string
     {
         return $this->hash;
     }
 
-    /**
-     * @param null|string $hash
-     *
-     * @return $this
-     */
-    public function setHash($hash)
+    public function setHash(?string $hash): self
     {
         $this->hash = $hash;
 
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getFromUser(): User
     {
         return $this->from_user;
     }
 
-    /**
-     * @param User $from_user
-     *
-     * @return $this
-     */
     public function setFromUser(User $from_user): self
     {
         $this->from_user = $from_user;
@@ -156,19 +121,11 @@ class Transaction
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getToUser(): User
     {
         return $this->to_user;
     }
 
-    /**
-     * @param User $to_user
-     *
-     * @return $this
-     */
     public function setToUser(User $to_user): self
     {
         $this->to_user = $to_user;

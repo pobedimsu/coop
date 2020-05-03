@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Menu;
 
 use Knp\Menu\FactoryInterface;
+use Knp\Menu\ItemInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -26,12 +27,8 @@ class MainMenu // implements ContainerAwareInterface
 
     /**
      * Главное меню
-     *
-     * @param array $options
-     *
-     * @return \Knp\Menu\ItemInterface
      */
-    public function top(array $options)
+    public function top(array $options): ItemInterface
     {
         $menu = $this->factory->createItem('root', [
             'childrenAttributes'    => [
@@ -79,12 +76,8 @@ class MainMenu // implements ContainerAwareInterface
 
     /**
      * Профиль пользователя
-     *
-     * @param array $options
-     *
-     * @return \Knp\Menu\ItemInterface
      */
-    public function profile(array $options)
+    public function profile(array $options): ItemInterface
     {
         $menu = $this->factory->createItem('root', [
             'childrenAttributes'    => [
