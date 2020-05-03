@@ -190,11 +190,6 @@ class BillService
      */
     public function getCountOffersAvailableByUser(User $user): int
     {
-        $offers = $this->em->getRepository(Offer::class)->findBy([
-            'user' => $user,
-            // ['status', 'OR', [1, 2]], @todo
-        ]);
-
-        return count($offers);
+        return $this->em->getRepository(Offer::class)->countAvailableByUser($user);
     }
 }

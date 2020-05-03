@@ -39,7 +39,7 @@
                     <a href="{{ path('user_show', {'id': user.id}) }}">{{ user }}</a>
                 </td>
                 <td>
-                    Доступных: @todo {{ app_count_offers_available_for_user(user) }}
+                    Доступных: {{ app_count_offers_available_for_user(user) }}
                     / Всего: {{ app_count_offers_for_user(user) }}
                 </td>
                 <td>{{ app_count_deals_for_user(user) }}</td>

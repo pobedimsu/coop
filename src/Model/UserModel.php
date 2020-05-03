@@ -20,7 +20,6 @@ class UserModel implements UserInterface
     use ColumnTrait\IsEnabled;
 
     const ROLE_DEFAULT = 'ROLE_USER';
-
     const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
     /**
@@ -129,10 +128,10 @@ class UserModel implements UserInterface
     /**
      * Приглашенные пользователи
      *
-     * @var User[]|ArrayCollection
+     * @var User[]|Collection
      *
      * @ORM\OneToMany(targetEntity="User", mappedBy="invited_by_user", fetch="EXTRA_LAZY")
-     * @ORM\OrderBy({"id" = "DESC"})
+     * @ORM\OrderBy({"created_at" = "DESC"})
      */
     protected $invited_users;
 

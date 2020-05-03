@@ -5,6 +5,84 @@
 {% block content %}
     <h1>Участник: {{user}}</h1>
 
-    @todo
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th style="width: 220px;">Телеграм</th>
+            <td>
+                {% if user.telegramUsername %}
+                    <a href="tg://resolve?domain={{ user.telegramUsername }}">
+                        Написать сообщение
+
+                        <span title="Написать сообщение в Телеграм" style="float: left; color: Dodgerblue; padding-right: 8px;">
+                            <i class="fab fa-telegram-plane"></i>
+                        </span>
+                    </a>
+                {% else %}
+                    Не подключен
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Баланс</th>
+            <td>
+                <b style="color: white;">{{ app_balance(app.user) }}</b>
+                <ul>
+                    <li>эмиссия: {{ app_offers_balance(user) }}</li>
+                    <li>холд: {{ app_get_hold_sum(user) }}</li>
+                    <li>транзакции: {{ app_transactions_in(user) - app_transactions_out(user) }}</li>
+                    <ul>
+                        <li>входящие: {{ app_transactions_in(user) }}</li>
+                        <li>исходящие {{ app_transactions_out(user) }}</li>
+                    </ul>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <th>Кол-во сделок</th>
+            <td>{{ app_count_deals_for_user(user) }}</td>
+        </tr>
+        <tr>
+            <th>Кол-во предложений</th>
+            <td>
+                Доступных: {{ app_count_offers_available_for_user(user) }}
+                / Всего: {{ app_count_offers_for_user(user) }}
+            </td>
+        </tr>
+        <tr>
+            <th>Дата регистрации</th>
+            <td>{{ user.createdAt|date }}</td>
+        </tr>
+        <tr>
+            <th>Последний вход</th>
+            <td>{% if user.lastLogin %}
+                    {{ user.lastLogin|date }}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    {% if user.longitude and user.latitude %}
+        <style type="text/css">
+            #mapdiv {
+                height: 500px;
+                width: 100%;
+            }
+        </style>
+
+        <div id="mapdiv"></div>
+
+        <script>
+          var mymap = L.map('mapdiv', { attributionControl:false }).setView([{{ user.latitude }}, {{ user.longitude }}], 15);
+
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            // __dummy
+          }).addTo(mymap);
+
+          var marker = L.marker([{{ user.latitude }}, {{ user.longitude }}]).addTo(mymap);
+
+          //marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+          marker.bindPopup("<b>{{ user }}</b>")
+        </script>
+    {% endif %}
 
 {% endblock %}

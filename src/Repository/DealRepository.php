@@ -203,7 +203,7 @@ class DealRepository extends EntityRepository
     public function countForOffer(Offer $offer): int
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('count(e.created_at)');
+        $qb->select('COUNT(e.created_at)');
         $qb->where('e.offer = :offer');
         $qb->setParameter('offer', $offer->getId());
 

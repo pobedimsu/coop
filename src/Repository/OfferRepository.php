@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Offer;
+use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -35,5 +37,23 @@ class OfferRepository extends EntityRepository
         $qb->orderBy('e.created_at', 'DESC');
 
         return $qb;
+    }
+
+    public function countAvailableByUser(User $user): int
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COUNT(e.id)')
+            ->where('e.user = :user')
+            ->andWhere('e.is_enabled = true')
+            ->andWhere($qb->expr()->orX(
+                $qb->expr()->eq('e.status', ':status_available'),
+                $qb->expr()->eq('e.status', ':status_on_demand'),
+            ))
+            ->setParameter('user', $user)
+            ->setParameter('status_available', Offer::STATUS_AVAILABLE)
+            ->setParameter('status_on_demand', Offer::STATUS_ON_DEMAND)
+        ;
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 }
