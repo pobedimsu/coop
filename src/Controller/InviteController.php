@@ -88,7 +88,7 @@ class InviteController extends AbstractController
     {
         $invite = $em->getRepository(Invite::class)->findActiveByUser($this->getUser());
 
-        if (empty($invite)) {
+        if ($invite === null) {
             $invite = new Invite($this->getUser());
 
             $em->persist($invite);
