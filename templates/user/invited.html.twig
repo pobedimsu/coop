@@ -1,9 +1,7 @@
 {% extends 'user/_layout.html.twig' %}
 
 {% block profile_content %}
-    {% set user = app.user %}
-
-    <p>Всего: {{ user.invitedUsers|length }}</p>
+    <p>Всего: {{ app.user.invitedUsers|length }}</p>
 
     <table class="table table-bordered table-hover">
         <thead>
@@ -16,10 +14,10 @@
         </tr>
         </thead>
         <tbody>
-        {% for u in user.invitedUsers %}
+        {% for user in app.user.invitedUsers %}
             <tr>
                 <td>
-                    <a href="{{ path('user_show', {'id': u.id}) }}">{{ u }}</a>
+                    <a href="{{ path('user_show', {'id': user.id}) }}">{{ user }}</a>
 
                     {% if user.telegramUsername %}
                         <a href="tg://resolve?domain={{ user.telegramUsername }}">
@@ -36,23 +34,23 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if u.invite %}
+                    {% if user.invite %}
                         По ссылке-пригляшению
                     {% else %}
                         Вручную
                     {% endif %}
                 </td>
                 <td>
-                    {% if u.enabled %}
+                    {% if user.enabled %}
                         <span class="label label-success label-important">Активен</span>
                     {% else %}
                         <span class="label label-danger label-important">Не Активен</span>
                     {% endif %}
                 </td>
-                <td>{{ u.createdAt|format_datetime }}</td>
+                <td>{{ user.createdAt|format_datetime }}</td>
                 <td>
-                    {% if u.lastLogin is not empty %}
-                        {{ u.lastLogin|format_datetime }}
+                    {% if user.lastLogin is not empty %}
+                        {{ user.lastLogin|format_datetime }}
                     {% endif %}
                 </td>
             </tr>
