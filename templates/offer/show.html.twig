@@ -48,6 +48,7 @@
                 {% endif %}
             </p>
 
+            {% if offer.isEnabled %}
             <h3>
                 <span class="badge badge-secondary">
                     Цена
@@ -61,10 +62,15 @@
                 {% include 'offer/_status.html.twig' %}
 
                 {% if offer.isStatusAccessToOrder and offer.user != app.user %}
-                    <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#exampleModal"><i class="far fa-handshake"></i> Получить</button>
+                    <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#exampleModal">
+                        <i class="far fa-handshake"></i> Отправить запрос на сделку
+                    </button>
                 {% endif %}
 {#                <button type="button" class="btn btn-sm btn-outline-danger"><i class="far fa-heart"></i> В избравнное</button>#}
             </h3>
+            {% else %}
+                <p><span class="badge badge-danger">Предложение отключено</span></p>
+            {% endif %}
 
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">

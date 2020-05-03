@@ -27,6 +27,11 @@ class OfferRepository extends EntityRepository
             $qb->setParameter('search', '%'.$filters['search'].'%');
         }
 
+        if (isset($filters['is_enabled']) and is_bool($filters['is_enabled'])) {
+            $qb->andWhere('e.is_enabled = :is_enabled');
+            $qb->setParameter('is_enabled', $filters['is_enabled']);
+        }
+
         $qb->orderBy('e.created_at', 'DESC');
 
         return $qb;

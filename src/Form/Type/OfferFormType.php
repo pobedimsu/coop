@@ -10,6 +10,7 @@ use App\Form\Tree\CategoryTreeType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -55,6 +56,7 @@ class OfferFormType extends AbstractType
                 'choices' => Offer::getStatusFormChoices(),
                 'choice_translation_domain' => false,
             ])
+            ->add('is_enabled')
 
             ->add('create', SubmitType::class, ['attr' => ['class' => 'btn-success']])
             ->add('update', SubmitType::class, ['attr' => ['class' => 'btn-success']])

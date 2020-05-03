@@ -30,6 +30,7 @@ class OfferController extends AbstractController
             ->getFindQueryBuilder([
                 'category' => $request->query->get('category'),
                 'search' => $request->query->get('search'),
+                'is_enabled' => true,
             ])
             ->getQuery()
             ->getResult()

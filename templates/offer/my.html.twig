@@ -29,7 +29,7 @@
         </thead>
         <tbody>
         {% for offer in offers %}
-            <tr {% if offer.status == 0 %} style="text-decoration:line-through;" {% endif %}>
+            <tr {% if offer.disabled %} style="text-decoration:line-through;" {% endif %}>
                 <td><a href="{{ path('offer_edit', {'id': offer.id}) }}" style="height: 70px; display: block;">
                         <img src="{{ path('image', {'filter': '100x70', 'id': offer.imageId ?: 0}) }}" style="max-width: 100px; max-height: 70px;">
                     </a>

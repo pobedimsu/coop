@@ -68,6 +68,11 @@ class DealController extends AbstractController
                 'status' => 'error',
                 'message' => 'Предложение не найдено',
             ];
+        } elseif ($offer->isDisabled()) {
+            $data = [
+                'status' => 'error',
+                'message' => 'Предложение отключено',
+            ];
         } else {
             $error_msg = null;
             $quantity = $request->request->get('quantity', 1);
