@@ -72,7 +72,7 @@ class BillService
      */
     public function getOffersBallance(User $user): int
     {
-        $offers = $this->em->getRepository(Offer::class)->findBy(['user' => $user]);
+        $offers = $this->em->getRepository(Offer::class)->findBy(['user' => $user, 'is_enabled' => true]);
 
         $sum = 0;
         foreach ($offers as $offer) {
