@@ -61,10 +61,12 @@ class MainMenu // implements ContainerAwareInterface
             ->setLinkAttribute('class', 'nav-link py-0')
         ;
 
+        /*
         $menu->addChild('Users', ['route' => 'users'])
             ->setAttribute('class', 'nav-item')
             ->setLinkAttribute('class', 'nav-link py-0')
         ;
+        */
 
         $menu->addChild('Invite', ['route' => 'invite'])
             ->setAttribute('class', 'nav-item')
