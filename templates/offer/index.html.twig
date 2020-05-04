@@ -15,7 +15,7 @@
         <tr>
             <td style="width: 200px;">
                 <select name="category" class="form-control">
-                    <option value="">Любоая категория</option>
+                    <option value="">Любая категория</option>
                     {% for c in categories %}
                         <option value="{{ c.id }}"
                            {% if app.request.query.get('category') == c.id %} selected {% endif %}
