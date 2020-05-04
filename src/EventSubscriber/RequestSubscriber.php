@@ -14,13 +14,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class RequestSubscriber implements EventSubscriberInterface
 {
-    /** @var RouterInterface */
     protected $router;
-
-    /** @var TokenStorageInterface */
     protected $token_storage;
-
-    /** @var string */
     protected $tgBotName;
 
     public function __construct(RouterInterface $router, TokenStorageInterface $token_storage, ?string $tgBotName)
@@ -51,9 +46,10 @@ class RequestSubscriber implements EventSubscriberInterface
 
         // Если указано имя чат-бота, то необходимо привязать тг аккаунт
         if ($this->tgBotName and empty($user->getTelegramUsername())) {
+            $requestRoute = $event->getRequest()->get('_route');
             $route = 'profile_telegram';
 
-            if ($route === $event->getRequest()->get('_route')) {
+            if ($route === $requestRoute or 'homepage' === $requestRoute) {
                 return;
             }
 
