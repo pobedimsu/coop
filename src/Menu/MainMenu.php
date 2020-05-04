@@ -6,23 +6,18 @@ namespace App\Menu;
 
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\KernelInterface;
 
-class MainMenu // implements ContainerAwareInterface
+class MainMenu
 {
-    //use ContainerAwareTrait;
-
     private $factory;
+    private $kernel;
 
-    /**
-     * @param FactoryInterface $factory
-     *
-     * Add any other dependency you need
-     */
-    public function __construct(FactoryInterface $factory)
+    public function __construct(FactoryInterface $factory, KernelInterface $kernel)
     {
         $this->factory = $factory;
+        $this->kernel  = $kernel;
     }
 
     /**
@@ -61,12 +56,10 @@ class MainMenu // implements ContainerAwareInterface
             ->setLinkAttribute('class', 'nav-link py-0')
         ;
 
-        /*
-        $menu->addChild('Users', ['route' => 'users'])
+        $menu->addChild('Manual', ['route' => 'manual_index'])
             ->setAttribute('class', 'nav-item')
             ->setLinkAttribute('class', 'nav-link py-0')
         ;
-        */
 
         $menu->addChild('Invite', ['route' => 'invite'])
             ->setAttribute('class', 'nav-item')
@@ -87,6 +80,7 @@ class MainMenu // implements ContainerAwareInterface
             ],
         ]);
 
+        $menu->setExtra('select_intehitance', false);
         $menu->addChild('Common', ['route' => 'profile']);
         $menu->addChild('Telegram', ['route' => 'profile_telegram']);
         $menu->addChild('Geoposition', ['route' => 'profile_geoposition']);
@@ -94,5 +88,52 @@ class MainMenu // implements ContainerAwareInterface
         $menu->addChild('Change password', ['route' => 'profile_password']);
 
         return $menu;
+    }
+
+    /**
+     * Построение полной структуры, включая ноды.
+     */
+    public function manual(array $options): ItemInterface
+    {
+        $menu = $this->factory->createItem('manual_pages', [
+            'childrenAttributes'    => [
+                'class' => 'nav flex-column nav-pills',
+            ],
+        ]);
+        $menu->setExtra('translation_domain', false);
+
+        $this->addManualChild($menu);
+
+        return $menu;
+    }
+
+    /**
+     * Рекурсивное построение дерева пунктов меню руководства
+     */
+    protected function addManualChild(ItemInterface $menu, string $path = null): void
+    {
+        $manDir = $this->kernel->getProjectDir() . '/doc/manual';
+
+        $finder = new Finder();
+        $finder->files()->in($manDir);
+
+        foreach ($finder as $file) {
+            $file->getRelativePathname();
+
+            $file = $file->getRelativePathname();
+
+            if ($file === 'index.md') {
+                continue;
+            }
+
+            $label = mb_substr($file, 0, -3); // Обрезание последних 3-х символов (.md)
+            $label = mb_substr($label, 3); // Обрезание первых 3-х символов, нумерация и тире
+            $label = str_replace('-', ' ', $label);
+
+            $menu->addChild($file, ['route' => 'manual', 'routeParameters' => ['slug' => $file]])
+                ->setLabel($label)
+                //->setExtra('translation_domain', false)
+            ;
+        }
     }
 }

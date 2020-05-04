@@ -49,7 +49,11 @@ class RequestSubscriber implements EventSubscriberInterface
             $requestRoute = $event->getRequest()->get('_route');
             $route = 'profile_telegram';
 
-            if ($route === $requestRoute or 'homepage' === $requestRoute) {
+            if ($route === $requestRoute
+                or 'homepage' === $requestRoute
+                or 'manual' === $requestRoute
+                or 'manual_index' === $requestRoute
+            ) {
                 return;
             }
 

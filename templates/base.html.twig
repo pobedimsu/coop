@@ -102,11 +102,9 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <div class="mr-auto">
-                        {{ knp_menu_render('top', {'currentClass': 'active'}) }}
+                        {{ knp_menu_render('top') }}
                     </div>
                     <ul class="navbar-nav">
-
-{#                        <li><a href="#" class="nav-link py-0 active">Баланс <b>{{ app_balance(app.user) }}</b></a></li>#}
                         <li><a href="{{ path('user_show', {'id': app.user.id}) }}" class="nav-link py-0 active" style="color: #d4d5d6; background-color: #4b4c4d">
                                 Баланс <b style="color: white;">{{ app_balance(app.user) }}</b>
                             </a>

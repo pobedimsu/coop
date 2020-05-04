@@ -38,6 +38,15 @@ services:
         tags:
             - { name: knp_menu.menu_builder, method: top, alias: top } # The alias is what is used to retrieve the menu
             - { name: knp_menu.menu_builder, method: profile, alias: profile }
+            - { name: knp_menu.menu_builder, method: manual, alias: manual }
+
+    # Menu selected items
+    app.menu.voter.request:
+        class: App\Menu\RequestVoter
+        arguments:
+            - '@request_stack'
+        tags:
+            - { name: knp_menu.voter }
 
     Gedmo\Loggable\LoggableListener:
         tags:

@@ -13,7 +13,10 @@ Error: Ошибка
 Firstname: Имя
 Final date: Финальная дата
 Geoposition: Местоположение
+Glossary: Глоссарий
 Homepage: Главная
+Installation: Установка
+Intro: Введение
 Invite: Приглашение участника
 Invited users: Приглашенные участники
 Is enabled: Включено?
@@ -24,6 +27,7 @@ Image file: Картинка
 Image: Картинка
 Joint Purchases: Совместные закупки
 Lastname: Фамилия
+Manual: Руководство
 Measure: Еденицы измерения
 Min quantity: Минимальное кол-во
 My geolocation: Моё местоположение
@@ -51,6 +55,7 @@ Success: Успешно
 Telegram: Телеграм
 Telegram chat link: Ссылка на чат в Телеграм
 Title: Заголовок
+TODO: '# В планах на разработку'
 Transportation cost in percent: Транспортные расходы в процентах
 Username: Логин
 Update: Обновить

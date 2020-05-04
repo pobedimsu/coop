@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Руководство{% endblock %}
+
+{% block content %}
+    <br>
+
+    <div class="row">
+        <div class="col-xl-3">
+            {{ knp_menu_render('manual') }}
+        </div>
+
+        <div class="col">
+            {{ content|raw }}
+        </div>
+
+    </div>
+
+{% endblock %}

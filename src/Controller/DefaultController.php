@@ -11,6 +11,7 @@ use SmartCore\Bundle\MediaBundle\Entity\File;
 use SmartCore\Bundle\MediaBundle\Provider\LocalProvider;
 use SmartCore\Bundle\MediaBundle\Service\MediaCloudService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -89,12 +90,34 @@ class DefaultController extends AbstractController
     }
 
     /**
+     * @todo вынести в UserController, а текущий UserController переименовать в ProfileController
+     *
      * @Route("/user/{id}", name="user_show")
      */
     public function userShow(User $user, EntityManagerInterface $em): Response
     {
         return $this->render('default/user_show.html.twig', [
             'user' => $user,
+        ]);
+    }
+
+    /**
+     * @Route("/manual/", name="manual_index") // Так надо, потому что маршрут со slug, генерируется без завершающего слеша :(
+     * @Route("/manual/{slug<.+>}", name="manual")
+     */
+    public function manual(string $slug = '', KernelInterface $kernel): Response
+    {
+        $fileMd = $kernel->getProjectDir() . '/doc/manual/' . $slug;
+
+        $md = new \Parsedown();
+        if (file_exists($fileMd) and !empty($slug)) {
+            $content = $md->text(file_get_contents($fileMd));
+        } else {
+            $content = $md->text(file_get_contents($kernel->getProjectDir() . '/doc/manual/index.md'));
+        }
+
+        return $this->render('default/content.html.twig', [
+            'content' => $content,
         ]);
     }
 }
