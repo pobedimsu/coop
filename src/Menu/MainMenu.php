@@ -115,7 +115,7 @@ class MainMenu
         $manDir = $this->kernel->getProjectDir() . '/doc/manual';
 
         $finder = new Finder();
-        $finder->files()->in($manDir);
+        $finder->files()->in($manDir)->sortByName();
 
         foreach ($finder as $file) {
             $file->getRelativePathname();
