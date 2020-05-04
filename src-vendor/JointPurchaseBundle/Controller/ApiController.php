@@ -17,6 +17,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiController extends AbstractController
 {
     /**
+     * Ожидаемые GET параметры:
+     *  product
+     *  quantity
+     *  comment
+     *
      * @Route("/api/order.update", name="jp_api_order_update", methods={"POST"})
      */
     public function orderUpdate(Request $request, EntityManagerInterface $em): JsonResponse

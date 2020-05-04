@@ -26,7 +26,7 @@
                 </td>
                 <td>{{ e.description }}</td>
                 <td style="white-space: nowrap;">
-                    <a href="#">{{ e.user }}</a>
+                    <a href="{{ path('user_show', {'id': e.user.id}) }}">{{ e.user }}</a>
 
                     {{ e.createdAt|date('Y-m-d H:i') }}
                 </td>
