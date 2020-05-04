@@ -9,7 +9,7 @@
         <li {% if show == 'active' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'active'}) }}">Активные</a></li>
         <li {% if show == 'in' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'in'}) }}">Входящие</a></li>
         <li {% if show == 'out' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'out'}) }}">Исходящие</a></li>
-        <li {% if show == 'complete' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'complete'}) }}">Завешенные</a></li>
+        <li {% if show == 'complete' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'complete'}) }}">Завершенные</a></li>
         <li {% if show == 'canceled' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'canceled'}) }}">Отменённые</a></li>
         <li {% if show == 'all' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'all'}) }}">Все</a></li>
     </ul>
