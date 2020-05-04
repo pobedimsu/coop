@@ -24,7 +24,7 @@
 
 Для ОС Windows, нужно скачать с Github, по этой ссылке:
 
-[https://github.com/telegramdesktop/tdesktop/releases](https://github.com/telegramdesktop/tdesktop/releases "(target|_blank)")
+https://github.com/telegramdesktop/tdesktop/releases
 
 Далее кликнуть по ссылке "Windows: Installer"
 
