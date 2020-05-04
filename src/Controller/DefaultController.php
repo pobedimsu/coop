@@ -113,7 +113,7 @@ class DefaultController extends AbstractController
         if (file_exists($fileMd) and !empty($slug)) {
             $content = $md->text(file_get_contents($fileMd));
         } else {
-            $content = $md->text(file_get_contents($kernel->getProjectDir() . '/doc/manual/index.md'));
+            $content = $md->text(file_get_contents($kernel->getProjectDir() . '/doc/manual/README.md'));
         }
 
         return $this->render('default/content.html.twig', [

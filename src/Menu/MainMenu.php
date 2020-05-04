@@ -122,7 +122,7 @@ class MainMenu
 
             $file = $file->getRelativePathname();
 
-            if ($file === 'index.md') {
+            if ($file === 'README.md') {
                 continue;
             }
 
