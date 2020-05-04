@@ -74,18 +74,18 @@
                                 <b>
                                     <a href="{{ path('offer_show', {'id': offer.id}) }}">{{ offer.title }}</a>
                                 </b>
-
                             </p>
                             {% include 'offer/_status.html.twig' %}
                             <p class="card-text">
                                 {{ offer.shortDescription }}
                             </p>
                             <p class="card-text">
+                                Цена
                                 <b>
                                     {% if offer.price == 0 %}
                                         Договорная
                                     {% else %}
-                                        {{ offer.price|number_format(0, ' ', ' ') }} ₽
+                                        {{ offer.price|number_format(0, ' ', ' ') }}
                                     {% endif %}
                                 </b>
 

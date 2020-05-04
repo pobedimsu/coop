@@ -55,7 +55,7 @@
                 {% if offer.price == 0 %}
                     Договорная
                 {% else %}
-                    {{ offer.price|number_format(0, ' ', ' ') }} {# ₽ #}
+                    {{ offer.price|number_format(0, ' ', ' ') }}
                 {% endif %}
                 </span>
 
@@ -100,7 +100,7 @@
                                     <textarea class="form-control" id="message-text" name="comment" rows="4"></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount">{{ offer.price }} ₽</strong></div>
+                                    <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount">{{ offer.price }}</strong></div>
                                     <button type="button" class="btn btn-light" data-dismiss="modal">Закрыть</button>
                                     <button type="submit" class="btn btn-success" id="form_submit">Отправить запрос</button>
                                 </div>
@@ -229,12 +229,14 @@
 
           $('#order-quantity').bind('keyup mouseup', function () {
             price = $('#order-price').val();
-            $('#order-amount').text(this.value * price + ' ₽');
+            //$('#order-amount').text(this.value * price + ' ₽');
+            $('#order-amount').text(this.value * price);
           });
 
           $('#order-price').bind('keyup mouseup', function () {
             price = $('#order-quantity').val();
-            $('#order-amount').text(this.value * price + ' ₽');
+            //$('#order-amount').text(this.value * price + ' ₽');
+            $('#order-amount').text(this.value * price);
           });
         });
     </script>
