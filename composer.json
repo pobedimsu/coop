@@ -9,6 +9,7 @@
         "ext-intl": "*",
         "borsaco/telegram-bot-api-bundle": "*",
         "doctrine/doctrine-bundle": "*",
+        "erusev/parsedown": "^1.7",
         "gedmo/doctrine-extensions": "^2.4",
         "knplabs/knp-menu-bundle": "*",
         "liip/imagine-bundle": "dev-master",
