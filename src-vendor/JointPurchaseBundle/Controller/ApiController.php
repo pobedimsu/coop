@@ -55,7 +55,7 @@ class ApiController extends AbstractController
             $comment  = $request->request->get('comment');
             $quantity = (int) $request->request->get('quantity');
 
-            $orderLine = $em->getRepository(JointPurchaseOrderLine::class)->findOneBy(['product' => $product]);
+            $orderLine = $em->getRepository(JointPurchaseOrderLine::class)->findOneByProductAndUser($product, $this->getUser());
 
             if (empty($orderLine)) {
                 $order = $em->getRepository(JointPurchaseOrder::class)->findOneBy(['joint_purchase' => $product->getJointPurchase(), 'user' => $this->getUser()]);

@@ -10,7 +10,7 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
 /**
  * Зваказы по товарам в заказе совместных закупок.
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Coop\JointPurchaseBundle\Repository\JointPurchaseOrderLineRepository")
  * @ORM\Table(name="joint_purchases_orders_lines",
  *      indexes={
  *          @ORM\Index(columns={"created_at"}),

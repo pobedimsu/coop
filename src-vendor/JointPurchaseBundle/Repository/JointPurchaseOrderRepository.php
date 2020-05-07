@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace Coop\JointPurchaseBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Coop\JointPurchaseBundle\Entity\JointPurchaseOrder;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Smart\CoreBundle\Doctrine\RepositoryTrait;
 
-class JointPurchaseOrderRepository extends EntityRepository
+class JointPurchaseOrderRepository extends ServiceEntityRepository
 {
     use RepositoryTrait\FindByQuery;
+
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, JointPurchaseOrder::class);
+    }
 }
