@@ -53,6 +53,7 @@ class RequestSubscriber implements EventSubscriberInterface
                 or 'homepage' === $requestRoute
                 or 'manual' === $requestRoute
                 or 'manual_index' === $requestRoute
+                or 'manual_index' === $requestRoute
             ) {
                 return;
             }
