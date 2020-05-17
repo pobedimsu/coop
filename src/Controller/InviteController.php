@@ -125,7 +125,7 @@ class InviteController extends AbstractController
 
         // Просрочено или не найдено приглашение
         if (empty($invite) or !($invite->getCreatedAt() > new \DateTime('-1 day'))) {
-            return new Response('Приглашение не действительно');
+            return new Response('Приглашение не действительно. <a href="/">Перейти на главную</a>');
         }
 
         if ($this->getUser()) {
