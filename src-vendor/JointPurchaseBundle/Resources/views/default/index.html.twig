@@ -55,7 +55,7 @@
                         {{ jp.organizer }}
                     {% endif %}
                 </td>
-                <td title="Обновлено: {{ jp.updatedAt|date('Y-M-d H:i') }}">{{ jp.createdAt|date('Y-M-d H:i') }}</td>
+                <td title="Обновлено: {{ jp.updatedAt|localizeddate }}">{{ jp.createdAt|localizeddate }}</td>
             </tr>
         {% endfor %}
         </tbody>

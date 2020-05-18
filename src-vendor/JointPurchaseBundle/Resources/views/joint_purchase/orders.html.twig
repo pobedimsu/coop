@@ -188,7 +188,7 @@
                     </script>
 
                 </td>
-                <td title="Обновлено: {{ order.createdAt|date('Y-M-d H:i') }}">{{ order.createdAt|date('Y-M-d H:i') }}</td>
+                <td title="Обновлено: {{ order.createdAt|localizeddate }}">{{ order.createdAt|localizeddate }}</td>
             </tr>
         {% endfor %}
         </tbody>

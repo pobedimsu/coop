@@ -5,7 +5,7 @@
 {% block content %}
     <h1>Заявка на предложение</h1>
 
-    <p>{{ demand.createdAt|date('Y-m-d H:i') }}</p>
+    <p>{{ demand.createdAt|localizeddate }}</p>
 
     <h2>{{ demand.title }}</h2>
 

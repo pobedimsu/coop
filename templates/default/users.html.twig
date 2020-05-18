@@ -47,9 +47,9 @@
                         <a href="{{ path('user_show', {'id': user.invitedByUser.id}) }}">{{ user.invitedByUser }}</a>
                     {% endif %}
                 </td>
-                <td>{{ user.createdAt|date }}</td>
+                <td>{{ user.createdAt|localizeddate }}</td>
                 <td>{% if user.lastLogin %}
-                        {{ user.lastLogin|date }}
+                        {{ user.lastLogin|localizeddate }}
                     {% endif %}
                 </td>
             </tr>

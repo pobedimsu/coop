@@ -54,12 +54,12 @@
         </tr>
         <tr>
             <th>Дата регистрации</th>
-            <td>{{ user.createdAt|date }}</td>
+            <td>{{ user.createdAt|localizeddate }}</td>
         </tr>
         <tr>
             <th>Последний вход</th>
             <td>{% if user.lastLogin %}
-                    {{ user.lastLogin|date }}
+                    {{ user.lastLogin|localizeddate }}
                 {% endif %}
             </td>
         </tr>
