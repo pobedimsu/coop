@@ -28,7 +28,7 @@
                 <td style="white-space: nowrap;">
                     <a href="{{ path('user_show', {'id': e.user.id}) }}">{{ e.user }}</a>
 
-                    {{ e.createdAt|localizeddate }}
+                    {{ e.createdAt|app_date }}
                 </td>
             </tr>
         {% endfor %}

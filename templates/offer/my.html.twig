@@ -62,7 +62,7 @@
                 <td>
                     {% include 'offer/_status.html.twig' %}
                 </td>
-                <td title="Обновлено: {{ offer.updatedAt|localizeddate }}">{{ offer.createdAt|localizeddate }}</td>
+                <td title="Обновлено: {{ offer.updatedAt|app_date }}">{{ offer.createdAt|app_date }}</td>
             </tr>
         {% endfor %}
         </tbody>
