@@ -13,9 +13,7 @@ services:
     php:
         build:
             context: ./.docker/development
-            dockerfile: php-fpm.docker
-#            dockerfile: php-fpm-alpine.docker
-#            dockerfile: php74-fpm.docker
+            dockerfile: php74-fpm-alpine.docker
         volumes:
             - ./:/app
             - composer:/root/.composer/cache

@@ -1,4 +1,4 @@
-FROM php:7.4-fpm-alpine
+FROM php:7.4.6-fpm-alpine
 
 RUN rm -rf /var/cache/apk/* && \
     rm -rf /tmp/*
@@ -54,16 +54,8 @@ RUN apk add --no-cache imagemagick imagemagick-dev \
     && pecl install imagick \
     && docker-php-ext-enable imagick
 
-# GD For PHP 7.3
-#RUN docker-php-ext-configure gd --with-gd \
-#        --with-freetype-dir=/usr \
-#        --with-jpeg-dir=/usr \
-#        --with-png-dir=/usr \
-#        --with-xpm-dir=/usr/lib/x86_64-linux-gnu \
-#    && docker-php-ext-install -j$(nproc) gd
-
 # GD For PHP 7.4
- RUN docker-php-ext-configure gd --enable-gd --with-jpeg --with-freetype --with-xpm && docker-php-ext-install -j$(nproc) gd
+RUN docker-php-ext-configure gd --enable-gd --with-jpeg --with-freetype --with-xpm && docker-php-ext-install -j$(nproc) gd
 
 RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
 
@@ -94,9 +86,10 @@ RUN docker-php-ext-enable apcu \
 
 # RUN pecl install xdebug && docker-php-ext-enable xdebug
 
-# RUN apk add --no-cache librabbitmq
-#     && pecl install amqp
-#     && docker-php-ext-enable amqp
+# не работает :(
+#RUN apk add --no-cache librabbitmq \
+#    && pecl install amqp \
+#    && docker-php-ext-enable amqp
 
 
 RUN apk add --no-cache imap imap-dev c-client openssl-dev krb5 krb5-dev
@@ -105,10 +98,25 @@ RUN PHP_OPENSSL=yes docker-php-ext-configure imap --with-kerberos --with-imap --
 # не работает :(
 # RUN pecl install dbase && docker-php-ext-enable dbase
 
+RUN apk add --no-cache libssh2 libssh2-dev
+
+### Install ssh2 extension
+RUN wget -O libssh2.tar.gz https://www.libssh2.org/download/libssh2-1.9.0.tar.gz \
+    && wget -O ssh2.tgz https://pecl.php.net/get/ssh2-1.2.tgz \
+    && mkdir libssh2 && tar vxzf libssh2.tar.gz -C libssh2 --strip-components 1 \
+    && mkdir ssh2 && tar vxzf ssh2.tgz -C ssh2 --strip-components 1 \
+    && cd libssh2 && ./configure \
+    && make && make install \
+    && cd ../ssh2 && phpize && ./configure --with-ssh2 \
+    && make && make install \
+    && echo "extension=ssh2.so" >> /usr/local/etc/php/conf.d/ssh2.ini \
+    && cd ../ && rm -rf libssh2.tar.gz ssh2.tgz ssh2 libssh2
+
+
 # COPY ./php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 # COPY ./php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
-RUN pecl install ssh2
+# RUN pecl install ssh2
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet
 

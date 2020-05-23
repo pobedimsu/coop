@@ -55,39 +55,59 @@ RUN docker-php-ext-enable apcu \
     && docker-php-ext-enable redis \
     && docker-php-ext-enable timezonedb
 
+### ImageMagick
 RUN apt-get install -y imagemagick libmagickcore-dev libmagickwand-dev \
     && pecl install imagick \
     && docker-php-ext-enable imagick
 
-RUN docker-php-ext-configure gd \
-        --with-gd \
-        --with-freetype-dir=/usr/include/ \
-        --with-jpeg-dir=/usr/include/ \
-        --with-xpm-dir=/usr/lib/x86_64-linux-gnu \
-    && docker-php-ext-install -j$(nproc) gd
-
+### xdebug
 # RUN pecl install xdebug && docker-php-ext-enable xdebug
+# COPY ./php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 RUN pecl install dbase && docker-php-ext-enable dbase
 
 RUN apt-get install -y libcurl4-gnutls-dev
 RUN pecl install oauth && docker-php-ext-enable oauth
 
-RUN apt-get install -y libssh2-1-dev libssh2-1
+### SSH2
+RUN apt-get update && apt-get install -y \
+    ssh \
+    libssh2-1 \
+    libssh2-1-dev \
+    wget \
+    libssl-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN pecl install ssh2 && docker-php-ext-enable ssh2
+### Install ssh2 extension
+RUN wget -O libssh2.tar.gz https://www.libssh2.org/download/libssh2-1.9.0.tar.gz \
+    && wget -O ssh2.tgz https://pecl.php.net/get/ssh2-1.2.tgz \
+    && mkdir libssh2 && tar vxzf libssh2.tar.gz -C libssh2 --strip-components 1 \
+    && mkdir ssh2 && tar vxzf ssh2.tgz -C ssh2 --strip-components 1 \
+    && cd libssh2 && ./configure \
+    && make && make install \
+    && cd ../ssh2 && phpize && ./configure --with-ssh2 \
+    && make && make install \
+    && echo "extension=ssh2.so" >> /usr/local/etc/php/conf.d/ssh2.ini \
+    && cd ../ && rm -rf libssh2.tar.gz ssh2.tgz ssh2 libssh2
 
-#RUN wget -O pecl-networking-ssh2-php7.zip https://github.com/Sean-Der/pecl-networking-ssh2/archive/php7.zip \
-#    && unzip pecl-networking-ssh2-php7.zip \
-#    && cd pecl-networking-ssh2-php7 \
-#    && phpize \
-#    && ./configure \
-#    && make && make install
-#    && cd ../ && rm -rf pecl-networking-ssh2-php7
+### GD
+RUN docker-php-ext-configure gd \
+        --with-freetype=/usr/include/ \
+        --with-jpeg=/usr/include/ \
+        --with-xpm=/usr/lib/x86_64-linux-gnu \
+    && docker-php-ext-install -j$(nproc) gd
 
-# COPY ./php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
-# COPY ./php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+### AMQP @todo
+#RUN apt-get install -y \
+#        librabbitmq-dev \
+#    && docker-php-ext-install \
+#        bcmath \
+#        sockets \
+#    && pecl install amqp \
+#    && docker-php-ext-enable amqp
 
+COPY ./php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY ./php/global.ini /usr/local/etc/php/conf.d/global.ini
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet
