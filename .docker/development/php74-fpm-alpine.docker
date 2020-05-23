@@ -86,17 +86,8 @@ RUN docker-php-ext-enable apcu \
 
 # RUN pecl install xdebug && docker-php-ext-enable xdebug
 
-# не работает :(
-#RUN apk add --no-cache librabbitmq \
-#    && pecl install amqp \
-#    && docker-php-ext-enable amqp
-
-
 RUN apk add --no-cache imap imap-dev c-client openssl-dev krb5 krb5-dev
 RUN PHP_OPENSSL=yes docker-php-ext-configure imap --with-kerberos --with-imap --with-imap-ssl && docker-php-ext-install -j$(nproc) imap
-
-# не работает :(
-# RUN pecl install dbase && docker-php-ext-enable dbase
 
 RUN apk add --no-cache libssh2 libssh2-dev
 
@@ -112,6 +103,13 @@ RUN wget -O libssh2.tar.gz https://www.libssh2.org/download/libssh2-1.9.0.tar.gz
     && echo "extension=ssh2.so" >> /usr/local/etc/php/conf.d/ssh2.ini \
     && cd ../ && rm -rf libssh2.tar.gz ssh2.tgz ssh2 libssh2
 
+# не работает :(
+# RUN pecl install dbase && docker-php-ext-enable dbase
+
+# не работает :(
+#RUN apk add --no-cache librabbitmq \
+#    && pecl install amqp \
+#    && docker-php-ext-enable amqp
 
 # COPY ./php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 # COPY ./php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini

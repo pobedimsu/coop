@@ -4,6 +4,22 @@ RUN apt-get update && apt-get install -y \
     apt-utils \
     gnupg \
     lsb-release \
+    g++ \
+    wget \
+    ssh \
+    unzip \
+    zip
+
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+    && echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |tee  /etc/apt/sources.list.d/pgdg.list
+
+RUN wget -O - "https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey" | apt-key add - \
+    && curl -fsSL https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc | apt-key add - \
+    && printf "deb https://dl.bintray.com/rabbitmq-erlang/debian `lsb_release -cs` erlang\ndeb https://dl.bintray.com/rabbitmq/debian `lsb_release -cs` main" > /etc/apt/sources.list.d/rabbitmq.list
+
+RUN apt-get update
+
+RUN apt-get install -y \
     libbz2-dev \
     libfreetype6-dev \
     libgmp-dev \
@@ -16,44 +32,42 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libxpm-dev \
     libxml2-dev \
-    mariadb-client \
-    g++ \
-    wget \
-    unzip \
-    zlib1g-dev \
-    zip
+    zlib1g-dev
 
-# PostgreSQL 12
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |tee  /etc/apt/sources.list.d/pgdg.list
-RUN apt-get update
-RUN apt-get install postgresql-client -y
-
-RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
-
+# Base PHP Extensions
 RUN docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install -j$(nproc) bz2 \
     && docker-php-ext-install -j$(nproc) exif \
     && docker-php-ext-install -j$(nproc) gmp \
     && docker-php-ext-install -j$(nproc) intl \
-    && docker-php-ext-install -j$(nproc) mysqli \
     && docker-php-ext-install -j$(nproc) opcache \
-    && docker-php-ext-install -j$(nproc) pgsql \
-    && docker-php-ext-install -j$(nproc) pdo_pgsql \
-    && docker-php-ext-install -j$(nproc) pdo_mysql \
     && docker-php-ext-install -j$(nproc) soap \
     && docker-php-ext-install -j$(nproc) sockets \
     && docker-php-ext-install -j$(nproc) zip
 
-RUN pecl install apcu \
-    && pecl install memcached \
-    && pecl install redis \
-    && pecl install timezonedb
+RUN pecl install apcu && docker-php-ext-enable apcu
+RUN pecl install dbase && docker-php-ext-enable dbase
+RUN pecl install memcached && docker-php-ext-enable memcached
+RUN pecl install redis && docker-php-ext-enable redis
+RUN pecl install timezonedb && docker-php-ext-enable timezonedb
 
-RUN docker-php-ext-enable apcu \
-    && docker-php-ext-enable memcached \
-    && docker-php-ext-enable redis \
-    && docker-php-ext-enable timezonedb
+### MariaDB
+RUN apt-get install -y mariadb-client \
+    && docker-php-ext-install -j$(nproc) mysqli \
+    && docker-php-ext-install -j$(nproc) pdo_mysql
+
+### PostgreSQL
+RUN apt-get install -y postgresql-client \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install -j$(nproc) pgsql \
+    && docker-php-ext-install -j$(nproc) pdo_pgsql
+
+### GD
+RUN docker-php-ext-configure gd \
+    --with-freetype=/usr/include/ \
+    --with-jpeg=/usr/include/ \
+    --with-xpm=/usr/lib/x86_64-linux-gnu \
+    && docker-php-ext-install -j$(nproc) gd
 
 ### ImageMagick
 RUN apt-get install -y imagemagick libmagickcore-dev libmagickwand-dev \
@@ -61,25 +75,15 @@ RUN apt-get install -y imagemagick libmagickcore-dev libmagickwand-dev \
     && docker-php-ext-enable imagick
 
 ### xdebug
-# RUN pecl install xdebug && docker-php-ext-enable xdebug
-# COPY ./php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+COPY ./php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
-RUN pecl install dbase && docker-php-ext-enable dbase
-
-RUN apt-get install -y libcurl4-gnutls-dev
-RUN pecl install oauth && docker-php-ext-enable oauth
+### OAuth
+RUN apt-get install -y libcurl4-gnutls-dev \
+    && pecl install oauth && docker-php-ext-enable oauth
 
 ### SSH2
-RUN apt-get update && apt-get install -y \
-    ssh \
-    libssh2-1 \
-    libssh2-1-dev \
-    wget \
-    libssl-dev \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-### Install ssh2 extension
+RUN apt-get install -y libssh2-1 libssh2-1-dev libssl-dev
 RUN wget -O libssh2.tar.gz https://www.libssh2.org/download/libssh2-1.9.0.tar.gz \
     && wget -O ssh2.tgz https://pecl.php.net/get/ssh2-1.2.tgz \
     && mkdir libssh2 && tar vxzf libssh2.tar.gz -C libssh2 --strip-components 1 \
@@ -91,27 +95,23 @@ RUN wget -O libssh2.tar.gz https://www.libssh2.org/download/libssh2-1.9.0.tar.gz
     && echo "extension=ssh2.so" >> /usr/local/etc/php/conf.d/ssh2.ini \
     && cd ../ && rm -rf libssh2.tar.gz ssh2.tgz ssh2 libssh2
 
-### GD
-RUN docker-php-ext-configure gd \
-        --with-freetype=/usr/include/ \
-        --with-jpeg=/usr/include/ \
-        --with-xpm=/usr/lib/x86_64-linux-gnu \
-    && docker-php-ext-install -j$(nproc) gd
+### AMQP
+RUN apt-get install librabbitmq-dev -y \
+    && pecl install amqp \
+    && docker-php-ext-enable amqp
 
-### AMQP @todo
-#RUN apt-get install -y \
-#        librabbitmq-dev \
-#    && docker-php-ext-install \
-#        bcmath \
-#        sockets \
-#    && pecl install amqp \
-#    && docker-php-ext-enable amqp
+# Custom soft
+RUN apt-get install -y sshpass hping3
 
+# Cleanups
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Configs
 COPY ./php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY ./php/global.ini /usr/local/etc/php/conf.d/global.ini
 
+# Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet
-
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 WORKDIR /app

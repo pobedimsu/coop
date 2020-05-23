@@ -1,0 +1,63 @@
+# https://github.com/codecasts/php-alpine
+FROM alpine:3.11
+
+ADD https://dl.bintray.com/php-alpine/key/php-alpine.rsa.pub /etc/apk/keys/php-alpine.rsa.pub
+
+RUN apk --update add ca-certificates && \
+    echo "https://dl.bintray.com/php-alpine/v3.11/php-7.4" >> /etc/apk/repositories
+
+# Core
+RUN apk add --update \
+    php \
+    php-common \
+    php-fpm
+
+# Core Extension
+RUN apk add --update \
+    php-sodium \
+    php-bcmath \
+    php-bz2 \
+    php-curl \
+    php-gd \
+    php-gmp \
+    php-json \
+    php-iconv \
+    php-intl \
+    php-mbstring \
+#    php-mcrypt \
+    php-mysqli \
+    php-mysqlnd \
+    php-opcache \
+    php-pdo \
+    php-pdo_mysql \
+    php-pdo_pgsql \
+    php-pdo_sqlite \
+    php-pear \
+    php-pgsql \
+    php-phar \
+    php-posix \
+    php-pspell \
+    php-session \
+    php-snmp \
+    php-soap \
+    php-sockets \
+    php-sqlite3 \
+    php-xml \
+    php-xsl \
+    php-zip \
+    php-zlib
+
+# Extra Extension
+RUN apk add --update \
+    php-amqp \
+    php-apcu \
+    php-imagick \
+#    php-libsodium \
+    php-memcached \
+    php-redis \
+#    php-ssh2 \
+    php-secp256k1 \
+    argon2 \
+    argon2-dev \
+    libargon2
+#    secp256k1

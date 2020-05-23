@@ -13,7 +13,7 @@ services:
     php:
         build:
             context: ./.docker/development
-            dockerfile: php74-fpm-alpine.docker
+            dockerfile: php74-fpm.docker
         volumes:
             - ./:/app
             - composer:/root/.composer/cache
@@ -61,4 +61,4 @@ services:
 volumes:
     composer:
     coop-db:
-#    coop-db-mysql:
+    coop-db-mysql:
