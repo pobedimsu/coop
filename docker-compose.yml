@@ -15,6 +15,7 @@ services:
             context: ./.docker/development
             dockerfile: php-fpm.docker
 #            dockerfile: php-fpm-alpine.docker
+#            dockerfile: php74-fpm.docker
         volumes:
             - ./:/app
             - composer:/root/.composer/cache
