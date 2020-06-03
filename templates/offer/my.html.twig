@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Мои предложения{% endblock %}
+{% block title %}Мои объявления{% endblock %}
 
 {% block content %}
     <p style="float: right; margin-top: 8px;">
-        <a href="{{ path('offer_create') }}" class="btn btn-success">Добавить предложение</a>
+        <a href="{{ path('offer_create') }}" class="btn btn-success">Добавить объявление</a>
     </p>
 
-    <h1>Мои предложения</h1>
+    <h1>Мои объявления</h1>
 
 {#    <p>Всего записей: <b>{{ pagerfanta.count }}</b>#}
 {#        {% if pagerfanta.haveToPaginate %} Текущая страница: <b>{{ pagerfanta.currentPage }}</b> Записей на страницу: <b>{{ pagerfanta.maxPerPage }}</b>{% endif %}#}
@@ -39,9 +39,12 @@
                     <br>
                     <span class="badge badge-light">{{ offer.category }}</span>
                 </td>
-                <td>{{ offer.price }}
+                <td>
                     {% if offer.quantity > 0 %}
+                        {{ offer.price }}{{ app_currency() }}
                         за <i>{{ offer.measureAsText }}</i>
+                    {% else %}
+                        договорная
                     {% endif %}
                 </td>
                 <td>{{ offer.quantity }}
@@ -54,7 +57,7 @@
                         <i>{{ offer.measureAsText }}</i>
                     {% endif %}
                 </td>
-                <td>{{ offer.priceTotal }}</td>
+                <td>{{ offer.priceTotal }}{{ app_currency() }}</td>
                 <td>
                     <b title="Активные" style="cursor: help;">{{ app_count_active_deals_for_offer(offer) }}</b> /
                     <span title="Всего" style="cursor: help;">{{ app_count_deals_for_offer(offer) }}</span>
@@ -72,6 +75,6 @@
 {#        {{ pagerfanta(pagerfanta, 'twitter_bootstrap_translated', {'css_container_class': 'pagination pagination-centered'}) }}#}
 {#    {% endif %}#}
 
-    <h3>Итого на сумму: {{ app_offers_balance(app.user) }}</h3>
+    <h3>Итого на сумму: {{ app_offers_balance(app.user) }}{{ app_currency() }}</h3>
 
 {% endblock %}

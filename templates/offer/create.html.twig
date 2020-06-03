@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Добавить предложение{% endblock %}
+{% block title %}Добавить объявление{% endblock %}
 
 {% block content %}
-    <h1>Добавить предложение</h1>
+    <h1>Добавить объявление</h1>
 
 {#    <p>@todo метки</p>#}
     <div class="row">
         <div class="col-md-8">
             {{ form(form) }}
         </div>
-        
+
         <div class="col-md-4">
             {% include 'offer/_help.html.twig' %}
         </div>
@@ -28,7 +28,7 @@
           quantityShow();
         }
       });
-      
+
       function quantityHide() {
         $('#offer_quantity').closest('.form-group').hide();
         //$('#offer_quantity_reserved').closest('.form-group').hide();

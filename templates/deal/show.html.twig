@@ -38,13 +38,13 @@
         Количество: {{ deal.quantity }} <i>{{ offer.quantity ? offer.measureAsText : '' }}</i>
     </p>
 
-    <p>Стоимость: {{ deal.offer.price }}
+    <p>Стоимость: {{ deal.offer.price }}{{ app_currency() }}
         {% if deal.offer.quantity > 0 %}
             за <i>{{ deal.offer.measureAsText }}</i>
         {% endif %}
     </p>
 
-    <p>Итоговая сумма: {{ deal.amountCost }}</p>
+    <p>Итоговая сумма: {{ deal.amountCost }}{{ app_currency() }}</p>
 
     <p>Статус:
         {{ deal.statusAsText }}
@@ -114,7 +114,7 @@
                 {% if offer.price == 0 %}
                     Договорная
                 {% else %}
-                    {{ offer.price|number_format(0, ' ', ' ') }}
+                    {{ offer.price|number_format(0, ' ', ' ') }}{{ app_currency() }}
                 {% endif %}
                 </span>
 

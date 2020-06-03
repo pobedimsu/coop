@@ -52,9 +52,9 @@
                     {% endif %}
                 </td>
                 <td><a href="{{ path('deal_show', {'id': deal.id}) }}">{{ deal.offer.title }}</a></td>
-                <td>{{ deal.cost }}</td>
+                <td>{{ deal.cost }}{{ app_currency() }}</td>
                 <td>{{ deal.quantity }}</td>
-                <td>{{ deal.amountCost }}</td>
+                <td>{{ deal.amountCost }}{{ app_currency() }}</td>
                 <td>{{ deal.statusAsText }}
                     {% if deal.status == 1 %}
                         <br>{{ deal.viewedAt|format_datetime }}

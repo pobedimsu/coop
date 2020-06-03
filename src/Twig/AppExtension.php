@@ -16,15 +16,17 @@ use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
+    protected $em;
+    protected $currency;
     protected $billService;
     protected $tgBotName;
-    protected $em;
 
-    public function __construct(BillService $billService, EntityManagerInterface $em, $tgBotName)
+    public function __construct(BillService $billService, EntityManagerInterface $em, $tgBotName, $currency)
     {
+        $this->em          = $em;
+        $this->currency    = $currency;
         $this->billService = $billService;
         $this->tgBotName   = $tgBotName;
-        $this->em          = $em;
     }
 
     public function getName(): string
@@ -47,6 +49,8 @@ class AppExtension extends AbstractExtension
             new TwigFunction('app_transactions_out',    [$this, 'getTransactionsOut']),
 
             new TwigFunction('app_tg_bot_name',    [$this, 'getTgBotName']),
+
+            new TwigFunction('app_currency',    [$this, 'getCurrency']),
         ];
     }
 
@@ -173,6 +177,11 @@ class AppExtension extends AbstractExtension
     public function getTransactionsOut(User $user): int
     {
         return $this->billService->getTransactionsOut($user);
+    }
+
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
     }
 
     public function getTgBotName(): ?string

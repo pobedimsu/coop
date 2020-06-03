@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Предложения{% endblock %}
+{% block title %}{{ 'Advertisements'|trans }}{% endblock %}
 
 {% block content %}
     <p style="float: right; margin-top: 8px;">
-        <a href="{{ path('offers_my') }}" class="btn btn-primary">Мои предложения</a>
-        <a href="{{ path('offer_create') }}" class="btn btn-success">Добавить предложение</a>
+        <a href="{{ path('offers_my') }}" class="btn btn-primary">Мои объявления</a>
+        <a href="{{ path('offer_create') }}" class="btn btn-success">Добавить объявление</a>
     </p>
 
-    <h1>Предложения</h1>
+    <h1>{{ 'Advertisements'|trans }}</h1>
 
     <form method="get">
     <table width="100%" style="margin-bottom: 12px;">
@@ -85,7 +85,7 @@
                                     {% if offer.price == 0 %}
                                         Договорная
                                     {% else %}
-                                        {{ offer.price|number_format(0, ' ', ' ') }}
+                                        {{ offer.price|number_format(0, ' ', ' ') }}{{ app_currency() }}
                                     {% endif %}
                                 </b>
 

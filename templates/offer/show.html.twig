@@ -4,10 +4,10 @@
 
 {% block content %}
     <p style="float: right; margin-top: 8px;">
-        <a href="{{ path('offers_my') }}" class="btn btn-primary">Мои предложения</a>
-        <a href="{{ path('offer_create') }}" class="btn btn-success">Добавить предложение</a>
+        <a href="{{ path('offers_my') }}" class="btn btn-primary">Мои объявления</a>
+        <a href="{{ path('offer_create') }}" class="btn btn-success">Добавить объявление</a>
     </p>
-    <h2>Просмотр предложения</h2>
+    <h2>Просмотр объявления</h2>
     <div class="clear"></div>
 
     <div class="row">
@@ -55,7 +55,7 @@
                 {% if offer.price == 0 %}
                     Договорная
                 {% else %}
-                    {{ offer.price|number_format(0, ' ', ' ') }}
+                    {{ offer.price|number_format(0, ' ', ' ') }}{{ app_currency() }}
                 {% endif %}
                 </span>
 
@@ -100,7 +100,7 @@
                                     <textarea class="form-control" id="message-text" name="comment" rows="4"></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount">{{ offer.price }}</strong></div>
+                                    <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount">{{ offer.price }}</strong>{{ app_currency() }}</div>
                                     <button type="button" class="btn btn-light" data-dismiss="modal">Закрыть</button>
                                     <button type="submit" class="btn btn-success" id="form_submit">Отправить запрос</button>
                                 </div>
@@ -154,10 +154,13 @@
 
         <div class="col-md-4">
             <div class="alert alert-warning" role="alert">
-                <h4 class="alert-heading">{{ offer.user }}
+                <h4 class="alert-heading">
+                    <a href="{{ path('user_show', {'id': offer.user.id}) }}">
+                    {{ offer.user }}
                     {% if offer.user.sex > 0%}
                         <span style="float: right;"> <i class="fas fa-{{ offer.user.sex ? 'male' : 'female' }}"></i></span>
                     {% endif %}
+                    </a>
                 </h4>
                 <p>
                     {% include 'user/_anketa.html.twig' with {'user': offer.user} %}
@@ -174,14 +177,14 @@
 {#                <p><i class="fas fa-map-marker-alt"></i> Новосибирск  --- @todo</p>#}
                 <p><i class="far fa-calendar-check"></i> Участник с {{ offer.user.createdAt|format_date }}</p>
                 <p><i class="far fa-money-bill-alt"></i> Баланс:
-                    {{ app_balance(offer.user) }}
+                    {{ app_balance(offer.user) }}{{ app_currency() }}
                     <ul>
-                        <li>эмиссия: {{ app_offers_balance(offer.user) }}</li>
-                        <li>холд: {{ app_get_hold_sum(offer.user) }}</li>
-                        <li>транзакции: {{ app_transactions_in(offer.user) - app_transactions_out(offer.user) }}</li>
+                        <li>эмиссия: {{ app_offers_balance(offer.user) }}{{ app_currency() }}</li>
+                        <li>холд: {{ app_get_hold_sum(offer.user) }}{{ app_currency() }}</li>
+                        <li>транзакции: {{ app_transactions_in(offer.user) - app_transactions_out(offer.user) }}{{ app_currency() }}</li>
                             <ul>
-                                <li>входящие: {{ app_transactions_in(offer.user) }}</li>
-                                <li>исходящие {{ app_transactions_out(offer.user) }}</li>
+                                <li>входящие: {{ app_transactions_in(offer.user) }}{{ app_currency() }}</li>
+                                <li>исходящие {{ app_transactions_out(offer.user) }}{{ app_currency() }}</li>
                             </ul>
                     </ul>
                 </p>

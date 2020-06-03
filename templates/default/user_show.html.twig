@@ -25,14 +25,14 @@
         <tr>
             <th>Баланс</th>
             <td>
-                <b style="color: white;">{{ app_balance(user) }}</b>
+                <b style="color: white;">{{ app_balance(user) }}</b>{{ app_currency() }}
                 <ul>
-                    <li>эмиссия: {{ app_offers_balance(user) }}</li>
-                    <li>холд: {{ app_get_hold_sum(user) }}</li>
-                    <li>транзакции: {{ app_transactions_in(user) - app_transactions_out(user) }}</li>
+                    <li>эмиссия: {{ app_offers_balance(user) }}{{ app_currency() }}</li>
+                    <li>холд: {{ app_get_hold_sum(user) }}{{ app_currency() }}</li>
+                    <li>транзакции: {{ app_transactions_in(user) - app_transactions_out(user) }}{{ app_currency() }}</li>
                     <ul>
-                        <li>входящие: {{ app_transactions_in(user) }}</li>
-                        <li>исходящие {{ app_transactions_out(user) }}</li>
+                        <li>входящие: {{ app_transactions_in(user) }}{{ app_currency() }}</li>
+                        <li>исходящие {{ app_transactions_out(user) }}{{ app_currency() }}</li>
                     </ul>
                 </ul>
             </td>
