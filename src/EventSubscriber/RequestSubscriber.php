@@ -15,26 +15,28 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class RequestSubscriber implements EventSubscriberInterface
 {
     protected $router;
-    protected $token_storage;
+    protected $tokenStorage;
     protected $tgBotName;
 
-    public function __construct(RouterInterface $router, TokenStorageInterface $token_storage, ?string $tgBotName)
+    public function __construct(?string $tgBotName, RouterInterface $router, TokenStorageInterface $tokenStorage)
     {
-        $this->router        = $router;
-        $this->token_storage = $token_storage;
-        $this->tgBotName     = $tgBotName;
+        $this->router       = $router;
+        $this->tokenStorage = $tokenStorage;
+        $this->tgBotName    = $tgBotName;
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::REQUEST => 'onKernelRequest',
+            KernelEvents::REQUEST => [
+                ['onKernelRequest', 255],
+            ],
         ];
     }
 
     public function onKernelRequest(RequestEvent $event): void
     {
-        if (null === $token = $this->token_storage->getToken()) {
+        if (null === $token = $this->tokenStorage->getToken()) {
             return;
         }
 
