@@ -9,6 +9,7 @@ use App\Entity\User;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -140,6 +141,7 @@ class UserModel implements UserInterface
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="invited_users")
+     * @Gedmo\TreeParent
      */
     protected $invited_by_user;
 

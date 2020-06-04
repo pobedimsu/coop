@@ -5,13 +5,22 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Category;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
 use Gedmo\Tree\Entity\Repository\ClosureTreeRepository;
 use Smart\CoreBundle\Doctrine\RepositoryTrait;
 
-class CategoryRepository extends ClosureTreeRepository
+class CategoryRepository extends ClosureTreeRepository implements ServiceEntityRepositoryInterface
 {
     use RepositoryTrait\FindByQuery;
+
+    public function __construct(ManagerRegistry $registry)
+    {
+        $manager = $registry->getManagerForClass(Category::class);
+
+        parent::__construct($manager, $manager->getClassMetadata(Category::class));
+    }
 
     /**
      * Выборка списка элементов (объектов) для постройки form select

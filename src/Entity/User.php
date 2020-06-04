@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Model\UserModel;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,6 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          @ORM\Index(columns={"firstname"}),
  *          @ORM\Index(columns={"lastname"}),
  *          @ORM\Index(columns={"last_login"}),
+ *          @ORM\Index(columns={"level"}),
  *          @ORM\Index(columns={"is_alcohol"}),
  *          @ORM\Index(columns={"is_enabled"}),
  *          @ORM\Index(columns={"is_smoking"}),
@@ -26,6 +28,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          @ORM\Index(columns={"sex"}),
  *      },
  * )
+ *
+ * @Gedmo\Tree(type="closure")
+ * @Gedmo\TreeClosure(class="UserClosure")
  *
  * @UniqueEntity(fields="username", message="Username is already exists")
  */
@@ -41,6 +46,16 @@ class User extends UserModel
         self::SEX_MALE   => 'Мужской',
         self::SEX_FEMALE => 'Женский',
     ];
+
+    /**
+     * This parameter is optional for the closure strategy
+     *
+     * @var int
+     *
+     * @ORM\Column(name="level", type="integer", nullable=false, options={"default":1})
+     * @Gedmo\TreeLevel
+     */
+    protected $level;
 
     /**
      * Пол
@@ -215,6 +230,26 @@ class User extends UserModel
     public function setIsMeatConsumption(?bool $is_meat_consumption): self
     {
         $this->is_meat_consumption = $is_meat_consumption;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLevel(): int
+    {
+        return $this->level;
+    }
+
+    /**
+     * @param int $level
+     *
+     * @return $this
+     */
+    public function setLevel(int $level): self
+    {
+        $this->level = $level;
 
         return $this;
     }

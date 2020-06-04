@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Category;
 use App\Entity\Offer;
 use App\Form\Type\OfferFormType;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use SmartCore\Bundle\MediaBundle\Service\MediaCloudService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,8 +24,9 @@ class OfferController extends AbstractController
     /**
      * @Route("/", name="offers")
      */
-    public function index(Request $request, EntityManagerInterface $em): Response
+    public function index(CategoryRepository $categoryRepository, Request $request, EntityManagerInterface $em): Response
     {
+        // @todo постраничность
         $offers = $em->getRepository(Offer::class)
             ->getFindQueryBuilder([
                 'category' => $request->query->get('category'),
@@ -37,7 +38,7 @@ class OfferController extends AbstractController
         ;
 
         return $this->render('offer/index.html.twig', [
-            'categories' => $em->getRepository(Category::class)->childrenHierarchyList(),
+            'categories' => $categoryRepository->childrenHierarchyList(),
             'offers' => $offers,
         ]);
     }

@@ -57,7 +57,7 @@ class UserController extends AbstractController
     /**
      * @Route("/invited/", name="profile_invited")
      */
-    public function invited(UserRepository $ur)
+    public function invited(): Response
     {
         // @todo постраничность
         return $this->render('user/invited.html.twig');
@@ -66,7 +66,7 @@ class UserController extends AbstractController
     /**
      * @Route("/invited/reset/password/{id}", name="profile_invited_reset_password")
      */
-    public function invitedResetPassword($id, TelegramService $telegram, UserRepository $ur, TokenGenerator $tokenGenerator, EntityManagerInterface $em)
+    public function invitedResetPassword($id, TelegramService $telegram, UserRepository $ur, TokenGenerator $tokenGenerator, EntityManagerInterface $em): Response
     {
         try {
             $user = $ur->findOneBy(['id' => Uuid::fromString($id)]);

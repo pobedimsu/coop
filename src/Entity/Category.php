@@ -15,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="categories",
  *      indexes={
  *          @ORM\Index(columns={"created_at"}),
+ *          @ORM\Index(columns={"level"}),
  *          @ORM\Index(columns={"position"}),
  *          @ORM\Index(columns={"title"}),
  *      },

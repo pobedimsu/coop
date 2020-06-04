@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Form\Type\CategoryFormType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,8 +21,10 @@ class AdminController extends AbstractController
     /**
      * @Route("/", name="admin")
      */
-    public function index(): Response
+    public function index(UserRepository $ur): Response
     {
+        $ur->rebuildClosure(); // @todo remove
+
         return $this->render('admin/index.html.twig');
     }
 
