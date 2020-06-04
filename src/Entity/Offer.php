@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Предложение (товар или услуга)
+ * Предложение (товар или услуга), они же "Объявления"
  *
  * @ORM\Entity(repositoryClass="App\Repository\OfferRepository")
  * @ORM\Table(name="offers",

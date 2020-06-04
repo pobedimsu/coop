@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 
 /**
+ * Сделки
+ *
  * @ORM\Entity(repositoryClass="App\Repository\DealRepository")
  * @ORM\Table(name="deals",
  *      indexes={

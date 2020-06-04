@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 
 /**
+ * Приглашения участников
+ *
  * @ORM\Entity(repositoryClass="App\Repository\InviteRepository")
  * @ORM\Table(name="invites",
  *      indexes={
