@@ -8,8 +8,12 @@ use App\Entity\User;
 use App\Form\Type\UserChangePasswordFormType;
 use App\Form\Type\UserFormType;
 use App\Repository\UserRepository;
-use App\Utils\UserValidator;
+use App\Service\TelegramService;
+use App\Util\TokenGenerator;
+use App\Util\UserValidator;
 use Doctrine\ORM\EntityManagerInterface;
+use Ramsey\Uuid\Exception\InvalidUuidStringException;
+use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\CacheItem;
@@ -53,10 +57,48 @@ class UserController extends AbstractController
     /**
      * @Route("/invited/", name="profile_invited")
      */
-    public function invited(UserRepository $users)
+    public function invited(UserRepository $ur)
     {
-        return $this->render('user/invited.html.twig', [
-            'users' => $users->findAll(),
+        // @todo постраничность
+        return $this->render('user/invited.html.twig');
+    }
+
+    /**
+     * @Route("/invited/reset/password/{id}", name="profile_invited_reset_password")
+     */
+    public function invitedResetPassword($id, TelegramService $telegram, UserRepository $ur, TokenGenerator $tokenGenerator, EntityManagerInterface $em)
+    {
+        try {
+            $user = $ur->findOneBy(['id' => Uuid::fromString($id)]);
+        } catch (InvalidUuidStringException $e) {
+            return $this->redirectToRoute('profile_invited');
+        }
+
+        if ($user->getInvitedByUser() !== $this->getUser()) {
+            return $this->redirectToRoute('profile_invited');
+        }
+
+        if ($user->getTelegramUsername()) {
+            if ($user->getPasswordRequestedAt() === null
+                or $user->getConfirmationToken() === null
+                or $user->getPasswordRequestedAt() < (new \DateTime('-1 hour'))
+            ) {
+                $user
+                    ->setConfirmationToken($tokenGenerator->generateToken())
+                    ->setResetPasswordCode(random_int(10000, 99999))
+                    ->setPasswordRequestedAt(new \DateTime())
+                ;
+
+                $em->flush();
+
+                $telegram->sendMessage($user,
+                    'Сгенерирована ссылка для сброса пароля, возьмите её у своего поручителя. Код подтверждения: ' . $user->getResetPasswordCode()
+                );
+            }
+        }
+
+        return $this->render('user/invited_reset_password.html.twig', [
+            'user' => $user,
         ]);
     }
 

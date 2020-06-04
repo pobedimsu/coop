@@ -15,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table("users",
  *      indexes={
  *          @ORM\Index(columns={"created_at"}),
+ *          @ORM\Index(columns={"confirmation_token"}),
  *          @ORM\Index(columns={"firstname"}),
  *          @ORM\Index(columns={"lastname"}),
  *          @ORM\Index(columns={"last_login"}),

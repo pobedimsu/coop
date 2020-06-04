@@ -108,6 +108,33 @@ class UserModel implements UserInterface
     protected $telegram_username;
 
     /**
+     * Хеш для восстановления пароля
+     *
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    protected $confirmation_token;
+
+    /**
+     * Код для подтверждения сброса пароля
+     *
+     * @var int|null
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $reset_password_code;
+
+    /**
+     * Дата создания запроса на восстановление пароля
+     *
+     * @var \DateTimeInterface|null
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $password_requested_at;
+
+    /**
      * Пригласивший пользователь
      *
      * @var User
@@ -420,6 +447,66 @@ class UserModel implements UserInterface
         $invite->setIsUsed(true);
 
         $this->invite = $invite;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmation_token;
+    }
+
+    /**
+     * @param string|null $confirmation_token
+     *
+     * @return $this
+     */
+    public function setConfirmationToken(?string $confirmation_token): self
+    {
+        $this->confirmation_token = $confirmation_token;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getPasswordRequestedAt(): ?\DateTimeInterface
+    {
+        return $this->password_requested_at;
+    }
+
+    /**
+     * @param \DateTimeInterface|null $password_requested_at
+     *
+     * @return $this
+     */
+    public function setPasswordRequestedAt(?\DateTimeInterface $password_requested_at): self
+    {
+        $this->password_requested_at = $password_requested_at;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getResetPasswordCode(): ?int
+    {
+        return $this->reset_password_code;
+    }
+
+    /**
+     * @param int|null $reset_password_code
+     *
+     * @return $this
+     */
+    public function setResetPasswordCode(?int $reset_password_code): self
+    {
+        $this->reset_password_code = $reset_password_code;
 
         return $this;
     }

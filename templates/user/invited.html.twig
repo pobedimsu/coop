@@ -11,6 +11,7 @@
             <th>Статус</th>
             <th>Дата создания</th>
             <th>Был в сети</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -52,6 +53,9 @@
                     {% if user.lastLogin is not empty %}
                         {{ user.lastLogin|format_datetime }}
                     {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('profile_invited_reset_password', {'id': user.id}) }}" class="btn btn-sm btn-success">Сброс пароля</a>
                 </td>
             </tr>
         {% endfor %}

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Utils;
+namespace App\Util;
 
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 

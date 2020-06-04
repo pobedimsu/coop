@@ -56,5 +56,6 @@ security:
         - { path: ^/api/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/telegram/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/invite/register/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/reset/password/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: ROLE_USER }

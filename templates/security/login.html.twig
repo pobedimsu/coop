@@ -6,6 +6,7 @@
     <title>Hello</title>
 
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/pnotify/pnotify.custom.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/floating-labels.css') }}">
     <style>
         .bd-placeholder-img {
@@ -22,6 +23,8 @@
             }
         }
     </style>
+
+    <script src="{{ asset('assets/jquery-3.4.1.min.js') }}"></script>
 </head>
 <body>
 <form class="form-signin" method="post">
@@ -33,7 +36,7 @@
 
     <div class="form-label-group">
         <input type="text" id="inputUsername" class="form-control" placeholder="Username" name="_username" required autofocus>
-        <label for="inputEmail">Username</label>
+        <label for="inputUsername">Username</label>
     </div>
 
     <div class="form-label-group">
@@ -45,5 +48,12 @@
 
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 </form>
+
+<script src="{{ asset('assets/popper.min.js') }}"></script>
+<script src="{{ asset('assets/bootstrap/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/pnotify/pnotify.custom.min.js') }}"></script>
+
+{% include '@SmartCore/pnotify_flash_messages.html.twig' %}
+
 </body>
 </html>
