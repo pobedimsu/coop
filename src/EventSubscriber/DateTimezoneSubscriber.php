@@ -21,10 +21,10 @@ class DateTimezoneSubscriber implements EventSubscriberInterface
     {
         return [
             KernelEvents::REQUEST => [
-                ['dateDefaultTimezoneSet', 250],
+                ['dateDefaultTimezoneSet', 255],
             ],
             ConsoleEvents::COMMAND => [
-                ['dateDefaultTimezoneSet', 250],
+                ['dateDefaultTimezoneSet', 255],
             ],
         ];
     }
