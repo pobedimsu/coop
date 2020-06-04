@@ -145,6 +145,11 @@ class Offer
         return $this->title;
     }
 
+    public function getQuantityAvailable(): ?int
+    {
+        return $this->quantity - $this->quantity_reserved;
+    }
+
     /**
      * @ORM\PreFlush()
      */

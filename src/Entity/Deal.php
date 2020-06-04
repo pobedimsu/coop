@@ -16,8 +16,11 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
  * @ORM\Entity(repositoryClass="App\Repository\DealRepository")
  * @ORM\Table(name="deals",
  *      indexes={
+ *          @ORM\Index(columns={"amount_cost"}),
  *          @ORM\Index(columns={"created_at"}),
  *          @ORM\Index(columns={"updated_at"}),
+ *          @ORM\Index(columns={"status"}),
+ *          @ORM\Index(columns={"type"}),
  *      }
  * )
  * @ORM\HasLifecycleCallbacks()
@@ -31,10 +34,13 @@ class Deal
 
     use StatusTrait;
 
+    const TYPE_EXTERNAL = 0;
+    const TYPE_INNER    = 1;
+
     const STATUS_NEW                    = 0;
     const STATUS_VIEW                   = 1;
     const STATUS_ACCEPTED               = 2;
-    const STATUS_ACCEPTED_OUTSIDE       = 3;
+    const STATUS_ACCEPTED_EXTERNAL      = 3;
     const STATUS_COMPLETE               = 4;
     const STATUS_COMPLETE_OUTSIDE       = 5;
     const STATUS_CANCEL_BY_BUYER        = 6;
@@ -43,12 +49,19 @@ class Deal
         self::STATUS_NEW                => 'Новая',
         self::STATUS_VIEW               => 'Просмотрено',
         self::STATUS_ACCEPTED           => 'Принято',
-        self::STATUS_ACCEPTED_OUTSIDE   => 'Принято для совершения вне системы',
+        self::STATUS_ACCEPTED_EXTERNAL  => 'Принято для совершения вне системы',
         self::STATUS_COMPLETE           => 'Завершено',
         self::STATUS_COMPLETE_OUTSIDE   => 'Завершено вне системы',
         self::STATUS_CANCEL_BY_BUYER    => 'Отменено покупателем',
         self::STATUS_CANCEL_BY_SELLER   => 'Отменено продавцом',
     ];
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", nullable=false, options={"default":1})
+     */
+    protected $type;
 
     /**
      * Стоимость предложения на момент создания сделки.
@@ -135,6 +148,19 @@ class Deal
         $this->created_at   = new \DateTime();
         $this->status       = self::STATUS_NEW;
         $this->transactions = new ArrayCollection();
+        $this->type         = self::TYPE_INNER;
+    }
+
+    public function getTypeText(): string
+    {
+        switch ($this->type) {
+            case self::TYPE_EXTERNAL:
+                return 'Внешняя';
+            case self::TYPE_INNER:
+                return 'Внутренняя';
+            default:
+                throw new \ErrorException('Не допустимый тип сделки: ' . $this->type);
+        }
     }
 
     /**
@@ -265,6 +291,26 @@ class Deal
     public function setSeller(User $seller): self
     {
         $this->seller = $seller;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType(): int
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param int $type
+     *
+     * @return $this
+     */
+    public function setType(int $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

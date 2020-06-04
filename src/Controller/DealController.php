@@ -8,6 +8,7 @@ use App\Entity\Deal;
 use App\Entity\Offer;
 use App\Entity\Transaction;
 use App\Event\DealEvent;
+use App\Repository\DealRepository;
 use App\Service\BillService;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,24 +24,41 @@ class DealController extends AbstractController
     /**
      * @Route("/deals/", name="deals")
      */
-    public function index(Request $request, EntityManagerInterface $em): Response
+    public function index(Request $request, DealRepository $dealRepo): Response
     {
+        // @todo постраничность
+
         $show = $request->query->get('tab', 'active');
 
-        if ($show == 'active') {
-            $deals = $em->getRepository(Deal::class)->findActiveByUser($this->getUser());
-        } elseif ($show == 'in') {
-            $deals = $em->getRepository(Deal::class)->findActiveIncomingByUser($this->getUser());
-        } elseif ($show == 'out') {
-            $deals = $em->getRepository(Deal::class)->findActiveOutgoingByUser($this->getUser());
-        } elseif ($show == 'complete') {
-            $deals = $em->getRepository(Deal::class)->findCompleteByUser($this->getUser());
-        } elseif ($show == 'canceled') {
-            $deals = $em->getRepository(Deal::class)->findCanceledByUser($this->getUser());
-        } elseif ($show == 'all') {
-            $deals = $em->getRepository(Deal::class)->findAllByUser($this->getUser());
-        } else {
-            throw $this->createNotFoundException('Unknown show type: '.$show);
+        $deals = $dealRepo->findNewByUser($this->getUser());
+
+        if ($deals and $request->query->get('tab') === null) {
+            $show = 'new';
+        }
+
+        switch ($show) {
+            case 'new':
+                break;
+            case 'active':
+                $deals = $dealRepo->findActiveByUser($this->getUser());
+                break;
+            case 'in':
+                $deals = $dealRepo->findActiveIncomingByUser($this->getUser());
+                break;
+            case 'out':
+                $deals = $dealRepo->findActiveOutgoingByUser($this->getUser());
+                break;
+            case 'complete':
+                $deals = $dealRepo->findCompleteByUser($this->getUser());
+                break;
+            case 'canceled':
+                $deals = $dealRepo->findCanceledByUser($this->getUser());
+                break;
+            case 'all':
+                $deals = $dealRepo->findAllByUser($this->getUser());
+                break;
+            default:
+                throw $this->createNotFoundException('Unknown show type: '.$show);
         }
 
         return $this->render('deal/index.html.twig', [
@@ -77,6 +95,7 @@ class DealController extends AbstractController
             $error_msg = null;
             $quantity = $request->request->get('quantity', 1);
             $price    = $request->request->get('price');
+            $type     = $request->request->get('type');
 
             if ($quantity < 1) {
                 $quantity = 1;
@@ -84,9 +103,15 @@ class DealController extends AbstractController
 
             if (!$offer->isStatusAccessToOrder()) {
                 $error_msg = 'Предложение не доступно для заказа';
-            } elseif ($quantity * $price > $billService->getBalance($this->getUser())) {
+            } elseif (
+                (int) $type === Deal::TYPE_INNER
+                and $quantity * $price > $billService->getBalance($this->getUser())
+            ) {
                 $error_msg = 'У вас недостаточно ресурсов для заключения сделки';
-            } elseif ($offer->getQuantity() and $quantity > $offer->getQuantity() - (int) $offer->getQuantityReserved()) {
+            } elseif (
+                $offer->getQuantity()
+                and $quantity > $offer->getQuantity() - (int) $offer->getQuantityReserved()
+            ) {
                 $error_msg = 'Количество не должно превышать имеющееся в наличии';
             } else {
                 $isNew = false;
@@ -112,6 +137,7 @@ class DealController extends AbstractController
                     ->setAmountCost($price * $quantity)
                     ->setBuyer($this->getUser())
                     ->setSeller($offer->getUser())
+                    ->setType((int) $type)
                     ->setComment($request->request->get('comment'))
                 ;
 
@@ -198,7 +224,7 @@ class DealController extends AbstractController
                         $deal->setStatus(Deal::STATUS_COMPLETE);
                     }
 
-                    if ($deal->getStatus() == Deal::STATUS_ACCEPTED_OUTSIDE) {
+                    if ($deal->getStatus() == Deal::STATUS_ACCEPTED_EXTERNAL) {
                         $deal->setStatus(Deal::STATUS_COMPLETE_OUTSIDE);
                     }
 
@@ -241,17 +267,15 @@ class DealController extends AbstractController
             }
 
             if ($request->query->get('action') == 'accept') {
-                $deal->setStatus(Deal::STATUS_ACCEPTED);
+                if ($deal->getType() === Deal::TYPE_INNER) {
+                    $deal->setStatus(Deal::STATUS_ACCEPTED);
+                } else {
+                    $deal->setStatus(Deal::STATUS_ACCEPTED_EXTERNAL);
+                }
 
-                $em->persist($deal);
-                $em->flush();
+                $offer->setQuantityReserved($deal->getQuantity());
 
-                $this->addFlash('success', 'Сделка принята.');
-            }
-
-            if ($request->query->get('action') == 'accept-outsite') {
-                $deal->setStatus(Deal::STATUS_ACCEPTED_OUTSIDE);
-
+                $em->persist($offer);
                 $em->persist($deal);
                 $em->flush();
 

@@ -48,7 +48,7 @@
 
     <p>Статус:
         {{ deal.statusAsText }}
-        {% if deal.status == 1 %}
+        {% if deal.status == constant('App\\Entity\\Deal::STATUS_VIEW') %}
             {{ deal.viewedAt|format_datetime }}
         {% endif %}
     </p>
@@ -61,25 +61,40 @@
         <p>Дата последнего изменения: {{ deal.updatedAt|format_datetime }}</p>
     {% endif %}
 
-    {% if deal.status == 0 or deal.status == 1%}
+    <p>Тип взаимозачёта:
+        <b>{{ deal.typeText }}</b>
+    </p>
+
+    {% if deal.status == constant('App\\Entity\\Deal::STATUS_NEW') or deal.status == constant('App\\Entity\\Deal::STATUS_VIEW') %}
         <br>
         {% if deal.seller.id == app.user.id %}
             <p>
-                <a href="{{ path('deal_show', {'id': deal.id, 'action': 'accept'}) }}" class="btn btn-success" onclick="return confirm('Вы уверены, что хотите принять заявку?')">Принять</a>
-                <a href="{{ path('deal_show', {'id': deal.id, 'action': 'accept-outsite'}) }}" class="btn btn-primary" onclick="return confirm('Вы уверены, что хотите принять заявку для личной договорённости ?')">Принять для личной договорённости *</a>
-                <a href="{{ path('deal_show', {'id': deal.id, 'action': 'cancel'}) }}" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите отменить заявку?')">Отменить</a>
+                <a href="{{ path('deal_show', {'id': deal.id, 'action': 'accept'}) }}" class="btn btn-success" onclick="return confirm('Вы уверены, что хотите принять заявку?')">
+                    {% if deal.type == constant('App\\Entity\\Deal::TYPE_INNER') %}
+                        Принять для внутреннего бартерного обмена
+                    {% else %}
+                        Принять для личной договорённости *
+                    {% endif %}
+                </a>
+
+                <a href="{{ path('deal_show', {'id': deal.id, 'action': 'cancel'}) }}" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите отменить заявку?')">Отклонить</a>
             </p>
 
-            <br>
-            <p>* - <i>в данном случае участники самостоятельно решают на каких условиях совершить обмен по данному предложению и стоимость сделки не затрагивает балансы участников в системе.</i></p>
+            {% if deal.type == constant('App\\Entity\\Deal::TYPE_EXTERNAL') %}
+                <br>
+                <p>* - <i>в данном случае участники самостоятельно решают на каких условиях совершить обмен по данному предложению и стоимость сделки не затрагивает балансы участников в системе.</i></p>
+            {% endif %}
+
         {% elseif deal.buyer.id == app.user.id %}
             <p>
-                <a href="{{ path('deal_show', {'id': deal.id, 'action': 'cancel'}) }}" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите отменить заявку?')">Отменить, если вы передумали</a>
+                <a href="{{ path('deal_show', {'id': deal.id, 'action': 'cancel'}) }}" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите отменить заявку?')">
+                    Отменить, если вы передумали
+                </a>
             </p>
         {% endif %}
     {% endif %}
 
-    {% if deal.status == constant('App\\Entity\\Deal::STATUS_ACCEPTED') or deal.status == constant('App\\Entity\\Deal::STATUS_ACCEPTED_OUTSIDE') %}
+    {% if deal.status == constant('App\\Entity\\Deal::STATUS_ACCEPTED') or deal.status == constant('App\\Entity\\Deal::STATUS_ACCEPTED_EXTERNAL') %}
         <br>
         {% if deal.seller.id == app.user.id %}
             <div class="alert alert-info" role="alert">
