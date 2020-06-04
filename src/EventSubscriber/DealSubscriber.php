@@ -23,7 +23,7 @@ class DealSubscriber implements EventSubscriberInterface
         return [
             DealEvent::CREATED  => 'sendCreatedNotify',
             DealEvent::UPDATED  => 'sendUpdatedNotify',
-            DealEvent::CANCELED_BY_CONTRACTOR => 'sendCanceledByContractorNotify',
+            DealEvent::CANCELED_BY_SELLER => 'sendCanceledBySellerNotify',
             DealEvent::CANCELED_BY_DECLARANT  => 'sendCanceledByDeclarantNotify',
         ];
     }
@@ -32,17 +32,17 @@ class DealSubscriber implements EventSubscriberInterface
     {
         $text = 'У вас новая заявка на: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getQuantity() . ')';
 
-        $this->telegram->sendMessage($deal->getContractorUser(), $text);
+        $this->telegram->sendMessage($deal->getSeller(), $text);
     }
 
     public function sendUpdatedNotify(Deal $deal): void
     {
         $text = 'Изменение запроса на: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getQuantity() . ')';
 
-        $this->telegram->sendMessage($deal->getContractorUser(), $text);
+        $this->telegram->sendMessage($deal->getSeller(), $text);
     }
 
-    public function sendCanceledByContractorNotify(Deal $deal): void
+    public function sendCanceledBySellerNotify(Deal $deal): void
     {
         $text = 'Заявка отменена: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getQuantity() . ')';
 
@@ -53,6 +53,6 @@ class DealSubscriber implements EventSubscriberInterface
     {
         $text = 'Заявка отменена: ' . $deal->getOffer()->getTitle() . ' (кол-во ' . $deal->getQuantity() . ')';
 
-        $this->telegram->sendMessage($deal->getContractorUser(), $text);
+        $this->telegram->sendMessage($deal->getSeller(), $text);
     }
 }

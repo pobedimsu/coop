@@ -111,7 +111,7 @@ class DealController extends AbstractController
                     ->setActualCost($price)
                     ->setAmountCost($price * $quantity)
                     ->setDeclarantUser($this->getUser())
-                    ->setContractorUser($offer->getUser())
+                    ->setSeller($offer->getUser())
                     ->setComment($request->request->get('comment'))
                 ;
 
@@ -148,7 +148,7 @@ class DealController extends AbstractController
      */
     public function show(Deal $deal, Request $request, EntityManagerInterface $em, EventDispatcherInterface $dispatcher): Response
     {
-        if ($deal->getContractorUser() == $this->getUser() or $deal->getDeclarantUser() == $this->getUser()) {
+        if ($deal->getSeller() == $this->getUser() or $deal->getDeclarantUser() == $this->getUser()) {
             // Проверка на то, что сделка принадлежит отдному из аутентифицированных участников
         } else {
             return $this->redirectToRoute('deals');
@@ -160,13 +160,13 @@ class DealController extends AbstractController
 
         if ($request->query->has('action')) {
             if ($request->query->get('action') == 'cancel') {
-                if ($deal->getContractorUser() == $this->getUser()) {
-                    $deal->setStatus(Deal::STATUS_CANCEL_BY_CONTRACTOR);
+                if ($deal->getSeller() == $this->getUser()) {
+                    $deal->setStatus(Deal::STATUS_CANCEL_BY_SELLER);
 
                     $em->persist($deal);
                     $em->flush();
 
-                    $dispatcher->dispatch($deal, DealEvent::CANCELED_BY_CONTRACTOR);
+                    $dispatcher->dispatch($deal, DealEvent::CANCELED_BY_SELLER);
                 }
 
                 if ($deal->getDeclarantUser() == $this->getUser()) {
@@ -193,7 +193,7 @@ class DealController extends AbstractController
             }
 
             if ($request->query->get('action') == 'complete') {
-                if ($deal->getContractorUser() == $this->getUser()) {
+                if ($deal->getSeller() == $this->getUser()) {
                     if ($deal->getStatus() == Deal::STATUS_ACCEPTED) {
                         $deal->setStatus(Deal::STATUS_COMPLETE);
                     }
@@ -225,7 +225,7 @@ class DealController extends AbstractController
                         $transaction = new Transaction();
                         $transaction
                             ->setFromUser($deal->getDeclarantUser()) // Заявитель (покупатель)
-                            ->setToUser($deal->getContractorUser())  // Исполнитель (продавец)
+                            ->setToUser($deal->getSeller())  // Исполнитель (продавец)
                             ->setSum($deal->getAmountCost())
                             ->setDeal($deal)
                             ->setComment('Успешное завершение сделки')
@@ -261,7 +261,7 @@ class DealController extends AbstractController
             return $this->redirectToRoute('deal_show', ['id' => $deal->getId()]);
         }
 
-        if (empty($deal->getViewedAt()) and $deal->getContractorUser() == $this->getUser()) {
+        if (empty($deal->getViewedAt()) and $deal->getSeller() == $this->getUser()) {
             $deal
                 ->setStatus(Deal::STATUS_VIEW)
                 ->setViewedAt(new \DateTime())

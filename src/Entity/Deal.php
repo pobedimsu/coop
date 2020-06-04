@@ -36,7 +36,7 @@ class Deal
     const STATUS_COMPLETE               = 4;
     const STATUS_COMPLETE_OUTSIDE       = 5;
     const STATUS_CANCEL_BY_DECLARANT    = 6;
-    const STATUS_CANCEL_BY_CONTRACTOR   = 7;
+    const STATUS_CANCEL_BY_SELLER       = 7;
     static protected $status_values = [
         self::STATUS_NEW                    => 'Новая',
         self::STATUS_VIEW                   => 'Просмотрено',
@@ -44,8 +44,8 @@ class Deal
         self::STATUS_ACCEPTED_OUTSIDE       => 'Принято для совершения вне системы',
         self::STATUS_COMPLETE               => 'Завершено',
         self::STATUS_COMPLETE_OUTSIDE       => 'Завершено вне системы',
-        self::STATUS_CANCEL_BY_DECLARANT    => 'Отменено заявителем',
-        self::STATUS_CANCEL_BY_CONTRACTOR   => 'Отменено исполнителем',
+        self::STATUS_CANCEL_BY_DECLARANT    => 'Отменено покупателем',
+        self::STATUS_CANCEL_BY_SELLER       => 'Отменено продавцом',
     ];
 
     /**
@@ -87,7 +87,7 @@ class Deal
     /**
      * Дата просмотра
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
@@ -102,14 +102,14 @@ class Deal
     protected $offer;
 
     /**
-     * Подрядчик, исполнитель, продавец
+     * Ппродавец
      *
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $contractor_user;
+    protected $seller;
 
     /**
      * Заявитель, покупатель
@@ -118,7 +118,10 @@ class Deal
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @todo rename to buyer
      */
+//    protected $buyer;
     protected $declarant_user;
 
     /**
@@ -215,18 +218,6 @@ class Deal
         return $this;
     }
 
-    public function getContractorUser(): User
-    {
-        return $this->contractor_user;
-    }
-
-    public function setContractorUser(User $contractor_user): self
-    {
-        $this->contractor_user = $contractor_user;
-
-        return $this;
-    }
-
     public function getDeclarantUser(): User
     {
         return $this->declarant_user;
@@ -255,6 +246,26 @@ class Deal
     public function setTransactions($transactions): self
     {
         $this->transactions = $transactions;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getSeller(): User
+    {
+        return $this->seller;
+    }
+
+    /**
+     * @param User $seller
+     *
+     * @return $this
+     */
+    public function setSeller(User $seller): self
+    {
+        $this->seller = $seller;
 
         return $this;
     }

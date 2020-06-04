@@ -19,7 +19,7 @@ class DealEvent extends Event
     const CANCELED = 'app.deal_canceled';
 
     // Отмена заявителем (покупателем)
-    const CANCELED_BY_CONTRACTOR = 'app.deal_canceled_by_contractor';
+    const CANCELED_BY_SELLER = 'app.deal_canceled_by_seller';
 
     // Отмена исполнителем (продавцом)
     const CANCELED_BY_DECLARANT  = 'app.deal_canceled_by_declarant';

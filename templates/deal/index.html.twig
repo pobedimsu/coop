@@ -37,7 +37,7 @@
             <tr {% if deal.viewedAt is null %} class="table-info" title="Не просмотрено" {% endif %}>
                 {% if show == 'active' or show == 'complete' or show == 'canceled' or show == 'all' %}
                     <td>
-                        {% if deal.contractorUser == app.user %}
+                        {% if deal.seller == app.user %}
                             Входящие
                         {% elseif deal.declarantUser == app.user %}
                             Исходящие
@@ -45,10 +45,10 @@
                     </td>
                 {% endif %}
                 <td>
-                    {% if deal.contractorUser == app.user %}
+                    {% if deal.seller == app.user %}
                         <a href="{{ path('user_show', {'id': deal.declarantUser.id}) }}">{{ deal.declarantUser }}</a>
                     {% elseif deal.declarantUser == app.user %}
-                        <a href="{{ path('user_show', {'id': deal.contractorUser.id}) }}">{{ deal.contractorUser }}</a>
+                        <a href="{{ path('user_show', {'id': deal.seller.id}) }}">{{ deal.seller }}</a>
                     {% endif %}
                 </td>
                 <td><a href="{{ path('deal_show', {'id': deal.id}) }}">{{ deal.offer.title }}</a></td>
