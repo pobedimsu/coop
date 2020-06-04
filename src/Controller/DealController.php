@@ -92,7 +92,7 @@ class DealController extends AbstractController
                 $isNew = false;
                 $prevQuantity = false;
                 $deal = $em->getRepository(Deal::class)->findOneBy([
-                    'declarant_user' => $this->getUser(),
+                    'buyer' => $this->getUser(),
                     'offer' => $offer,
                     'status' => Deal::STATUS_NEW, // @todo возможно надо ещё и STATUS_VIEW
                 ]);
@@ -110,7 +110,7 @@ class DealController extends AbstractController
                     ->setQuantity($quantity)
                     ->setActualCost($price)
                     ->setAmountCost($price * $quantity)
-                    ->setDeclarantUser($this->getUser())
+                    ->setBuyer($this->getUser())
                     ->setSeller($offer->getUser())
                     ->setComment($request->request->get('comment'))
                 ;
@@ -148,7 +148,7 @@ class DealController extends AbstractController
      */
     public function show(Deal $deal, Request $request, EntityManagerInterface $em, EventDispatcherInterface $dispatcher): Response
     {
-        if ($deal->getSeller() == $this->getUser() or $deal->getDeclarantUser() == $this->getUser()) {
+        if ($deal->getSeller() == $this->getUser() or $deal->getBuyer() == $this->getUser()) {
             // Проверка на то, что сделка принадлежит отдному из аутентифицированных участников
         } else {
             return $this->redirectToRoute('deals');
@@ -169,13 +169,13 @@ class DealController extends AbstractController
                     $dispatcher->dispatch($deal, DealEvent::CANCELED_BY_SELLER);
                 }
 
-                if ($deal->getDeclarantUser() == $this->getUser()) {
-                    $deal->setStatus(Deal::STATUS_CANCEL_BY_DECLARANT);
+                if ($deal->getBuyer() == $this->getUser()) {
+                    $deal->setStatus(Deal::STATUS_CANCEL_BY_BUYER);
 
                     $em->persist($deal);
                     $em->flush();
 
-                    $dispatcher->dispatch($deal, DealEvent::CANCELED_BY_DECLARANT);
+                    $dispatcher->dispatch($deal, DealEvent::CANCELED_BY_BUYER);
                 }
 
                 if (!empty($offer->getQuantity()) and $quantity_reserved > 0) {
@@ -224,8 +224,8 @@ class DealController extends AbstractController
                     if ($deal->getStatus() == Deal::STATUS_COMPLETE) {
                         $transaction = new Transaction();
                         $transaction
-                            ->setFromUser($deal->getDeclarantUser()) // Заявитель (покупатель)
-                            ->setToUser($deal->getSeller())  // Исполнитель (продавец)
+                            ->setFromUser($deal->getBuyer())
+                            ->setToUser($deal->getSeller())
                             ->setSum($deal->getAmountCost())
                             ->setDeal($deal)
                             ->setComment('Успешное завершение сделки')

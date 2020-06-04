@@ -35,17 +35,17 @@ class Deal
     const STATUS_ACCEPTED_OUTSIDE       = 3;
     const STATUS_COMPLETE               = 4;
     const STATUS_COMPLETE_OUTSIDE       = 5;
-    const STATUS_CANCEL_BY_DECLARANT    = 6;
+    const STATUS_CANCEL_BY_BUYER        = 6;
     const STATUS_CANCEL_BY_SELLER       = 7;
     static protected $status_values = [
-        self::STATUS_NEW                    => 'Новая',
-        self::STATUS_VIEW                   => 'Просмотрено',
-        self::STATUS_ACCEPTED               => 'Принято',
-        self::STATUS_ACCEPTED_OUTSIDE       => 'Принято для совершения вне системы',
-        self::STATUS_COMPLETE               => 'Завершено',
-        self::STATUS_COMPLETE_OUTSIDE       => 'Завершено вне системы',
-        self::STATUS_CANCEL_BY_DECLARANT    => 'Отменено покупателем',
-        self::STATUS_CANCEL_BY_SELLER       => 'Отменено продавцом',
+        self::STATUS_NEW                => 'Новая',
+        self::STATUS_VIEW               => 'Просмотрено',
+        self::STATUS_ACCEPTED           => 'Принято',
+        self::STATUS_ACCEPTED_OUTSIDE   => 'Принято для совершения вне системы',
+        self::STATUS_COMPLETE           => 'Завершено',
+        self::STATUS_COMPLETE_OUTSIDE   => 'Завершено вне системы',
+        self::STATUS_CANCEL_BY_BUYER    => 'Отменено покупателем',
+        self::STATUS_CANCEL_BY_SELLER   => 'Отменено продавцом',
     ];
 
     /**
@@ -112,17 +112,14 @@ class Deal
     protected $seller;
 
     /**
-     * Заявитель, покупатель
+     * Покупатель
      *
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(nullable=false)
-     *
-     * @todo rename to buyer
      */
-//    protected $buyer;
-    protected $declarant_user;
+    protected $buyer;
 
     /**
      * @var Transaction[]|ArrayCollection
@@ -218,14 +215,14 @@ class Deal
         return $this;
     }
 
-    public function getDeclarantUser(): User
+    public function getBuyer(): User
     {
-        return $this->declarant_user;
+        return $this->buyer;
     }
 
-    public function setDeclarantUser(User $declarant_user): self
+    public function setBuyer(User $buyer): self
     {
-        $this->declarant_user = $declarant_user;
+        $this->buyer = $buyer;
 
         return $this;
     }

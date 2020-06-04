@@ -19,7 +19,7 @@ class DealRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where($qb->expr()->orX(
             $qb->expr()->eq('e.seller', ':user'),
-            $qb->expr()->eq('e.declarant_user', ':user')
+            $qb->expr()->eq('e.buyer', ':user')
         ));
         $qb->andWhere($qb->expr()->orX(
             $qb->expr()->eq('e.status', ':status_new'),
@@ -43,7 +43,7 @@ class DealRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where($qb->expr()->orX(
             $qb->expr()->eq('e.seller', ':user'),
-            $qb->expr()->eq('e.declarant_user', ':user')
+            $qb->expr()->eq('e.buyer', ':user')
         ));
         $qb->orderBy('e.updated_at', 'DESC')
             ->setParameter('user', $user)
@@ -57,7 +57,7 @@ class DealRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where($qb->expr()->orX(
             $qb->expr()->eq('e.seller', ':user'),
-            $qb->expr()->eq('e.declarant_user', ':user')
+            $qb->expr()->eq('e.buyer', ':user')
         ));
         $qb->andWhere($qb->expr()->orX(
             $qb->expr()->eq('e.status', ':status_complete'),
@@ -77,15 +77,15 @@ class DealRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where($qb->expr()->orX(
             $qb->expr()->eq('e.seller', ':user'),
-            $qb->expr()->eq('e.declarant_user', ':user')
+            $qb->expr()->eq('e.buyer', ':user')
         ));
         $qb->andWhere($qb->expr()->orX(
-            $qb->expr()->eq('e.status', ':status_cancel_by_declarant'),
+            $qb->expr()->eq('e.status', ':status_cancel_by_buyer'),
             $qb->expr()->eq('e.status', ':status_cancel_by_seller')
         ));
         $qb->orderBy('e.updated_at', 'DESC')
             ->setParameter('user', $user)
-            ->setParameter('status_cancel_by_declarant', Deal::STATUS_CANCEL_BY_DECLARANT)
+            ->setParameter('status_cancel_by_buyer', Deal::STATUS_CANCEL_BY_BUYER)
             ->setParameter('status_cancel_by_seller', Deal::STATUS_CANCEL_BY_SELLER)
         ;
 
@@ -116,7 +116,7 @@ class DealRepository extends EntityRepository
     public function findActiveOutgoingByUser($user)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.declarant_user = :user');
+        $qb->where('e.buyer = :user');
         $qb->andWhere($qb->expr()->orX(
             $qb->expr()->eq('e.status', ':status_new'),
             $qb->expr()->eq('e.status', ':status_view'),
@@ -166,11 +166,11 @@ class DealRepository extends EntityRepository
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function sumActiveForDeclarantUser(User $user): int
+    public function sumActiveForBuyer(User $user): int
     {
         $qb = $this->createQueryBuilder('e');
         $qb->select('SUM(e.amount_cost)');
-        $qb->where('e.declarant_user = :user');
+        $qb->where('e.buyer = :user');
         $qb->andWhere($qb->expr()->orX(
             $qb->expr()->eq('e.status', ':status_new'),
             $qb->expr()->eq('e.status', ':status_view'),
@@ -194,7 +194,7 @@ class DealRepository extends EntityRepository
      */
     public function getHoldSum(User $user): int
     {
-        return $this->sumActiveForDeclarantUser($user);
+        return $this->sumActiveForBuyer($user);
     }
 
     /**
@@ -219,7 +219,7 @@ class DealRepository extends EntityRepository
         $qb->select('count(e.created_at)');
         $qb->where($qb->expr()->orX(
             $qb->expr()->eq('e.seller', ':user'),
-            $qb->expr()->eq('e.declarant_user', ':user')
+            $qb->expr()->eq('e.buyer', ':user')
         ));
         $qb->setParameter('user', $user);
 

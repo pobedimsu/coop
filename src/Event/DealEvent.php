@@ -18,11 +18,11 @@ class DealEvent extends Event
     // Отмена сделки
     const CANCELED = 'app.deal_canceled';
 
-    // Отмена заявителем (покупателем)
+    // Отмена покупателем
     const CANCELED_BY_SELLER = 'app.deal_canceled_by_seller';
 
-    // Отмена исполнителем (продавцом)
-    const CANCELED_BY_DECLARANT  = 'app.deal_canceled_by_declarant';
+    // Отмена продавцом
+    const CANCELED_BY_BUYER  = 'app.deal_canceled_by_buyer';
 
     // Подтверждение сделки
     const CONFIRMED = 'app.deal_confirmed';

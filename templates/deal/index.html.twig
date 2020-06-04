@@ -39,15 +39,15 @@
                     <td>
                         {% if deal.seller == app.user %}
                             Входящие
-                        {% elseif deal.declarantUser == app.user %}
+                        {% elseif deal.buyer == app.user %}
                             Исходящие
                         {% endif %}
                     </td>
                 {% endif %}
                 <td>
                     {% if deal.seller == app.user %}
-                        <a href="{{ path('user_show', {'id': deal.declarantUser.id}) }}">{{ deal.declarantUser }}</a>
-                    {% elseif deal.declarantUser == app.user %}
+                        <a href="{{ path('user_show', {'id': deal.buyer.id}) }}">{{ deal.buyer }}</a>
+                    {% elseif deal.buyer == app.user %}
                         <a href="{{ path('user_show', {'id': deal.seller.id}) }}">{{ deal.seller }}</a>
                     {% endif %}
                 </td>
