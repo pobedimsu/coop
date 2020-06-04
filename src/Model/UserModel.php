@@ -42,7 +42,7 @@ class UserModel implements UserInterface
      * @var string
      *
      * @ORM\Column(type="string", length=190)
-     * @Assert\Length(min = 6, minMessage = "Password length must be at least {{ limit }} characters long")
+     * @Assert\Length(min = 6, minMessage = "Password length must be at least {{ limit }} characters long", allowEmptyString=false)
      */
     protected $password;
 
@@ -535,6 +535,7 @@ class UserModel implements UserInterface
      */
     public function setPlainPassword(?string $plain_password): self
     {
+        $this->password = $plain_password;
         $this->plain_password = $plain_password;
 
         return $this;

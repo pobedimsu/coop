@@ -52,7 +52,7 @@ class User extends UserModel
      *
      * @var int
      *
-     * @ORM\Column(name="level", type="integer", nullable=false, options={"default":1})
+     * @ORM\Column(type="integer", nullable=false, options={"default":1})
      * @Gedmo\TreeLevel
      */
     protected $level;

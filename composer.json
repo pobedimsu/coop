@@ -56,7 +56,8 @@
             "SmartCore\\Bundle\\MediaBundle\\": "src-vendor/MediaBundle/",
             "SmartCore\\Bundle\\TexterBundle\\": "src-vendor/TexterBundle/",
             "Coop\\JointPurchaseBundle\\": "src-vendor/JointPurchaseBundle/",
-            "Borsaco\\TelegramBotApiBundle\\": "src-overload/Borsaco/TelegramBotApiBundle/"
+            "Borsaco\\TelegramBotApiBundle\\": "src-overload/Borsaco/TelegramBotApiBundle/",
+            "Gedmo\\": "src-overload/Gedmo"
         }
     },
     "autoload-dev": {

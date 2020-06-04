@@ -88,5 +88,12 @@ docker-compose run php bin/console user:list
 -----
 
 1. СЗ: Метод подсчёта общей суммы заказа для твига
-2. СЗ: Логику при изменении цены
-3. Возможность менять БД (сейчас настройки для MariaDB) на MySQL и PostgreSQL
+2. Патч для Gedmo\Tree\Strategy\ORM\Closure.php для совместимости c Ramsey\Uuid, нужно вместо
+
+```php
+$this->pendingNodesLevelProcess[$nodeId] = $node;
+```
+сделать так:
+```php
+$this->pendingNodesLevelProcess[(string) $nodeId] = $node;
+```

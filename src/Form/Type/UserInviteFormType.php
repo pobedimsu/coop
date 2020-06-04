@@ -29,7 +29,6 @@ class UserInviteFormType extends AbstractType
                 'first_options'   => ['label' => 'Password'],
                 'second_options'  => ['label' => 'Password confirmation'],
                 'invalid_message' => 'Passwords mismatch',
-                'translation_domain' => false,
             ])
             ->add('firstname')
             ->add('lastname')

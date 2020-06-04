@@ -84,7 +84,7 @@ class Offer
      * @var string|null
      *
      * @ORM\Column(type="text", nullable=true)
-     * @Assert\Length(max = 160)
+     * @Assert\Length(max = 160, allowEmptyString=false)
      */
     protected $short_description;
 
