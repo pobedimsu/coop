@@ -64,7 +64,7 @@ class InviteController extends AbstractController
             }
 
             if ($form->get('create')->isClicked() and $form->isValid()) {
-                $encodedPassword = $encoder->encodePassword($user, $user->getPassword());
+                $encodedPassword = $encoder->encodePassword($user, $user->getPlainPassword());
                 $user->setPassword($encodedPassword);
 
                 $em->persist($user);
@@ -167,7 +167,7 @@ class InviteController extends AbstractController
             }
 
             if ($form->get('create')->isClicked() and $form->isValid()) {
-                $encodedPassword = $encoder->encodePassword($user, $user->getPassword());
+                $encodedPassword = $encoder->encodePassword($user, $user->getPlainPassword());
                 $user->setPassword($encodedPassword);
 
                 $em->persist($user);

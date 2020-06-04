@@ -47,6 +47,13 @@ class UserModel implements UserInterface
     protected $password;
 
     /**
+     * @var string|null
+     *
+     * Plain password. Used for model validation. Must not be persisted.
+     */
+    protected $plain_password;
+
+    /**
      * @var array
      *
      * @ORM\Column(type="array")
@@ -509,6 +516,26 @@ class UserModel implements UserInterface
     public function setResetPasswordCode(?int $reset_password_code): self
     {
         $this->reset_password_code = $reset_password_code;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPlainPassword(): ?string
+    {
+        return $this->plain_password;
+    }
+
+    /**
+     * @param string|null $plain_password
+     *
+     * @return $this
+     */
+    public function setPlainPassword(?string $plain_password): self
+    {
+        $this->plain_password = $plain_password;
 
         return $this;
     }
