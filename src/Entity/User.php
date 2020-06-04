@@ -104,6 +104,7 @@ class User extends UserModel
     {
         parent::__construct();
 
+        $this->level            = 1;
         $this->is_alcohol       = null;
         $this->is_meat_consumption = null;
         $this->is_smoking       = null;
