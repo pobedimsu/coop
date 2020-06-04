@@ -24,9 +24,7 @@
             {% if show == 'active' or show == 'complete' or show == 'canceled' or show == 'all' %}<th>Тип</th>{% endif %}
             <th>Участник</th>
             <th>Предложение</th>
-            <th>Стоимость за ед.</th>
-            <th>Кол-во</th>
-            <th>Общая стоимость</th>
+            <th>Сумма</th>
             <th>Статус</th>
             <th>Дата создания</th>
             <th>Дата обновления</th>
@@ -51,9 +49,10 @@
                         <a href="{{ path('user_show', {'id': deal.seller.id}) }}">{{ deal.seller }}</a>
                     {% endif %}
                 </td>
-                <td><a href="{{ path('deal_show', {'id': deal.id}) }}">{{ deal.offer.title }}</a></td>
-                <td>{{ deal.cost }}{{ app_currency() }}</td>
-                <td>{{ deal.quantity }}</td>
+                <td>
+                    <a href="{{ path('deal_show', {'id': deal.id}) }}">{{ deal.offer.title }}</a>
+                    {{ deal.cost }}{{ app_currency() }} x {{ deal.quantity }}
+                </td>
                 <td>{{ deal.amountCost }}{{ app_currency() }}</td>
                 <td>{{ deal.statusAsText }}
                     {% if deal.status == 1 %}

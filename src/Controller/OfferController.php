@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Offer;
 use App\Form\Type\OfferFormType;
 use App\Repository\CategoryRepository;
+use App\Repository\OfferRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use SmartCore\Bundle\MediaBundle\Service\MediaCloudService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,10 +25,10 @@ class OfferController extends AbstractController
     /**
      * @Route("/", name="offers")
      */
-    public function index(CategoryRepository $categoryRepository, Request $request, EntityManagerInterface $em): Response
+    public function index(CategoryRepository $categoryRepository, OfferRepository $offerRepo, Request $request): Response
     {
         // @todo постраничность
-        $offers = $em->getRepository(Offer::class)
+        $offers = $offerRepo
             ->getFindQueryBuilder([
                 'category' => $request->query->get('category'),
                 'search' => $request->query->get('search'),
@@ -143,9 +144,9 @@ class OfferController extends AbstractController
     /**
      * @Route("/my/", name="offers_my")
      */
-    public function my(EntityManagerInterface $em): Response
+    public function my(OfferRepository $offerRepo): Response
     {
-        $offers = $em->getRepository(Offer::class)->findBy(['user' => $this->getUser()], ['created_at' => 'DESC']);
+        $offers = $offerRepo->findBy(['user' => $this->getUser()], ['created_at' => 'DESC']);
 
         return $this->render('offer/my.html.twig', [
             'offers' => $offers,
@@ -155,9 +156,9 @@ class OfferController extends AbstractController
     /**
      * @Route("/{id}/", name="offer_show")
      */
-    public function show(string $id, EntityManagerInterface $em): Response
+    public function show(string $id, OfferRepository $offerRepo): Response
     {
-        $offer = $em->getRepository(Offer::class)->findOneBy(['id' => $id]);
+        $offer = $offerRepo->findOneBy(['id' => $id]);
 
         if (empty($offer)) {
             return $this->redirectToRoute('offers');
