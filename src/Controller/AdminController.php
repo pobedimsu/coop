@@ -90,21 +90,19 @@ class AdminController extends AbstractController
         $form = $this->createForm(CategoryFormType::class, $category);
         $form->remove('create');
 
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
+        $form->handleRequest($request);
 
-            if ($form->get('cancel')->isClicked()) {
-                return $this->redirectToRoute('admin_category');
-            }
+        if ($form->get('cancel')->isClicked()) {
+            return $this->redirectToRoute('admin_category');
+        }
 
-            if ($form->get('update')->isClicked() and $form->isValid()) {
-                $em->persist($category);
-                $em->flush();
+        if ($form->get('update')->isClicked() and $form->isValid()) {
+            $em->persist($category);
+            $em->flush();
 
-                $this->addFlash('success', 'Категория обновлена');
+            $this->addFlash('success', 'Категория обновлена');
 
-                return $this->redirectToRoute('admin_category');
-            }
+            return $this->redirectToRoute('admin_category');
         }
 
         return $this->render('admin/category/edit.html.twig', [
