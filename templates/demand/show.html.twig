@@ -21,4 +21,10 @@
 
     <hr>
     <a href="{{ path('demand') }}">Назад</a> @todo с учетом страницы
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <p>
+            <a href="?remove" class="btn btn-danger">Удалить</a>
+        </p>
+    {% endif %}
 {% endblock %}

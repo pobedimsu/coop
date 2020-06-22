@@ -77,8 +77,17 @@ class DemandController extends AbstractController
     /**
      * @Route("/{id}/", name="demand_show")
      */
-    public function show(Demand $demand): Response
+    public function show(Demand $demand, EntityManagerInterface $em, Request $request): Response
     {
+        if ($request->query->has('remove') and $this->isGranted('ROLE_ADMIN')) {
+            $em->remove($demand);
+            $em->flush();
+
+            $this->addFlash('success', 'Заявка удалена.');
+
+            return $this->redirectToRoute('demand');
+        }
+
         return $this->render('demand/show.html.twig', [
             'demand' => $demand,
         ]);
