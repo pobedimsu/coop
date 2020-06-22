@@ -19,6 +19,8 @@
 
             {% if offer.user == app.user %}
                 <p><a href="{{ path('offer_edit', {'id': offer.id}) }}" class="btn btn-sm btn-success">Редактировать</a></p>
+            {% elseif is_granted('ROLE_ADMIN') %}
+                <p><a href="{{ path('offer_edit', {'id': offer.id}) }}" class="btn btn-sm btn-danger">Редактировать</a></p>
             {% endif %}
 
             <p>

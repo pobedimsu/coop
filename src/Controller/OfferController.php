@@ -90,7 +90,7 @@ class OfferController extends AbstractController
      */
     public function edit(Offer $offer, Request $request, EntityManagerInterface $em, MediaCloudService $mc): Response
     {
-        if ($offer->getUser() !== $this->getUser()) {
+        if ($offer->getUser() !== $this->getUser() and ! $this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('offer_show', ['id' => $offer->getId()]);
         }
 
