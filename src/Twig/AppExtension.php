@@ -114,9 +114,11 @@ class AppExtension extends AbstractExtension
      */
     public function getBalance(?User $user = null): int
     {
-        $balance = $this->billService->getBalance($user);
+        if ( ! $user) {
+            return 0;
+        }
 
-        return $balance ? $balance : 0;
+        return $this->billService->getBalance($user);
     }
 
     /**
