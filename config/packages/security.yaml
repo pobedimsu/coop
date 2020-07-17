@@ -54,6 +54,7 @@ security:
     access_control:
         - { path: ^/admin/, roles: ROLE_ADMIN }
         - { path: ^/api/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/manual/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/telegram/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/invite/register/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/reset/password/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
