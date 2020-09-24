@@ -102,8 +102,14 @@
     "guzzlehttp/psr7": {
         "version": "1.6.1"
     },
+    "illuminate/collections": {
+        "version": "v8.6.0"
+    },
     "illuminate/contracts": {
         "version": "v5.8.34"
+    },
+    "illuminate/macroable": {
+        "version": "v8.6.0"
     },
     "illuminate/support": {
         "version": "v5.8.34"
@@ -186,6 +192,9 @@
     },
     "psr/container": {
         "version": "1.0.0"
+    },
+    "psr/http-client": {
+        "version": "1.0.1"
     },
     "psr/http-message": {
         "version": "1.0.1"
