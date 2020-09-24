@@ -46,7 +46,7 @@ class MainMenu
             ->setLinkAttribute('class', 'nav-link py-0')
         ;
 
-        $menu->addChild('Deals', ['route' => 'deals'])
+        $menu->addChild('My deals', ['route' => 'deals'])
             ->setAttribute('class', 'nav-item')
             ->setLinkAttribute('class', 'nav-link py-0')
         ;
