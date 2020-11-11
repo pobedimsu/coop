@@ -84,6 +84,21 @@ docker-compose run php <command>
 docker-compose run php bin/console user:list
 ```
 
+Telegram
+--------
+
+Создать бота в тг @BotFather
+
+Добавить вебхук
+
+https://api.telegram.org/bot{my_bot_token}/setWebhook?url={url_to_send_updates_to}
+
+Проверить, что вебхук установлен
+
+https://api.telegram.org/bot{my_bot_token}/getWebhookInfo
+
+
+
 @TODO
 -----
 
