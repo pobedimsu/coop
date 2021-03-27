@@ -27,7 +27,12 @@
     <script src="{{ asset('assets/jquery-3.4.1.min.js') }}"></script>
 </head>
 <body>
+
 <form class="form-signin" method="post">
+    <p style="margin: 0 auto 40px auto; text-align: center;">
+        <a href="{{ path('manual_index') }}">Ознакомиться с проектом</a>
+    </p>
+
     {% if error %}
         <div class="alert alert-danger">
             {{ error.messageKey }}
