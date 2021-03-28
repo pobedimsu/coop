@@ -44,7 +44,11 @@ class TexterExtension extends AbstractExtension
     {
         $text = $this->em->getRepository(Text::class)->findOneBy(['name' => $name]);
 
-        return $text->getText();
+        if ($text) {
+            return $text->getText();
+        }
+
+        return '';
     }
 
     /**

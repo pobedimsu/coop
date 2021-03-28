@@ -29,10 +29,6 @@
 <body>
 
 <form class="form-signin" method="post">
-    <p style="margin: 0 auto 40px auto; text-align: center;">
-        <a href="{{ path('manual_index') }}">Ознакомиться с проектом</a>
-    </p>
-
     {% if error %}
         <div class="alert alert-danger">
             {{ error.messageKey }}
@@ -53,9 +49,7 @@
 
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 
-    <p style="margin: 40px auto 0 auto; text-align: center;">
-        <a href="{{ path('manual', {'slug': '20-Registration.md'}) }}">Регистрация</a>
-    </p>
+    {{ texter('on_login_page') }}
 </form>
 
 <script src="{{ asset('assets/popper.min.js') }}"></script>

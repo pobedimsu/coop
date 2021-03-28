@@ -60,20 +60,27 @@ class InitCommand extends Command
             $isUpdated = true;
         }
 
-        $homepageText = $this->em->getRepository(Text::class)->findOneBy(['name' => 'homepage']);
+        $texts = [
+            'homepage' => '<h1>Главная</h1>',
+            'on_login_page' => '',
+        ];
 
-        if (empty($homepageText)) {
-            $homepageText = new Text();
-            $homepageText
-                ->setName('homepage')
-                ->setText('<h1>Главная</h1>')
-            ;
-            $this->em->persist($homepageText);
-            $this->em->flush();
+        foreach ($texts as $name => $content) {
+            $text = $this->em->getRepository(Text::class)->findOneBy(['name' => $name]);
 
-            $this->io->writeln("<info>Создан текст 'homepage'</info>");
+            if (empty($text)) {
+                $text = new Text();
+                $text
+                    ->setName($name)
+                    ->setText($content)
+                ;
+                $this->em->persist($text);
+                $this->em->flush();
 
-            $isUpdated = true;
+                $this->io->writeln("<info>Создан текст '" . $name . "'</info>");
+
+                $isUpdated = true;
+            }
         }
 
         if (!$isUpdated) {
