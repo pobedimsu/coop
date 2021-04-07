@@ -17,11 +17,11 @@ return [
     Symfony\Bundle\DebugBundle\DebugBundle::class => ['dev' => true, 'test' => true],
     Sonata\IntlBundle\SonataIntlBundle::class => ['all' => true],
     Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
-    WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle::class => ['all' => true],
     Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true],
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
     Borsaco\TelegramBotApiBundle\TelegramBotApiBundle::class => ['all' => true],
     Coop\JointPurchaseBundle\JointPurchaseBundle::class => ['all' => true],
     Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle::class => ['all' => true],
     Nelmio\CorsBundle\NelmioCorsBundle::class => ['all' => true],
+    BabDev\PagerfantaBundle\BabDevPagerfantaBundle::class => ['all' => true],
 ];
