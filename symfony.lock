@@ -22,5 +22,8 @@
     },
     "symfony/http-client-contracts": {
         "version": "v2.3.1"
+    },
+    "symfony/proxy-manager-bridge": {
+        "version": "v5.2.4"
     }
 }
