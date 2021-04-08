@@ -61,3 +61,6 @@ services:
             - ./../var/log/php-fpm_errors.log:/var/log/php-fpm_errors.log
             - ./php-fpm/global.ini:/usr/local/etc/php/conf.d/global.ini
             - ./php-fpm/apcu.ini:/usr/local/etc/php/conf.d/apcu.ini
+
+volumes:
+    pg13:
