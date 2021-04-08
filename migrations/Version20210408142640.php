@@ -1,0 +1,270 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+
+/**
+ * Auto-generated Migration: Please modify to your needs!
+ */
+final class Version20210408142640 extends AbstractMigration
+{
+    public function getDescription() : string
+    {
+        return '';
+    }
+
+    public function up(Schema $schema) : void
+    {
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
+
+        $this->addSql('CREATE SEQUENCE categories_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE media_categories_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE media_collections_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE media_files_transformed_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE media_filters_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE media_storages_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE texter_items_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE TABLE categories (id INT NOT NULL, parent_id INT DEFAULT NULL, name VARCHAR(190) DEFAULT NULL, level INT DEFAULT 1 NOT NULL, title VARCHAR(190) DEFAULT NULL, description TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, position SMALLINT DEFAULT 0, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_3AF346685E237E06 ON categories (name)');
+        $this->addSql('CREATE INDEX IDX_3AF34668727ACA70 ON categories (parent_id)');
+        $this->addSql('CREATE INDEX IDX_3AF346688B8E8428 ON categories (created_at)');
+        $this->addSql('CREATE INDEX IDX_3AF346689AEACC13 ON categories (level)');
+        $this->addSql('CREATE INDEX IDX_3AF34668462CE4F5 ON categories (position)');
+        $this->addSql('CREATE INDEX IDX_3AF346682B36786B ON categories (title)');
+        $this->addSql('CREATE TABLE categories_closure (id SERIAL NOT NULL, ancestor INT NOT NULL, descendant INT NOT NULL, depth INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_600D5C71B4465BB ON categories_closure (ancestor)');
+        $this->addSql('CREATE INDEX IDX_600D5C719A8FAD16 ON categories_closure (descendant)');
+        $this->addSql('CREATE INDEX IDX_7AEF6B6FD3087B6C ON categories_closure (depth)');
+        $this->addSql('CREATE UNIQUE INDEX IDX_EA6C9A627F768DDD ON categories_closure (ancestor, descendant)');
+        $this->addSql('CREATE TABLE deals (id UUID NOT NULL, offer_id UUID NOT NULL, seller_id UUID NOT NULL, buyer_id UUID NOT NULL, type SMALLINT DEFAULT 1 NOT NULL, cost INT NOT NULL, actual_cost INT NOT NULL, amount_cost INT NOT NULL, quantity INT DEFAULT NULL, viewed_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, comment TEXT DEFAULT NULL, status SMALLINT DEFAULT 0 NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_EF39849B53C674EE ON deals (offer_id)');
+        $this->addSql('CREATE INDEX IDX_EF39849B8DE820D9 ON deals (seller_id)');
+        $this->addSql('CREATE INDEX IDX_EF39849B6C755722 ON deals (buyer_id)');
+        $this->addSql('CREATE INDEX IDX_EF39849B71B5CDC0 ON deals (amount_cost)');
+        $this->addSql('CREATE INDEX IDX_EF39849B8B8E8428 ON deals (created_at)');
+        $this->addSql('CREATE INDEX IDX_EF39849B43625D9F ON deals (updated_at)');
+        $this->addSql('CREATE INDEX IDX_EF39849B7B00651C ON deals (status)');
+        $this->addSql('CREATE INDEX IDX_EF39849B8CDE5729 ON deals (type)');
+        $this->addSql('COMMENT ON COLUMN deals.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN deals.offer_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN deals.seller_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN deals.buyer_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE demands (id UUID NOT NULL, user_id UUID DEFAULT NULL, image_id INT DEFAULT NULL, title VARCHAR(190) DEFAULT NULL, description TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_D24062F4A76ED395 ON demands (user_id)');
+        $this->addSql('CREATE INDEX IDX_D24062F48B8E8428 ON demands (created_at)');
+        $this->addSql('COMMENT ON COLUMN demands.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN demands.user_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE invites (id UUID NOT NULL, user_id UUID DEFAULT NULL, is_used BOOLEAN DEFAULT \'false\' NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_37E6A6CA76ED395 ON invites (user_id)');
+        $this->addSql('CREATE INDEX IDX_37E6A6C8B8E8428 ON invites (created_at)');
+        $this->addSql('CREATE INDEX IDX_37E6A6CECB44D39 ON invites (is_used)');
+        $this->addSql('COMMENT ON COLUMN invites.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN invites.user_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE joint_purchases (id UUID NOT NULL, organizer_id UUID DEFAULT NULL, final_date DATE NOT NULL, status SMALLINT DEFAULT 0 NOT NULL, shipping_type SMALLINT DEFAULT 0 NOT NULL, transportation_cost_in_percent INT DEFAULT NULL, telegram_chat_link VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, title VARCHAR(190) DEFAULT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_2A27B689876C4DDA ON joint_purchases (organizer_id)');
+        $this->addSql('CREATE INDEX IDX_2A27B6898B8E8428 ON joint_purchases (created_at)');
+        $this->addSql('COMMENT ON COLUMN joint_purchases.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN joint_purchases.organizer_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE joint_purchases_orders (id UUID NOT NULL, joint_purchase_id UUID NOT NULL, user_id UUID NOT NULL, payment INT DEFAULT NULL, shipping_cost INT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, comment TEXT DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_716FF96A462DC748 ON joint_purchases_orders (joint_purchase_id)');
+        $this->addSql('CREATE INDEX IDX_716FF96AA76ED395 ON joint_purchases_orders (user_id)');
+        $this->addSql('CREATE INDEX IDX_716FF96A8B8E8428 ON joint_purchases_orders (created_at)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_716FF96A462DC748A76ED395 ON joint_purchases_orders (joint_purchase_id, user_id)');
+        $this->addSql('COMMENT ON COLUMN joint_purchases_orders.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN joint_purchases_orders.joint_purchase_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN joint_purchases_orders.user_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE joint_purchases_orders_lines (id UUID NOT NULL, order_id UUID NOT NULL, product_id UUID NOT NULL, quantity INT NOT NULL, price INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, comment TEXT DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_1F049B288D9F6D38 ON joint_purchases_orders_lines (order_id)');
+        $this->addSql('CREATE INDEX IDX_1F049B284584665A ON joint_purchases_orders_lines (product_id)');
+        $this->addSql('CREATE INDEX IDX_1F049B288B8E8428 ON joint_purchases_orders_lines (created_at)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_1F049B284584665A8D9F6D38 ON joint_purchases_orders_lines (product_id, order_id)');
+        $this->addSql('COMMENT ON COLUMN joint_purchases_orders_lines.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN joint_purchases_orders_lines.order_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN joint_purchases_orders_lines.product_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE joint_purchases_products (id UUID NOT NULL, joint_purchase_id UUID NOT NULL, image_id VARCHAR(36) DEFAULT NULL, min_quantity INT NOT NULL, price INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, title VARCHAR(190) DEFAULT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_EB38574C462DC748 ON joint_purchases_products (joint_purchase_id)');
+        $this->addSql('CREATE INDEX IDX_EB38574C8B8E8428 ON joint_purchases_products (created_at)');
+        $this->addSql('CREATE INDEX IDX_EB38574C2B36786B ON joint_purchases_products (title)');
+        $this->addSql('COMMENT ON COLUMN joint_purchases_products.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN joint_purchases_products.joint_purchase_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE media_categories (id INT NOT NULL, parent_id INT DEFAULT NULL, slug VARCHAR(32) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, title VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_30D688FC727ACA70 ON media_categories (parent_id)');
+        $this->addSql('CREATE INDEX IDX_30D688FC989D9B62 ON media_categories (slug)');
+        $this->addSql('CREATE TABLE media_collections (id INT NOT NULL, storage_id INT NOT NULL, code VARCHAR(2) NOT NULL, default_filter VARCHAR(255) DEFAULT NULL, upload_filter VARCHAR(255) DEFAULT NULL, params TEXT NOT NULL, relative_path VARCHAR(255) NOT NULL, file_relative_path_pattern VARCHAR(255) NOT NULL, filename_pattern VARCHAR(128) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, title VARCHAR(190) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_244DA17D77153098 ON media_collections (code)');
+        $this->addSql('CREATE INDEX IDX_244DA17D5CC5DB90 ON media_collections (storage_id)');
+        $this->addSql('COMMENT ON COLUMN media_collections.params IS \'(DC2Type:array)\'');
+        $this->addSql('CREATE TABLE media_files (id UUID NOT NULL, category_id INT DEFAULT NULL, user_id VARCHAR(36) DEFAULT NULL, collection VARCHAR(2) NOT NULL, storage VARCHAR(2) NOT NULL, relative_path VARCHAR(100) DEFAULT NULL, filename VARCHAR(100) NOT NULL, original_filename VARCHAR(255) NOT NULL, type VARCHAR(8) NOT NULL, mime_type VARCHAR(32) NOT NULL, original_size INT NOT NULL, size INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_192C84E812469DE2 ON media_files (category_id)');
+        $this->addSql('CREATE INDEX IDX_192C84E8FC4D6532 ON media_files (collection)');
+        $this->addSql('CREATE INDEX IDX_192C84E8547A1B34 ON media_files (storage)');
+        $this->addSql('CREATE INDEX IDX_192C84E8F7C0246A ON media_files (size)');
+        $this->addSql('CREATE INDEX IDX_192C84E88CDE5729 ON media_files (type)');
+        $this->addSql('CREATE INDEX IDX_192C84E8A76ED395 ON media_files (user_id)');
+        $this->addSql('COMMENT ON COLUMN media_files.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE media_files_transformed (id INT NOT NULL, file_id UUID NOT NULL, collection VARCHAR(2) NOT NULL, storage VARCHAR(2) NOT NULL, filter VARCHAR(32) NOT NULL, size INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_1084B87D93CB796C ON media_files_transformed (file_id)');
+        $this->addSql('CREATE INDEX IDX_1084B87DFC4D6532 ON media_files_transformed (collection)');
+        $this->addSql('CREATE INDEX IDX_1084B87D547A1B34 ON media_files_transformed (storage)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_1084B87D7FC45F1D93CB796C ON media_files_transformed (filter, file_id)');
+        $this->addSql('COMMENT ON COLUMN media_files_transformed.file_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE media_filters (id INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, name VARCHAR(190) NOT NULL, title VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_19A0E1C45E237E06 ON media_filters (name)');
+        $this->addSql('CREATE TABLE media_storages (id INT NOT NULL, code VARCHAR(2) NOT NULL, relative_path VARCHAR(255) NOT NULL, provider VARCHAR(255) NOT NULL, arguments TEXT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, title VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_358F6F1777153098 ON media_storages (code)');
+        $this->addSql('COMMENT ON COLUMN media_storages.arguments IS \'(DC2Type:array)\'');
+        $this->addSql('CREATE TABLE offers (id UUID NOT NULL, category_id INT NOT NULL, user_id UUID DEFAULT NULL, is_enabled BOOLEAN DEFAULT \'true\' NOT NULL, price INT NOT NULL, short_description TEXT DEFAULT NULL, measure SMALLINT NOT NULL, quantity INT DEFAULT NULL, quantity_reserved INT DEFAULT NULL, image_id VARCHAR(36) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, title VARCHAR(190) DEFAULT NULL, description TEXT DEFAULT NULL, status SMALLINT DEFAULT 0 NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_DA46042712469DE2 ON offers (category_id)');
+        $this->addSql('CREATE INDEX IDX_DA460427A76ED395 ON offers (user_id)');
+        $this->addSql('CREATE INDEX IDX_DA4604278B8E8428 ON offers (created_at)');
+        $this->addSql('CREATE INDEX IDX_DA46042746C53D4C ON offers (is_enabled)');
+        $this->addSql('CREATE INDEX IDX_DA460427CAC822D9 ON offers (price)');
+        $this->addSql('CREATE INDEX IDX_DA4604277B00651C ON offers (status)');
+        $this->addSql('CREATE INDEX IDX_DA4604272B36786B ON offers (title)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_DA460427A76ED3952B36786B ON offers (user_id, title)');
+        $this->addSql('COMMENT ON COLUMN offers.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN offers.user_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE tags (id UUID NOT NULL, user_id UUID DEFAULT NULL, title VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_6FBC94262B36786B ON tags (title)');
+        $this->addSql('CREATE INDEX IDX_6FBC9426A76ED395 ON tags (user_id)');
+        $this->addSql('COMMENT ON COLUMN tags.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN tags.user_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE texter_items (id INT NOT NULL, name VARCHAR(32) DEFAULT NULL, text TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_CD3DA845E237E06 ON texter_items (name)');
+        $this->addSql('CREATE TABLE transactions (id UUID NOT NULL, from_user_id UUID NOT NULL, to_user_id UUID NOT NULL, deal_id UUID DEFAULT NULL, sum INT DEFAULT 0 NOT NULL, hash VARCHAR(64) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, comment TEXT DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_EAA81A4C2130303A ON transactions (from_user_id)');
+        $this->addSql('CREATE INDEX IDX_EAA81A4C29F6EE60 ON transactions (to_user_id)');
+        $this->addSql('CREATE INDEX IDX_EAA81A4CF60E2305 ON transactions (deal_id)');
+        $this->addSql('CREATE INDEX IDX_EAA81A4CC8BD9F4D ON transactions (sum)');
+        $this->addSql('CREATE INDEX IDX_EAA81A4C8B8E8428 ON transactions (created_at)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_EAA81A4CD1B862B8 ON transactions (hash)');
+        $this->addSql('COMMENT ON COLUMN transactions.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN transactions.from_user_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN transactions.to_user_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN transactions.deal_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE users (id UUID NOT NULL, invited_by_user_id UUID DEFAULT NULL, invite_id UUID DEFAULT NULL, level INT DEFAULT 1 NOT NULL, sex SMALLINT DEFAULT 0 NOT NULL, is_smoking BOOLEAN DEFAULT NULL, is_alcohol BOOLEAN DEFAULT NULL, is_meat_consumption BOOLEAN DEFAULT NULL, api_token VARCHAR(64) DEFAULT NULL, username VARCHAR(40) NOT NULL, password VARCHAR(190) NOT NULL, roles TEXT NOT NULL, firstname VARCHAR(30) NOT NULL, lastname VARCHAR(30) NOT NULL, last_login TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, latitude NUMERIC(10, 8) DEFAULT NULL, longitude NUMERIC(11, 8) DEFAULT NULL, telegram_user_id INT DEFAULT NULL, telegram_username VARCHAR(100) DEFAULT NULL, confirmation_token VARCHAR(100) DEFAULT NULL, reset_password_code INT DEFAULT NULL, password_requested_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, is_enabled BOOLEAN DEFAULT \'true\', description TEXT DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E97BA2F5EB ON users (api_token)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9F85E0677 ON users (username)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9FC28B263 ON users (telegram_user_id)');
+        $this->addSql('CREATE INDEX IDX_1483A5E9EDB25FDD ON users (invited_by_user_id)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9EA417747 ON users (invite_id)');
+        $this->addSql('CREATE INDEX IDX_1483A5E98B8E8428 ON users (created_at)');
+        $this->addSql('CREATE INDEX IDX_1483A5E9C05FB297 ON users (confirmation_token)');
+        $this->addSql('CREATE INDEX IDX_1483A5E983A00E68 ON users (firstname)');
+        $this->addSql('CREATE INDEX IDX_1483A5E93124B5B6 ON users (lastname)');
+        $this->addSql('CREATE INDEX IDX_1483A5E9C843FD0B ON users (last_login)');
+        $this->addSql('CREATE INDEX IDX_1483A5E99AEACC13 ON users (level)');
+        $this->addSql('CREATE INDEX IDX_1483A5E984D5FB8D ON users (is_alcohol)');
+        $this->addSql('CREATE INDEX IDX_1483A5E946C53D4C ON users (is_enabled)');
+        $this->addSql('CREATE INDEX IDX_1483A5E97A515D67 ON users (is_smoking)');
+        $this->addSql('CREATE INDEX IDX_1483A5E9E3065D6B ON users (is_meat_consumption)');
+        $this->addSql('CREATE INDEX IDX_1483A5E9EFA269F7 ON users (sex)');
+        $this->addSql('COMMENT ON COLUMN users.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN users.invited_by_user_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN users.invite_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN users.roles IS \'(DC2Type:array)\'');
+        $this->addSql('CREATE TABLE users_closure (id SERIAL NOT NULL, ancestor UUID NOT NULL, descendant UUID NOT NULL, depth INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_B807F91BB4465BB ON users_closure (ancestor)');
+        $this->addSql('CREATE INDEX IDX_B807F91B9A8FAD16 ON users_closure (descendant)');
+        $this->addSql('CREATE INDEX IDX_7DF222F75AFE18F4 ON users_closure (depth)');
+        $this->addSql('CREATE UNIQUE INDEX IDX_C64B2E1BC59206E4 ON users_closure (ancestor, descendant)');
+        $this->addSql('COMMENT ON COLUMN users_closure.ancestor IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN users_closure.descendant IS \'(DC2Type:uuid)\'');
+        $this->addSql('ALTER TABLE categories ADD CONSTRAINT FK_3AF34668727ACA70 FOREIGN KEY (parent_id) REFERENCES categories (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE categories_closure ADD CONSTRAINT FK_600D5C71B4465BB FOREIGN KEY (ancestor) REFERENCES categories (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE categories_closure ADD CONSTRAINT FK_600D5C719A8FAD16 FOREIGN KEY (descendant) REFERENCES categories (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE deals ADD CONSTRAINT FK_EF39849B53C674EE FOREIGN KEY (offer_id) REFERENCES offers (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE deals ADD CONSTRAINT FK_EF39849B8DE820D9 FOREIGN KEY (seller_id) REFERENCES users (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE deals ADD CONSTRAINT FK_EF39849B6C755722 FOREIGN KEY (buyer_id) REFERENCES users (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE demands ADD CONSTRAINT FK_D24062F4A76ED395 FOREIGN KEY (user_id) REFERENCES users (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE invites ADD CONSTRAINT FK_37E6A6CA76ED395 FOREIGN KEY (user_id) REFERENCES users (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE joint_purchases ADD CONSTRAINT FK_2A27B689876C4DDA FOREIGN KEY (organizer_id) REFERENCES users (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE joint_purchases_orders ADD CONSTRAINT FK_716FF96A462DC748 FOREIGN KEY (joint_purchase_id) REFERENCES joint_purchases (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE joint_purchases_orders ADD CONSTRAINT FK_716FF96AA76ED395 FOREIGN KEY (user_id) REFERENCES users (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE joint_purchases_orders_lines ADD CONSTRAINT FK_1F049B288D9F6D38 FOREIGN KEY (order_id) REFERENCES joint_purchases_orders (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE joint_purchases_orders_lines ADD CONSTRAINT FK_1F049B284584665A FOREIGN KEY (product_id) REFERENCES joint_purchases_products (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE joint_purchases_products ADD CONSTRAINT FK_EB38574C462DC748 FOREIGN KEY (joint_purchase_id) REFERENCES joint_purchases (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE media_categories ADD CONSTRAINT FK_30D688FC727ACA70 FOREIGN KEY (parent_id) REFERENCES media_categories (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE media_collections ADD CONSTRAINT FK_244DA17D5CC5DB90 FOREIGN KEY (storage_id) REFERENCES media_storages (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE media_files ADD CONSTRAINT FK_192C84E812469DE2 FOREIGN KEY (category_id) REFERENCES media_categories (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE media_files_transformed ADD CONSTRAINT FK_1084B87D93CB796C FOREIGN KEY (file_id) REFERENCES media_files (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE offers ADD CONSTRAINT FK_DA46042712469DE2 FOREIGN KEY (category_id) REFERENCES categories (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE offers ADD CONSTRAINT FK_DA460427A76ED395 FOREIGN KEY (user_id) REFERENCES users (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE tags ADD CONSTRAINT FK_6FBC9426A76ED395 FOREIGN KEY (user_id) REFERENCES users (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE transactions ADD CONSTRAINT FK_EAA81A4C2130303A FOREIGN KEY (from_user_id) REFERENCES users (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE transactions ADD CONSTRAINT FK_EAA81A4C29F6EE60 FOREIGN KEY (to_user_id) REFERENCES users (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE transactions ADD CONSTRAINT FK_EAA81A4CF60E2305 FOREIGN KEY (deal_id) REFERENCES deals (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE users ADD CONSTRAINT FK_1483A5E9EDB25FDD FOREIGN KEY (invited_by_user_id) REFERENCES users (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE users ADD CONSTRAINT FK_1483A5E9EA417747 FOREIGN KEY (invite_id) REFERENCES invites (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE users_closure ADD CONSTRAINT FK_B807F91BB4465BB FOREIGN KEY (ancestor) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE users_closure ADD CONSTRAINT FK_B807F91B9A8FAD16 FOREIGN KEY (descendant) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+    }
+
+    public function down(Schema $schema) : void
+    {
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
+
+        $this->addSql('ALTER TABLE categories DROP CONSTRAINT FK_3AF34668727ACA70');
+        $this->addSql('ALTER TABLE categories_closure DROP CONSTRAINT FK_600D5C71B4465BB');
+        $this->addSql('ALTER TABLE categories_closure DROP CONSTRAINT FK_600D5C719A8FAD16');
+        $this->addSql('ALTER TABLE offers DROP CONSTRAINT FK_DA46042712469DE2');
+        $this->addSql('ALTER TABLE transactions DROP CONSTRAINT FK_EAA81A4CF60E2305');
+        $this->addSql('ALTER TABLE users DROP CONSTRAINT FK_1483A5E9EA417747');
+        $this->addSql('ALTER TABLE joint_purchases_orders DROP CONSTRAINT FK_716FF96A462DC748');
+        $this->addSql('ALTER TABLE joint_purchases_products DROP CONSTRAINT FK_EB38574C462DC748');
+        $this->addSql('ALTER TABLE joint_purchases_orders_lines DROP CONSTRAINT FK_1F049B288D9F6D38');
+        $this->addSql('ALTER TABLE joint_purchases_orders_lines DROP CONSTRAINT FK_1F049B284584665A');
+        $this->addSql('ALTER TABLE media_categories DROP CONSTRAINT FK_30D688FC727ACA70');
+        $this->addSql('ALTER TABLE media_files DROP CONSTRAINT FK_192C84E812469DE2');
+        $this->addSql('ALTER TABLE media_files_transformed DROP CONSTRAINT FK_1084B87D93CB796C');
+        $this->addSql('ALTER TABLE media_collections DROP CONSTRAINT FK_244DA17D5CC5DB90');
+        $this->addSql('ALTER TABLE deals DROP CONSTRAINT FK_EF39849B53C674EE');
+        $this->addSql('ALTER TABLE deals DROP CONSTRAINT FK_EF39849B8DE820D9');
+        $this->addSql('ALTER TABLE deals DROP CONSTRAINT FK_EF39849B6C755722');
+        $this->addSql('ALTER TABLE demands DROP CONSTRAINT FK_D24062F4A76ED395');
+        $this->addSql('ALTER TABLE invites DROP CONSTRAINT FK_37E6A6CA76ED395');
+        $this->addSql('ALTER TABLE joint_purchases DROP CONSTRAINT FK_2A27B689876C4DDA');
+        $this->addSql('ALTER TABLE joint_purchases_orders DROP CONSTRAINT FK_716FF96AA76ED395');
+        $this->addSql('ALTER TABLE offers DROP CONSTRAINT FK_DA460427A76ED395');
+        $this->addSql('ALTER TABLE tags DROP CONSTRAINT FK_6FBC9426A76ED395');
+        $this->addSql('ALTER TABLE transactions DROP CONSTRAINT FK_EAA81A4C2130303A');
+        $this->addSql('ALTER TABLE transactions DROP CONSTRAINT FK_EAA81A4C29F6EE60');
+        $this->addSql('ALTER TABLE users DROP CONSTRAINT FK_1483A5E9EDB25FDD');
+        $this->addSql('ALTER TABLE users_closure DROP CONSTRAINT FK_B807F91BB4465BB');
+        $this->addSql('ALTER TABLE users_closure DROP CONSTRAINT FK_B807F91B9A8FAD16');
+        $this->addSql('DROP SEQUENCE categories_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE media_categories_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE media_collections_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE media_files_transformed_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE media_filters_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE media_storages_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE texter_items_id_seq CASCADE');
+        $this->addSql('DROP TABLE categories');
+        $this->addSql('DROP TABLE categories_closure');
+        $this->addSql('DROP TABLE deals');
+        $this->addSql('DROP TABLE demands');
+        $this->addSql('DROP TABLE invites');
+        $this->addSql('DROP TABLE joint_purchases');
+        $this->addSql('DROP TABLE joint_purchases_orders');
+        $this->addSql('DROP TABLE joint_purchases_orders_lines');
+        $this->addSql('DROP TABLE joint_purchases_products');
+        $this->addSql('DROP TABLE media_categories');
+        $this->addSql('DROP TABLE media_collections');
+        $this->addSql('DROP TABLE media_files');
+        $this->addSql('DROP TABLE media_files_transformed');
+        $this->addSql('DROP TABLE media_filters');
+        $this->addSql('DROP TABLE media_storages');
+        $this->addSql('DROP TABLE offers');
+        $this->addSql('DROP TABLE tags');
+        $this->addSql('DROP TABLE texter_items');
+        $this->addSql('DROP TABLE transactions');
+        $this->addSql('DROP TABLE users');
+        $this->addSql('DROP TABLE users_closure');
+    }
+}
