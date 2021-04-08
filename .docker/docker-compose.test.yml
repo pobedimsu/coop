@@ -1,0 +1,28 @@
+version: '3.9'
+
+# @todo продумать тестовое окружение, а пока не актуально...
+services:
+    db:
+        build: ./postgres
+        environment:
+            POSTGRES_USER: '${DB_USER}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD}'
+            POSTGRES_DB: '${DB_NAME}'
+        volumes:
+            - pg13:/var/lib/postgresql/data
+
+    pgbouncer:
+        image: pgbouncer/pgbouncer:latest
+        depends_on:
+            - db
+        environment: # https://gitlab.com/aztek-io/oss/containers/pgbouncer-container/-/blob/master/entrypoint.sh
+            DATABASES_HOST: db
+            DATABASES_PORT: 5432
+            DATABASES_USER: '${DB_USER}'
+            DATABASES_PASSWORD: '${DB_PASSWORD}'
+            DATABASES_DBNAME: '${DB_NAME}'
+            PGBOUNCER_POOL_MODE: transaction
+            PGBOUNCER_MAX_CLIENT_CONN: 1000
+
+volumes:
+    pg13:

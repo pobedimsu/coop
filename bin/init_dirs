@@ -20,15 +20,20 @@ if [ ! -d "config/secrets/dev" ]; then
     mkdir config/secrets/dev
 fi
 
+if [ ! -d "config/secrets/prod" ]; then
+    mkdir config/secrets/prod
+fi
+
 if [ ! -d "$VAR/sessions" ]; then
     mkdir $VAR/sessions
 fi
 
-chmod 777 config/secrets
-chmod 777 config/secrets/dev
+chmod -R 777 config/secrets
 chmod 777 usr
 chmod 777 $VAR
-chmod 777 $VAR/cache
-chmod 777 $VAR/log
-chmod 777 $VAR/sessions
+chmod -R 777 $VAR/cache
+chmod -R 777 $VAR/log
+chmod -R 777 $VAR/sessions
+touch $VAR/log/php_errors.log
+touch $VAR/log/php-fpm_errors.log
 find $VAR/log -type f -exec chmod 666 {} \;

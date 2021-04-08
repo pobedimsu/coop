@@ -17,8 +17,3 @@ then
     echo "Clearing var/cache/test..."
     rm -rf var/cache/test
 fi
-
-if [ -d var/log ]
-then
-    find var/log -type f -exec chmod 666 {} \;
-fi

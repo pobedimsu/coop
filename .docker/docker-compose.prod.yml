@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+    php-cli:
+        restart: unless-stopped # always
+        environment:
+            APP_ENV: prod
+            APP_DEBUG: 0
+
+    php-fpm: # В продакшине используется хостовый nginx, который проксирует пхп запросы на докерный php-fpm
+        restart: unless-stopped # always
+        ports:
+            - '127.0.0.1:${PHP_FPM_PROD_PORT}:9000'
+        environment:
+            APP_ENV: prod
+            APP_DEBUG: 0

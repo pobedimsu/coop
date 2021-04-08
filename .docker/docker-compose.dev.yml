@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+
+    nginx:
+        build:
+            context: ./nginx
+        working_dir: '${WORKING_DIR}'
+        volumes:
+            - './../:${WORKING_DIR}'
+        depends_on:
+            - php-fpm
+        ports:
+            - '${WEB_PORT}:80'
+
+    php-cli:
+        environment:
+            APP_ENV: dev
+            APP_DEBUG: 1
+
+    php-fpm:
+        environment:
+            APP_ENV: dev
+            APP_DEBUG: 1
+
+volumes:
+    pg13:

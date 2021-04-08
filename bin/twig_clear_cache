@@ -5,3 +5,9 @@ then
     echo "Clearing var/cache/prod/twig..."
     rm -rf var/cache/prod/twig
 fi
+
+if [ -d "var/cache/dev/twig" ]
+then
+    echo "Clearing var/cache/dev/twig..."
+    rm -rf var/cache/dev/twig
+fi
