@@ -84,7 +84,7 @@ RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/
 RUN chmod +x /usr/local/bin/dumb-init
 
 ### Custom soft
-RUN apt-get install -y mc htop cron rsyslog
+#RUN apt-get install -y mc htop cron rsyslog
 
 ### Cleanups
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
