@@ -11,9 +11,7 @@ endif
 
 # Подгрузка настроек докера, чтобы изменять файлы конфигов через sed (nginx, supervisor, etc..)
 ifneq (",$(wildcard ./.env.docker.${APP_ENV}.local)")
-    include .env.docker.${APP_ENV}.local;echo 'OK'
-else
-	echo 'NOT FOUND'
+    include .env.docker.${APP_ENV}.local
 endif
 
 INTERACTIVE := $(shell [ -t 0 ] && echo 1)
