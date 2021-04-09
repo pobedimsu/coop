@@ -6,7 +6,6 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
 use Smart\CoreBundle\Doctrine\RepositoryTrait;
 
 class TransactionRepository extends EntityRepository

@@ -6,8 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\Query;
+use Doctrine\Persistence\ManagerRegistry;
 use Gedmo\Tree\Entity\Repository\ClosureTreeRepository;
 use Smart\CoreBundle\Doctrine\RepositoryTrait;
 

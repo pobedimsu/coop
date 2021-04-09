@@ -17,13 +17,31 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.2.0"
     },
+    "pagerfanta/core": {
+        "version": "v3.0.0"
+    },
     "psr/event-dispatcher": {
         "version": "1.0.0"
+    },
+    "symfony/css-selector": {
+        "version": "v5.2.4"
     },
     "symfony/http-client-contracts": {
         "version": "v2.3.1"
     },
     "symfony/proxy-manager-bridge": {
         "version": "v5.2.4"
+    },
+    "tijsverkoyen/css-to-inline-styles": {
+        "version": "2.2.3"
+    },
+    "twig/cssinliner-extra": {
+        "version": "v3.3.0"
+    },
+    "twig/extra-bundle": {
+        "version": "v3.3.0"
+    },
+    "twig/intl-extra": {
+        "version": "v3.3.0"
     }
 }

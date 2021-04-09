@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210408142640 extends AbstractMigration
+final class Version20210409100144 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -20,8 +20,6 @@ final class Version20210408142640 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
-
         $this->addSql('CREATE SEQUENCE categories_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE media_categories_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE media_collections_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
@@ -208,8 +206,6 @@ final class Version20210408142640 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
-
         $this->addSql('ALTER TABLE categories DROP CONSTRAINT FK_3AF34668727ACA70');
         $this->addSql('ALTER TABLE categories_closure DROP CONSTRAINT FK_600D5C71B4465BB');
         $this->addSql('ALTER TABLE categories_closure DROP CONSTRAINT FK_600D5C719A8FAD16');

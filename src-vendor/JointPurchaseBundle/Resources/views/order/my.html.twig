@@ -81,7 +81,7 @@
                     {% endif %}
                 </td>
                 <td>{{ order.jointPurchase.statusAsText }}</td>
-                <td title="Обновлено: {{ order.createdAt|localizeddate }}">{{ order.createdAt|localizeddate }}</td>
+                <td title="Обновлено: {{ order.createdAt|app_date }}">{{ order.createdAt|app_date }}</td>
             </tr>
         {% endfor %}
         </tbody>
