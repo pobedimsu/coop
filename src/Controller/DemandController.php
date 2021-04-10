@@ -7,7 +7,7 @@ namespace App\Controller;
 use App\Entity\Demand;
 use App\Form\Type\DemandFormType;
 use Doctrine\ORM\EntityManagerInterface;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,13 +25,13 @@ class DemandController extends AbstractController
      */
     public function index(Request $request, EntityManagerInterface $em): Response
     {
-        $pagerfanta = new Pagerfanta(new DoctrineORMAdapter(
+        $pagerfanta = new Pagerfanta(new QueryAdapter(
             $em->getRepository(Demand::class)->getFindByQuery(null, ['created_at' => 'DESC'])
         ));
         $pagerfanta->setMaxPerPage(20);
 
         try {
-            $pagerfanta->setCurrentPage($request->query->get('page', 1));
+            $pagerfanta->setCurrentPage((int) $request->query->get('page', 1));
         } catch (NotValidCurrentPageException $e) {
             throw $this->createNotFoundException();
         }
