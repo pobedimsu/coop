@@ -1,6 +1,17 @@
 Платформа для кооперации
 ========================
 
+Установка Debian
+----------------
+
+```
+apt-get install git screen -y
+git clone https://github.com/pobedimsu/coop.git
+cd coop
+./install/debian.sh
+```
+
+
 Установка
 ---------
 
