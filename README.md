@@ -5,15 +5,15 @@
 ----------------
 
 ```
-apt-get install git -y
+apt install git -y
 git clone https://github.com/pobedimsu/coop.git
 ./coop/install/debian.sh
 ```
 
-Или одно стройкой:
+Или одной стройкой:
 
 ```
-apt-get install git -y; git clone https://github.com/pobedimsu/coop.git; ./coop/install/debian.sh
+apt install git -y; git clone https://github.com/pobedimsu/coop.git; ./coop/install/debian.sh
 ```
 
 
