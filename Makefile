@@ -72,7 +72,6 @@ restart-build: down build up
 
 deploy:
 	@make -s down
-	@git reset --hard
 	@git pull
 	@if [ ! -f .env.local ]; then \
   		echo "[${env}]: No configuration found."; \
