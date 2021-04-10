@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff09f4e8c4bb103ba031e2454054294a",
+    "content-hash": "eebcb76ae87ff78a43ffbe8fe905f3bd",
     "packages": [
         {
             "name": "babdev/pagerfanta-bundle",
@@ -3375,6 +3375,52 @@
                 "source": "https://github.com/pagerfanta-packages/core/tree/v3.0.0"
             },
             "time": "2021-03-06T02:43:41+00:00"
+        },
+        {
+            "name": "pagerfanta/doctrine-orm-adapter",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pagerfanta-packages/doctrine-orm-adapter.git",
+                "reference": "f8dbdc826ef7b9ef6c591e19372c6449dfff1659"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pagerfanta-packages/doctrine-orm-adapter/zipball/f8dbdc826ef7b9ef6c591e19372c6449dfff1659",
+                "reference": "f8dbdc826ef7b9ef6c591e19372c6449dfff1659",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": "^2.8",
+                "pagerfanta/core": "^3.0",
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Pagerfanta\\Doctrine\\ORM\\": "./"
+                },
+                "exclude-from-classmap": [
+                    "Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Pagerfanta adapter for Doctrine ORM",
+            "keywords": [
+                "doctrine",
+                "orm",
+                "pagerfanta"
+            ],
+            "support": {
+                "source": "https://github.com/pagerfanta-packages/doctrine-orm-adapter/tree/v3.0.0"
+            },
+            "time": "2020-12-21T00:19:13+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",

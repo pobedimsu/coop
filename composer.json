@@ -17,6 +17,7 @@
         "knplabs/knp-menu-bundle": "^3.0",
         "liip/imagine-bundle": "^2.6",
         "nelmio/cors-bundle": "^2.0",
+        "pagerfanta/doctrine-orm-adapter": "^3.0",
         "sensio/framework-extra-bundle": "^6.1",
         "smart-core/core-bundle": "dev-master",
         "smart-core/db-dumper-bundle": "dev-master",

@@ -20,6 +20,9 @@
     "pagerfanta/core": {
         "version": "v3.0.0"
     },
+    "pagerfanta/doctrine-orm-adapter": {
+        "version": "v3.0.0"
+    },
     "psr/event-dispatcher": {
         "version": "1.0.0"
     },
