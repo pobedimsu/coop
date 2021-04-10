@@ -64,8 +64,8 @@ chmod +x /usr/local/bin/docker-compose
 if [ ! -f ~/.bashrc_old ]
 then
     mv ~/.bashrc ~/.bashrc_old
-    cp -R configs/debian/etc / -v
-    cp -R configs/debian/root / -v
+    cp -R install/configs/debian/etc / -v
+    cp -R install/configs/debian/root / -v
 fi
 
 apt clean
