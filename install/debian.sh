@@ -15,7 +15,7 @@ then
     exit
 fi
 
-apt install wget curl lsb-release -y
+apt install wget curl lsb-release gnupg gnupg2 -y
 
 DEBIAN_VERSION=$(cat /etc/debian_version | head -c 1)
 RELEASE=$(lsb_release -cs)
@@ -53,7 +53,7 @@ apt update
 apt upgrade -y
 
 apt install acl software-properties-common dirmngr apt-transport-https ca-certificates time tmux zip -y
-apt install bash-completion colordiff fail2ban net-tools gnupg gnupg2 htop make mailutils mc mlocate sudo supervisor -y
+apt install bash-completion colordiff fail2ban net-tools htop make mailutils mc mlocate sudo supervisor -y
 apt install nginx docker-ce docker-ce-cli containerd.io -y
 apt install certbot python-certbot-nginx -y
 
