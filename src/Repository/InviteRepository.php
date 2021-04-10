@@ -18,7 +18,7 @@ class InviteRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('e')
             ->where('e.user = :user')
-            ->andWhere('e.is_used = 0')
+            ->andWhere('e.is_used = false')
             ->andWhere('e.created_at > :date')
             ->orderBy('e.created_at', 'DESC')
             ->setMaxResults(1)
