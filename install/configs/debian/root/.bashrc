@@ -49,4 +49,4 @@ alias cdw="cd /var/www"
     . /usr/share/bash-completion/bash_completion
 
 #export GREP_OPTIONS='--color=auto'
-cd /var/www/
+#cd /var/www/

@@ -1,4 +1,6 @@
 #!/bin/bash
+SCRIPT=$(readlink -f "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
 
 DOCKER_COMPOSE=1.29.0
 
@@ -66,8 +68,8 @@ chmod +x /usr/local/bin/docker-compose
 if [ ! -f ~/.bashrc_old ]
 then
     mv ~/.bashrc ~/.bashrc_old
-    cp -R install/configs/debian/etc / -v
-    cp -R install/configs/debian/root / -v
+    cp -R ${SCRIPTPATH}/configs/debian/etc / -v
+    cp -R ${SCRIPTPATH}/configs/debian/root / -v
 fi
 
 apt clean

@@ -5,10 +5,15 @@
 ----------------
 
 ```
-apt-get install git screen -y
+apt-get install git -y
 git clone https://github.com/pobedimsu/coop.git
-cd coop
-./install/debian.sh
+./coop/install/debian.sh
+```
+
+Или одно стройкой:
+
+```
+apt-get install git -y; git clone https://github.com/pobedimsu/coop.git; ./coop/install/debian.sh
 ```
 
 
