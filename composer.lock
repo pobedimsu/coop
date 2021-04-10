@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eebcb76ae87ff78a43ffbe8fe905f3bd",
+    "content-hash": "99e1c2ffd0306fe3783f0d64b6265bf5",
     "packages": [
         {
             "name": "babdev/pagerfanta-bundle",
@@ -3421,6 +3421,50 @@
                 "source": "https://github.com/pagerfanta-packages/doctrine-orm-adapter/tree/v3.0.0"
             },
             "time": "2020-12-21T00:19:13+00:00"
+        },
+        {
+            "name": "pagerfanta/twig",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pagerfanta-packages/twig.git",
+                "reference": "56d18d4d4d5bf347c2b80098e362ba7191889aaf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pagerfanta-packages/twig/zipball/56d18d4d4d5bf347c2b80098e362ba7191889aaf",
+                "reference": "56d18d4d4d5bf347c2b80098e362ba7191889aaf",
+                "shasum": ""
+            },
+            "require": {
+                "pagerfanta/core": "^3.0",
+                "php": "^7.4 || ^8.0",
+                "twig/twig": "^1.35 || ^2.5 || ^3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Pagerfanta\\Twig\\": "./"
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Twig integration for Pagerfanta",
+            "keywords": [
+                "pagerfanta"
+            ],
+            "support": {
+                "source": "https://github.com/pagerfanta-packages/twig/tree/v3.0.0"
+            },
+            "time": "2021-03-06T02:25:44+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
