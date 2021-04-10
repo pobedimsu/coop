@@ -17,12 +17,12 @@ then
     exit
 fi
 
-DEBIAN_VERSION=$(cat /etc/debian_version | head -c 2)
+RELEASE=$(lsb_release -cs)
 
-if (( $DEBIAN_VERSION == '9.' ))
+if (( $RELEASE == 'stretch' ))
 then
     echo -e "${YELLOW} Debian 9 'Stretch' installing... ${NORMAL}"
-elif (( $DEBIAN_VERSION == '10' ))
+elif (( $RELEASE == 'buster' ))
 then
     echo -e "${YELLOW} Debian 10 'Buster' installing... ${NORMAL}"
 else
@@ -33,9 +33,7 @@ fi
 apt update
 apt upgrade -y --force-confnew
 
-apt install wget curl lsb-release gnupg gnupg2 software-properties-common dirmngr apt-transport-https ca-certificates -y
-
-RELEASE=$(lsb_release -cs)
+apt install gnupg gnupg2 software-properties-common dirmngr apt-transport-https ca-certificates -y
 
 tput sgr0
 
