@@ -105,6 +105,7 @@ init-configs:
   		echo "[${env}]: generate => .env.docker.${env}.local"; \
 		cp .docker/.env.docker.dist .env.docker.${env}.local; \
 		sed -i "s/APP_ENV=~/APP_ENV=${env}/g" .env.docker.${env}.local; \
+		sed -i "s#WORKING_DIR=/app#WORKING_DIR=${pwd}#g" .env.docker.${env}.local; \
 	else \
 	  	echo "[${env}]: already exist => .env.docker.${env}.local "; \
 	fi
