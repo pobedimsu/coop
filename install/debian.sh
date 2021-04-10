@@ -15,25 +15,27 @@ then
     exit
 fi
 
-apt update
-apt upgrade -y --force-yes
-apt install wget curl lsb-release gnupg gnupg2 software-properties-common dirmngr apt-transport-https ca-certificates -y
-
 DEBIAN_VERSION=$(cat /etc/debian_version | head -c 1)
-RELEASE=$(lsb_release -cs)
-
-tput sgr0
 
 if (( $DEBIAN_VERSION == 9 ))
 then
     echo -e "${YELLOW} Debian 9 'Stretch' installing... ${NORMAL}"
-elif (( $RELEASE == 'buster' ))
+elif (( $DEBIAN_VERSION == 10 ))
 then
     echo -e "${YELLOW} Debian 10 'Buster' installing... ${NORMAL}"
 else
     echo -e "${RED} BAD Debian version ${NORMAL}"
     exit
 fi
+
+apt update
+apt upgrade -y --force-confnew
+
+apt install wget curl lsb-release gnupg gnupg2 software-properties-common dirmngr apt-transport-https ca-certificates -y
+
+RELEASE=$(lsb_release -cs)
+
+tput sgr0
 
 # Docker
 curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
