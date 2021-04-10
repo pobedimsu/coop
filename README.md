@@ -5,43 +5,33 @@
 ----------------
 
 ```
-apt install git -y
+apt install git -qq -y
 git clone https://github.com/pobedimsu/coop.git
 ./coop/install/debian.sh
+mv coop/ /var/www/coop
 ```
 
 Или одной стройкой:
 
 ```
-apt install git -y; git clone https://github.com/pobedimsu/coop.git; ./coop/install/debian.sh
+apt install git -qq -y; git clone https://github.com/pobedimsu/coop.git; ./coop/install/debian.sh; mv coop/ /var/www/coop
 ```
 
+После чего, следует перезагрузить сервер:
+
+```
+reboot
+```
 
 Установка
 ---------
-
-Получение кода:
-```
-git clone https://github.com/pobedimsu/coop.git
-cd coop
-cp .env .env.local
-composer i
-```
-
-Создать БД.
 
 Отредактировать настройки в ```.env.local```
 
 1. Обязательно указать произвольную строку для APP_SECRET
 2. Прописать доступы к БД в параметре DATABASE_URL 
 
-Далее выполнить в консоле:
-```    
-bin/console doctrine:schema:update --force
-bin/console app:init
-```
-
-В завершени нужно создать первого пользователя
+Создать первого пользователя
 ```    
 bin/console user:add
 ```

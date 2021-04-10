@@ -30,10 +30,10 @@ else
     exit
 fi
 
-apt update
-apt upgrade -y --force-confnew
+apt update -qq
+apt upgrade -qq -y --force-confnew
 
-apt install gnupg gnupg2 software-properties-common dirmngr apt-transport-https ca-certificates -y
+apt install gnupg gnupg2 software-properties-common dirmngr apt-transport-https ca-certificates -qq -y
 
 tput sgr0
 
@@ -53,12 +53,12 @@ update-locale LANG=ru_RU.UTF-8
 dpkg-reconfigure tzdata
 #dpkg-reconfigure locales
 
-apt update
+apt update -qq
 
-apt install acl time tmux zip -y
-apt install bash-completion colordiff fail2ban net-tools htop make mailutils mc mlocate sudo supervisor -y
-apt install nginx docker-ce docker-ce-cli containerd.io -y
-apt install certbot python-certbot-nginx -y
+apt install acl time tmux zip -qq -y
+apt install bash-completion colordiff fail2ban net-tools htop make mailutils mc mlocate sudo supervisor -qq -y
+apt install nginx docker-ce docker-ce-cli containerd.io -qq -y
+apt install certbot python-certbot-nginx -qq -y
 
 curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
