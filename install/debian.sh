@@ -33,9 +33,12 @@ fi
 apt remove -y unattended-upgrades
 
 apt update -qq
-apt upgrade -qq -y -o Dpkg::Options::=--force-confnew -o Dpkg::Options::=--force-confdef --allow-change-held-packages
+apt upgrade -qq -y -o Dpkg::Options::=--force-confnew --allow-change-held-packages
 
-apt install gnupg gnupg2 software-properties-common dirmngr apt-transport-https ca-certificates -qq -y
+export DEBIAN_FRONTEND=noninteractive
+export UCF_FORCE_CONFFNEW=1
+
+apt install gnupg gnupg2 software-properties-common dirmngr apt-transport-https ca-certificates -qq -y -o Dpkg::Options::=--force-confnew
 
 tput sgr0
 
