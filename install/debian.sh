@@ -30,8 +30,6 @@ else
     exit
 fi
 
-apt remove -y unattended-upgrades
-
 apt update -qq
 apt upgrade -qq -y -o Dpkg::Options::=--force-confnew --allow-change-held-packages
 
