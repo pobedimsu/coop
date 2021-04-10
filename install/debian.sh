@@ -50,6 +50,10 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian ${
 wget --quiet -O - http://nginx.org/keys/nginx_signing.key | apt-key add -
 printf "deb http://nginx.org/packages/mainline/debian/ ${RELEASE} nginx\ndeb-src http://nginx.org/packages/mainline/debian/ ${RELEASE} nginx" > /etc/apt/sources.list.d/nginx.list
 
+# Ondrej Sury PHP
+wget --quiet -O - https://packages.sury.org/php/apt.gpg | apt-key add -
+printf "deb https://packages.sury.org/php/ ${RELEASE} main" > /etc/apt/sources.list.d/php-sury.list
+
 sed -i s/'# ru_RU.UTF-8 UTF-8'/'ru_RU.UTF-8 UTF-8'/g /etc/locale.gen
 locale-gen ru_RU.UTF-8
 localectl set-locale LANG=ru_RU.UTF-8
@@ -65,7 +69,8 @@ apt update -qq
 apt install acl sudo time tmux zip -qq -y
 apt install bash-completion colordiff fail2ban net-tools htop make mailutils mc mlocate supervisor -qq -y
 apt install nginx docker-ce docker-ce-cli containerd.io -qq -y
-apt install certbot python-certbot-nginx php-cli -qq -y
+apt install certbot python-certbot-nginx -qq -y
+apt install php-cli php-mbstring -qq -y
 
 curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
