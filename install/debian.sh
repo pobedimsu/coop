@@ -50,7 +50,10 @@ sed -i s/'# ru_RU.UTF-8 UTF-8'/'ru_RU.UTF-8 UTF-8'/g /etc/locale.gen
 locale-gen ru_RU.UTF-8
 localectl set-locale LANG=ru_RU.UTF-8
 update-locale LANG=ru_RU.UTF-8
-dpkg-reconfigure tzdata
+ln -fs /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+dpkg-reconfigure --frontend noninteractive tzdata
+
+#dpkg-reconfigure tzdata
 #dpkg-reconfigure locales
 
 apt update -qq
