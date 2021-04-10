@@ -15,6 +15,8 @@ then
     exit
 fi
 
+apt update
+apt upgrade -y
 apt install wget curl lsb-release gnupg gnupg2 software-properties-common dirmngr apt-transport-https ca-certificates -y
 
 DEBIAN_VERSION=$(cat /etc/debian_version | head -c 1)
@@ -50,7 +52,6 @@ dpkg-reconfigure tzdata
 #dpkg-reconfigure locales
 
 apt update
-apt upgrade -y
 
 apt install acl time tmux zip -y
 apt install bash-completion colordiff fail2ban net-tools htop make mailutils mc mlocate sudo supervisor -y
@@ -60,7 +61,6 @@ apt install certbot python-certbot-nginx -y
 curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
-# Configs
 if [ ! -f ~/.bashrc_old ]
 then
     mv ~/.bashrc ~/.bashrc_old
