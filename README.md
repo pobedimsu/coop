@@ -1,29 +1,6 @@
 Платформа для кооперации
 ========================
 
-Системные требования
---------------------
-
-* PHP v7.3 c расширениями:
-    * ctype
-    * gd
-    * iconv    
-    * intl
-    * json 
-    * mbstring 
-    * PDO
-    * SimpleXML
-    * tokenizer 
-    * xml
-* [Composer](https://getcomposer.org/)
-* СУБД: MariaDB, MySQL, PostgreSQL
-
-Чтобы узнать соотвествует соответствие системным требованиямм, можно выполнить команду:
-
-```
-composer check-platform-reqs
-```
-
 Установка
 ---------
 

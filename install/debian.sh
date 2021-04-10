@@ -1,18 +1,23 @@
 #!/bin/bash
 
-SCRIPT_START_SECONDS=$(date +%s)
-SCRIPT_START_DATE=$(date +%T)
-
 DOCKER_COMPOSE=1.29.0
 
+SCRIPT_START_SECONDS=$(date +%s)
+SCRIPT_START_DATE=$(date +%T)
 NORMAL='\033[0m'
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
-DEBIAN_VERSION=$(cat /etc/debian_version | head -c 1)
+
+if [ ! -f /etc/debian_version ]
+then
+    echo -e "${RED} This installer only for Debian Linux (9 and 10) ${NORMAL}"
+    exit
+fi
 
 apt install wget curl lsb-release -y
 
+DEBIAN_VERSION=$(cat /etc/debian_version | head -c 1)
 RELEASE=$(lsb_release -cs)
 
 tput sgr0
@@ -47,10 +52,10 @@ dpkg-reconfigure tzdata
 apt update
 apt upgrade -y
 
-apt install software-properties-common dirmngr apt-transport-https ca-certificates -y
-apt install acl bash-completion certbot python-certbot-nginx colordiff fail2ban net-tools gnupg gnupg2 htop make mailutils mc mlocate sudo supervisor time tmux zip -y
-apt install nginx -y
-apt install docker-ce docker-ce-cli containerd.io -y
+apt install acl software-properties-common dirmngr apt-transport-https ca-certificates time tmux zip -y
+apt install bash-completion colordiff fail2ban net-tools gnupg gnupg2 htop make mailutils mc mlocate sudo supervisor -y
+apt install nginx docker-ce docker-ce-cli containerd.io -y
+apt install certbot python-certbot-nginx -y
 
 curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
