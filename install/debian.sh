@@ -31,7 +31,7 @@ else
 fi
 
 apt update -qq
-apt upgrade -qq -y --force-confnew
+apt upgrade -qq -y -o Dpkg::Options::=--force-confnew
 
 apt install gnupg gnupg2 software-properties-common dirmngr apt-transport-https ca-certificates -qq -y
 
