@@ -74,6 +74,21 @@ mcedit .env.local
 ./deploy.sh
 ```
 
+Создать конфиг Nginx:
+```
+./install/nginx.php my-domain.ru
+```
+
+Установить SSL сертификат
+```
+certbot
+```
+
+Подключить телеграм бота к сайту:
+```
+bin/console telegram:bot:webhook:set coop https://my-domain.ru/telegram/
+```
+
 Первичная настройка 
 -------------------
 
