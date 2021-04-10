@@ -30,8 +30,10 @@ else
     exit
 fi
 
+apt remove -y unattended-upgrades
+
 apt update -qq
-apt upgrade -qq -y -o Dpkg::Options::=--force-confnew
+apt upgrade -qq -y -o Dpkg::Options::=--force-confnew -o Dpkg::Options::=--force-confdef --allow-change-held-packages
 
 apt install gnupg gnupg2 software-properties-common dirmngr apt-transport-https ca-certificates -qq -y
 
