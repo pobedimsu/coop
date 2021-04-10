@@ -1,4 +1,5 @@
 #!/bin/bash
+
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 
@@ -19,10 +20,10 @@ fi
 
 RELEASE=$(lsb_release -cs)
 
-if (( $RELEASE == 'stretch' ))
+if [[ "$RELEASE" == "stretch" ]]
 then
     echo -e "${YELLOW} Debian 9 'Stretch' installing... ${NORMAL}"
-elif (( $RELEASE == 'buster' ))
+elif [[ "$RELEASE" == "buster" ]]
 then
     echo -e "${YELLOW} Debian 10 'Buster' installing... ${NORMAL}"
 else
@@ -61,8 +62,8 @@ dpkg-reconfigure --frontend noninteractive tzdata
 
 apt update -qq
 
-apt install acl time tmux zip -qq -y
-apt install bash-completion colordiff fail2ban net-tools htop make mailutils mc mlocate sudo supervisor -qq -y
+apt install acl sudo time tmux zip -qq -y
+apt install bash-completion colordiff fail2ban net-tools htop make mailutils mc mlocate supervisor -qq -y
 apt install nginx docker-ce docker-ce-cli containerd.io -qq -y
 apt install certbot python-certbot-nginx -qq -y
 

@@ -11,7 +11,7 @@ git clone https://github.com/pobedimsu/coop.git
 mv coop/ /var/www/coop
 ```
 
-Или одной стройкой:
+Или одной строкой:
 
 ```
 apt install git -qq -y; git clone https://github.com/pobedimsu/coop.git; ./coop/install/debian.sh; mv coop/ /var/www/coop
