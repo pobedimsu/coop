@@ -17,12 +17,12 @@ then
     exit
 fi
 
-DEBIAN_VERSION=$(cat /etc/debian_version | head -c 1)
+DEBIAN_VERSION=$(cat /etc/debian_version | head -c 2)
 
-if (( $DEBIAN_VERSION == 9 ))
+if (( $DEBIAN_VERSION == '9.' ))
 then
     echo -e "${YELLOW} Debian 9 'Stretch' installing... ${NORMAL}"
-elif (( $DEBIAN_VERSION == 10 ))
+elif (( $DEBIAN_VERSION == '10' ))
 then
     echo -e "${YELLOW} Debian 10 'Buster' installing... ${NORMAL}"
 else
