@@ -44,14 +44,14 @@ RUN docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install -j$(nproc) gmp \
     && docker-php-ext-install -j$(nproc) intl \
     && docker-php-ext-install -j$(nproc) opcache \
-    && docker-php-ext-install -j$(nproc) pcntl \
-    && docker-php-ext-install -j$(nproc) soap \
-    && docker-php-ext-install -j$(nproc) sockets \
+#    && docker-php-ext-install -j$(nproc) pcntl \
+#    && docker-php-ext-install -j$(nproc) soap \
+#    && docker-php-ext-install -j$(nproc) sockets \
     && docker-php-ext-install -j$(nproc) zip
 
 RUN pecl install apcu && docker-php-ext-enable apcu
 #RUN pecl install dbase && docker-php-ext-enable dbase
-RUN pecl install event && docker-php-ext-enable event
+#RUN pecl install event && docker-php-ext-enable event
 RUN pecl install memcached && docker-php-ext-enable memcached
 #RUN pecl install redis && docker-php-ext-enable redis
 RUN pecl install timezonedb && docker-php-ext-enable timezonedb
