@@ -16,7 +16,7 @@ then
 fi
 
 apt update
-apt upgrade -y
+apt upgrade -y --force-yes
 apt install wget curl lsb-release gnupg gnupg2 software-properties-common dirmngr apt-transport-https ca-certificates -y
 
 DEBIAN_VERSION=$(cat /etc/debian_version | head -c 1)
