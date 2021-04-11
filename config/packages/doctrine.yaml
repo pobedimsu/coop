@@ -1,14 +1,6 @@
 doctrine:
     dbal:
-        # configure these for your database server
-#        driver: 'pdo_mysql'
-#        driver: 'pdo_pgsql'
-#        charset: utf8mb4
-#        default_table_options:
-#            charset: utf8mb4
-#            collate: utf8mb4_unicode_ci
-#        unix_socket: /var/run/mysqld/mysqld.sock
-
+        override_url: true
         url: '%env(resolve:DATABASE_URL)%'
     orm:
         auto_generate_proxy_classes: true
@@ -21,3 +13,5 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+        resolve_target_entities:
+            Symfony\Component\Security\Core\User\UserInterface: 'App\Entity\User'

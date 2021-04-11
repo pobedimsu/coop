@@ -12,7 +12,7 @@ framework:
         cookie_samesite: lax
         save_path:       "%kernel.project_dir%/var/sessions/%kernel.environment%"
 
-    esi: true
+    esi: false
     #fragments: true
     php_errors:
         log: true

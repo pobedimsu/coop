@@ -8,7 +8,7 @@ security:
 
     providers:
         database_users:
-            entity: { class: App\Entity\User, property: username }
+            entity: { class: App\Entity\User, property: username_canonical }
 
     firewalls:
         dev:
@@ -58,5 +58,5 @@ security:
         - { path: ^/telegram/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/invite/register/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/reset/password/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login, allow_if: "!is_fully_authenticated()" }
         - { path: ^/, role: ROLE_USER }
