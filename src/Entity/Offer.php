@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Doctrine\StatusTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
+use Smart\CoreBundle\Doctrine\ColumnTrait\IsEnabled;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -35,7 +36,6 @@ class Offer
     use ColumnTrait\Uuid;
     use ColumnTrait\CreatedAt;
     use ColumnTrait\UpdatedAt;
-    use ColumnTrait\IsEnabled;
     use ColumnTrait\TitleNotBlank;
     use ColumnTrait\Description;
     use ColumnTrait\User;
@@ -67,62 +67,48 @@ class Offer
     ];
 
     /**
-     * @var bool
-     *
      * @ORM\Column(type="boolean", nullable=false,  options={"default":1})
      */
-    protected $is_enabled;
+    protected bool $is_enabled;
 
     /**
-     * @var int
-     *
      * @ORM\Column(type="integer", nullable=false)
      */
-    protected $price;
+    protected int $price;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="text", nullable=true)
      * @Assert\Length(max = 160, allowEmptyString=false)
      */
-    protected $short_description;
+    protected ?string $short_description;
 
     /**
      * Еденицы измерения
      *
-     * @var int
-     *
      * @ORM\Column(type="smallint", nullable=false)
      */
-    protected $measure;
+    protected int $measure;
 
     /**
      * Количество
      *
-     * @var int|null
-     *
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $quantity;
+    protected ?int $quantity;
 
     /**
      * Кол-во в резерве
      *
-     * @var int|null
-     *
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $quantity_reserved;
+    protected ?int $quantity_reserved = null;
 
     /**
      * ИД файла в медиалибе
      *
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=36, nullable=true)
      */
-    protected $image_id;
+    protected ?string $image_id = null;
 
     /**
      * @var Category
@@ -130,7 +116,7 @@ class Offer
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $category;
+    protected Category $category;
 
     public function __construct()
     {
@@ -153,7 +139,7 @@ class Offer
     /**
      * @ORM\PreFlush()
      */
-    public function preFlush()
+    public function preFlush(): void
     {
         if ($this->getMeasure() == self::MEASURE_NONE) {
             $this->setQuantity(null);
@@ -276,5 +262,32 @@ class Offer
         $this->category = $category;
 
         return $this;
+    }
+
+    public function setIsEnabled(bool $is_enabled): self
+    {
+        $this->is_enabled = $is_enabled;
+
+        return $this;
+    }
+
+    public function getIsEnabled(): bool
+    {
+        return $this->is_enabled;
+    }
+
+    public function getIsEnabledAsText(): string
+    {
+        return $this->is_enabled ? 'Yes' : 'No';
+    }
+
+    public function isEnabled(): bool
+    {
+        return $this->is_enabled;
+    }
+
+    public function isDisabled(): bool
+    {
+        return !$this->is_enabled;
     }
 }

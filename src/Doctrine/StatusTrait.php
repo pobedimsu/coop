@@ -7,11 +7,9 @@ namespace App\Doctrine;
 trait StatusTrait
 {
     /**
-     * @var int
-     *
      * @ORM\Column(type="smallint", nullable=false, options={"unsigned"=true, "default":0})
      */
-    protected $status;
+    protected int $status;
 
     static public function getStatusFormChoices(): array
     {

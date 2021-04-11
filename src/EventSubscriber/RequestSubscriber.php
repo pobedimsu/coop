@@ -14,9 +14,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class RequestSubscriber implements EventSubscriberInterface
 {
-    protected $router;
-    protected $tokenStorage;
-    protected $tgBotName;
+    protected RouterInterface $router;
+    protected TokenStorageInterface $tokenStorage;
+    protected ?string $tgBotName;
 
     public function __construct(?string $tgBotName, RouterInterface $router, TokenStorageInterface $tokenStorage)
     {

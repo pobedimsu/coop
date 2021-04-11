@@ -6,38 +6,23 @@ namespace App\Form\Tree;
 
 use App\Entity\Category;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Bridge\Doctrine\Form\ChoiceList\EntityLoaderInterface;
 
 class CategoryLoader implements EntityLoaderInterface
 {
     /** @var \Doctrine\ORM\EntityRepository */
-    private $repo;
+    private ObjectRepository $repo;
+    protected array $result;
+    protected int $level;
+    protected bool $only_active = false;
 
-    /** @var array */
-    protected $result;
-
-    /** @var int */
-    protected $level;
-
-    /** @var bool */
-    protected $only_active = false;
-
-    /**
-     * @param ObjectManager $em
-     * @param null $manager
-     * @param string|null $class
-     */
     public function __construct(ObjectManager $em, $manager = null, $class = null)
     {
         $this->repo = $em->getRepository($class);
     }
 
-    /**
-     * @param bool|null $only_active
-     *
-     * @return $this
-     */
-    public function setOnlyActive($only_active)
+    public function setOnlyActive(bool $only_active): self
     {
         $this->only_active = $only_active;
 
@@ -47,9 +32,9 @@ class CategoryLoader implements EntityLoaderInterface
     /**
      * Returns an array of entities that are valid choices in the corresponding choice list.
      *
-     * @return array The entities.
+     * @return Category[]
      */
-    public function getEntities()
+    public function getEntities(): array
     {
         $this->result = [];
         $this->level = 0;
@@ -59,10 +44,7 @@ class CategoryLoader implements EntityLoaderInterface
         return $this->result;
     }
 
-    /**
-     * @param Category|null $parent_folder
-     */
-    protected function addChild($parent_folder = null)
+    protected function addChild(?Category $parent_folder = null): void
     {
         $level = $this->level;
         $ident = '';

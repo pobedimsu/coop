@@ -16,12 +16,12 @@ use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
-    protected $em;
-    protected $currency;
-    protected $billService;
-    protected $tgBotName;
+    protected EntityManagerInterface $em;
+    protected string $currency;
+    protected BillService $billService;
+    protected string $tgBotName;
 
-    public function __construct(BillService $billService, EntityManagerInterface $em, $tgBotName, $currency)
+    public function __construct(BillService $billService, EntityManagerInterface $em, string $tgBotName, string $currency)
     {
         $this->em          = $em;
         $this->currency    = $currency;

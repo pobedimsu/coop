@@ -27,7 +27,7 @@ class DealEvent extends Event
     // Подтверждение сделки
     const CONFIRMED = 'app.deal_confirmed';
 
-    protected $deal;
+    protected Deal $deal;
 
     public function __construct(Deal $deal)
     {

@@ -57,56 +57,44 @@ class Deal
     ];
 
     /**
-     * @var int
-     *
      * @ORM\Column(type="smallint", nullable=false, options={"default":1})
      */
-    protected $type;
+    protected int $type;
 
     /**
      * Стоимость предложения на момент создания сделки.
      *
-     * @var int
-     *
      * @ORM\Column(type="integer", nullable=false, options={"unsigned"=true})
      */
-    protected $cost;
+    protected int $cost;
 
     /**
      * Фактическая стоимость - до которой договорились участники.
      *
-     * @var int
-     *
      * @ORM\Column(type="integer", nullable=false, options={"unsigned"=true})
      */
-    protected $actual_cost;
+    protected int $actual_cost;
 
     /**
      * Общая стоимость - кол-во помноженное на фактическую стоимость.
      *
-     * @var int
-     *
      * @ORM\Column(type="integer", nullable=false, options={"unsigned"=true})
      */
-    protected $amount_cost;
+    protected int $amount_cost;
 
     /**
      * Кол-во
      *
-     * @var int
-     *
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $quantity;
+    protected ?int $quantity;
 
     /**
      * Дата просмотра
      *
-     * @var \DateTimeInterface
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    protected $viewed_at;
+    protected ?\DateTimeInterface $viewed_at;
 
     /**
      * @var Offer
@@ -119,29 +107,25 @@ class Deal
     /**
      * Ппродавец
      *
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $seller;
+    protected User $seller;
 
     /**
      * Покупатель
      *
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $buyer;
+    protected User $buyer;
 
     /**
-     * @var Transaction[]|ArrayCollection
+     * @var Transaction[]|Collection
      *
      * @ORM\OneToMany(targetEntity="Transaction", mappedBy="deal", fetch="EXTRA_LAZY")
      */
-    protected $transactions;
+    protected Collection $transactions;
 
     public function __construct()
     {
@@ -166,7 +150,7 @@ class Deal
     /**
      * @ORM\PreUpdate()
      */
-    public function onUpdated()
+    public function onUpdated(): void
     {
         $this->updated_at = new \DateTime();
     }
@@ -258,15 +242,13 @@ class Deal
     /**
      * @return Transaction[]|Collection
      */
-    public function getTransactions()
+    public function getTransactions(): Collection
     {
         return $this->transactions;
     }
 
     /**
      * @param Transaction[]|Collection $transactions
-     *
-     * @return $this
      */
     public function setTransactions($transactions): self
     {
@@ -275,19 +257,11 @@ class Deal
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getSeller(): User
     {
         return $this->seller;
     }
 
-    /**
-     * @param User $seller
-     *
-     * @return $this
-     */
     public function setSeller(User $seller): self
     {
         $this->seller = $seller;
@@ -295,19 +269,11 @@ class Deal
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getType(): int
     {
         return $this->type;
     }
 
-    /**
-     * @param int $type
-     *
-     * @return $this
-     */
     public function setType(int $type): self
     {
         $this->type = $type;

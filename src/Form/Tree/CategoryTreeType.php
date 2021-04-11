@@ -2,7 +2,6 @@
 
 namespace App\Form\Tree;
 
-
 use App\Entity\Category;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\Form\ChoiceList\DoctrineChoiceLoader;

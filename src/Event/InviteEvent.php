@@ -12,7 +12,7 @@ class InviteEvent extends Event
     // Регистрация по приглашению
     const REGISTER  = 'app.invite_register';
 
-    protected $invite;
+    protected Invite $invite;
 
     public function __construct(Invite $invite)
     {

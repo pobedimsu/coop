@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class RequestVoter implements VoterInterface
 {
-    protected $requestStack;
+    protected RequestStack $requestStack;
 
     public function __construct(RequestStack $requestStack)
     {

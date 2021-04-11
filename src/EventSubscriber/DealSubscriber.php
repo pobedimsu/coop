@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class DealSubscriber implements EventSubscriberInterface
 {
-    protected $telegram;
+    protected TelegramService $telegram;
 
     public function __construct(TelegramService $telegram)
     {

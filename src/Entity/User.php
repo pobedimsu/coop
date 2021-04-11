@@ -32,7 +32,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @Gedmo\Tree(type="closure")
  * @Gedmo\TreeClosure(class="UserClosure")
  *
- * @UniqueEntity(fields="username", message="Username is already exists")
+ * @UniqueEntity(
+ *     fields="username_canonical",
+ *     errorPath="username",
+ *     message="Username is already exists"
+ * )
  */
 class User extends UserModel
 {
@@ -50,56 +54,43 @@ class User extends UserModel
     /**
      * This parameter is optional for the closure strategy
      *
-     * @var int
-     *
      * @ORM\Column(type="integer", nullable=false, options={"default":1})
      * @Gedmo\TreeLevel
      */
-    protected $level;
+    protected int $level;
 
     /**
      * Пол
      *
-     * @var int
-     *
      * @ORM\Column(type="smallint", nullable=false, options={"unsigned"=true, "default":0})
      * @Assert\NotNull(message="This value is not valid.")
      */
-    protected $sex;
+    protected int $sex;
 
     /**
      * Курение
      *
-     * @var bool|null
-     *
      * @ORM\Column(type="boolean", nullable=true)
      * Assert\NotNull(message="This value is not valid.")
      */
-    protected $is_smoking;
+    protected ?bool $is_smoking;
 
     /**
      * Алкаголь
      *
-     * @var bool|null
-     *
      * @ORM\Column(type="boolean", nullable=true)
      * Assert\NotNull(message="This value is not valid.")
      */
-    protected $is_alcohol;
+    protected ?bool $is_alcohol;
 
     /**
      * Потребление мяса
      *
-     * @var bool|null
-     *
      * @ORM\Column(type="boolean", nullable=true)
      * Assert\NotNull(message="This value is not valid.")
      */
-    protected $is_meat_consumption;
+    protected ?bool $is_meat_consumption;
 
-    /**
-     * User constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -113,25 +104,16 @@ class User extends UserModel
 
     // Start SEX block of setters and getters
 
-    /**
-     * @return array
-     */
     static public function getSexFormChoices(): array
     {
         return array_flip(self::$sex_values);
     }
 
-    /**
-     * @return array
-     */
     static public function getSexValues(): array
     {
         return self::$sex_values;
     }
 
-    /**
-     * @return bool
-     */
     static public function isSexExist($sex): bool
     {
         if (isset(self::$sex_values[$sex])) {
@@ -141,9 +123,6 @@ class User extends UserModel
         return false;
     }
 
-    /**
-     * @return string
-     */
     public function getSexAsText(): string
     {
         if (isset(self::$sex_values[$this->sex])) {
@@ -153,19 +132,11 @@ class User extends UserModel
         return 'N/A';
     }
 
-    /**
-     * @return int
-     */
     public function getSex(): int
     {
         return $this->sex;
     }
 
-    /**
-     * @param int $sex
-     *
-     * @return $this
-     */
     public function setSex(?int $sex): self
     {
         $this->sex = $sex;
@@ -175,19 +146,11 @@ class User extends UserModel
 
     // __End SEX block of setters and getters
 
-    /**
-     * @return bool|null
-     */
     public function getIsSmoking(): ?bool
     {
         return $this->is_smoking;
     }
 
-    /**
-     * @param bool|null $is_smoking
-     *
-     * @return $this
-     */
     public function setIsSmoking(?bool $is_smoking): self
     {
         $this->is_smoking = $is_smoking;
@@ -195,19 +158,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return bool|null
-     */
     public function getIsAlcohol(): ?bool
     {
         return $this->is_alcohol;
     }
 
-    /**
-     * @param bool|null $is_alcohol
-     *
-     * @return $this
-     */
     public function setIsAlcohol(?bool $is_alcohol): self
     {
         $this->is_alcohol = $is_alcohol;
@@ -215,19 +170,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return bool|null
-     */
     public function getIsMeatConsumption(): ?bool
     {
         return $this->is_meat_consumption;
     }
 
-    /**
-     * @param bool|null $is_meat_consumption
-     *
-     * @return $this
-     */
     public function setIsMeatConsumption(?bool $is_meat_consumption): self
     {
         $this->is_meat_consumption = $is_meat_consumption;
@@ -235,19 +182,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getLevel(): int
     {
         return $this->level;
     }
 
-    /**
-     * @param int $level
-     *
-     * @return $this
-     */
     public function setLevel(int $level): self
     {
         $this->level = $level;

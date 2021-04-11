@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class DateTimezoneSubscriber implements EventSubscriberInterface
 {
-    protected $timezone;
+    protected ?string $timezone;
 
     public function __construct(?string $dateDefaultTimezone)
     {

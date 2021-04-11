@@ -10,19 +10,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ImageFormType extends AbstractType
 {
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => null,
         ]);
     }
 
-    public function getParent()
+    public function getParent(): string
     {
         return FileType::class;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'app_media_image';
     }

@@ -27,45 +27,35 @@ class Transaction
     /**
      * От кого переходит сумма (покупатель)
      *
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $from_user;
+    protected User $from_user;
 
     /**
      * Кому переходит сумма (продавец)
      *
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $to_user;
+    protected User $to_user;
 
     /**
-     * @var int
-     *
      * @ORM\Column(type="integer", nullable=false, options={"unsigned"=true, "default":0})
      */
-    protected $sum;
+    protected int $sum;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=64, nullable=true)
      */
-    protected $hash;
+    protected ?string $hash;
 
     /**
      * Сделка на основании которой произведена транзакция
      *
-     * @var Deal
-     *
      * @ORM\ManyToOne(targetEntity="Deal", inversedBy="transactions")
      */
-    protected $deal;
+    protected Deal $deal;
 
     public function __construct()
     {

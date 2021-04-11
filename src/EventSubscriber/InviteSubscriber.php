@@ -13,8 +13,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class InviteSubscriber implements EventSubscriberInterface
 {
-    protected $em;
-    protected $telegram;
+    protected EntityManagerInterface $em;
+    protected TelegramService $telegram;
 
     public function __construct(TelegramService $telegram, EntityManagerInterface $em)
     {

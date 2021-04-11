@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,47 +33,42 @@ class Category
     use ColumnTrait\Position;
 
     /**
-     * @var string
-     *
      * @ORM\Column(type="string", length=190, unique=true, nullable=true)
      * @Gedmo\Slug(fields={"title"})
      * Assert\NotBlank()
      */
-    protected $name;
+    protected ?string $name;
 
     /**
      * This parameter is optional for the closure strategy
      *
-     * @var int
-     *
      * @ORM\Column(name="level", type="integer", nullable=false, options={"default":1})
      * @Gedmo\TreeLevel
      */
-    protected $level;
+    protected int $level;
 
     /**
-     * @var Category|null
-     *
      * @Gedmo\TreeParent
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
      */
-    protected $parent;
+    protected ?Category $parent;
 
     /**
      * @var Category[]|Collection
      *
      * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
      */
-    protected $children;
+    protected Collection $children;
 
     /**
      * Для отображения в формах. Не маппится в БД.
      */
-    protected $form_title = '';
+    protected string $form_title = '';
 
     public function __construct()
     {
+        $this->children   = new ArrayCollection();
         $this->created_at = new \DateTime();
         $this->level      = 1;
         $this->position   = 0;
@@ -110,17 +106,15 @@ class Category
     /**
      * @return Category[]|Collection
      */
-    public function getChildren()
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
     /**
      * @param Category[]|Collection $children
-     *
-     * @return $this
      */
-    public function setChildren($children): self
+    public function setChildren(Collection $children): self
     {
         $this->children = $children;
 

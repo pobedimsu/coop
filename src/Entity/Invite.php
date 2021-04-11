@@ -27,11 +27,9 @@ class Invite
     /**
      * Использована ли ссылка. Если по приглашению зарегистрировался участник, то ставится true.
      *
-     * @var bool
-     *
      * @ORM\Column(type="boolean", nullable=false, options={"default":0})
      */
-    protected $is_used;
+    protected bool $is_used;
 
     public function __construct(User $user = null)
     {

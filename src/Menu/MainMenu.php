@@ -11,8 +11,8 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class MainMenu
 {
-    private $factory;
-    private $kernel;
+    private FactoryInterface $factory;
+    private KernelInterface $kernel;
 
     public function __construct(FactoryInterface $factory, KernelInterface $kernel)
     {

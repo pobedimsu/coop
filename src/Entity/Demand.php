@@ -29,40 +29,25 @@ class Demand
     /**
      * ИД файла в медиалибе
      *
-     * @var int|null
-     *
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $image_id;
+    protected ?int $image_id = null;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="User")
      */
-    protected $user;
+    protected User $user;
 
-    /**
-     * Demand constructor.
-     */
     public function __construct()
     {
         $this->created_at = new \DateTime();
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
     public function setUser(User $user): self
     {
         $this->user = $user;
@@ -70,19 +55,11 @@ class Demand
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getImageId(): ?int
     {
         return $this->image_id;
     }
 
-    /**
-     * @param int|null $image_id
-     *
-     * @return $this
-     */
     public function setImageId(?int $image_id): self
     {
         $this->image_id = $image_id;

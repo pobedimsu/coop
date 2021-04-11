@@ -6,11 +6,12 @@ namespace App\Service;
 
 use App\Entity\User;
 use Borsaco\TelegramBotApiBundle\Service\Bot;
+use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
 class TelegramService
 {
-    protected $tg;
+    protected Api $tg;
 
     public function __construct(Bot $bot)
     {

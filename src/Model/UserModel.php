@@ -24,142 +24,113 @@ class UserModel implements UserInterface
     const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=64, unique=true, nullable=true)
      */
-    protected $api_token;
+    protected ?string $api_token;
 
     /**
-     * @var string
-     *
      * @ORM\Column(type="string", length=40, unique=true)
      * @Assert\NotNull(message="This value is not valid.")
      */
-    protected $username;
+    protected string $username;
 
     /**
-     * @var string
-     *
+     * @ORM\Column(type="string", length=40, unique=true)
+     */
+    protected string $username_canonical;
+
+    /**
      * @ORM\Column(type="string", length=190)
      * @Assert\Length(min = 6, minMessage = "Password length must be at least {{ limit }} characters long", allowEmptyString=false)
      */
-    protected $password;
+    protected string $password;
 
     /**
-     * @var string|null
-     *
      * Plain password. Used for model validation. Must not be persisted.
      */
-    protected $plain_password;
+    protected ?string $plain_password;
 
     /**
-     * @var array
-     *
      * @ORM\Column(type="array")
      */
-    protected $roles;
+    protected array $roles;
 
     /**
      * Имя
      *
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=30)
      * @Assert\NotNull(message="This value is not valid.")
      */
-    protected $firstname;
+    protected ?string $firstname;
 
     /**
      * Фамилия
      *
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=30)
      * @Assert\NotNull(message="This value is not valid.")
      */
-    protected $lastname;
+    protected ?string $lastname;
 
     /**
-     * @var \DateTime|null
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    protected $last_login;
+    protected ?\DateTime $last_login;
 
     /**
-     * @var float|null
-     *
      * @ORM\Column(type="decimal", precision=10, scale=8, nullable=true)
      */
-    protected $latitude;
+    protected ?float $latitude;
 
     /**
-     * @var float|null
-     *
      * @ORM\Column(type="decimal", precision=11, scale=8, nullable=true)
      */
-    protected $longitude;
+    protected ?float $longitude;
 
     /**
-     * @var integer|null
-     *
      * @ORM\Column(type="integer", nullable=true, unique=true)
      */
-    protected $telegram_user_id;
+    protected ?int $telegram_user_id;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    protected $telegram_username;
+    protected ?string $telegram_username;
 
     /**
      * Хеш для восстановления пароля
      *
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    protected $confirmation_token;
+    protected ?string $confirmation_token;
 
     /**
      * Код для подтверждения сброса пароля
      *
-     * @var int|null
-     *
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $reset_password_code;
+    protected ?int $reset_password_code;
 
     /**
      * Дата создания запроса на восстановление пароля
      *
-     * @var \DateTimeInterface|null
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    protected $password_requested_at;
+    protected ?\DateTimeInterface $password_requested_at;
 
     /**
      * Пригласивший пользователь
      *
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="invited_users")
      * @Gedmo\TreeParent
      */
-    protected $invited_by_user;
+    protected ?User $invited_by_user;
 
     /**
      * Приглашение
      *
-     * @var Invite|null
-     *
      * @ORM\OneToOne(targetEntity="Invite", cascade={"persist"})
      */
-    protected $invite;
+    protected ?Invite $invite;
 
     /**
      * Приглашенные пользователи
@@ -169,7 +140,7 @@ class UserModel implements UserInterface
      * @ORM\OneToMany(targetEntity="User", mappedBy="invited_by_user", fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"created_at" = "DESC"})
      */
-    protected $invited_users;
+    protected Collection $invited_users;
 
     public function __construct()
     {
@@ -190,13 +161,27 @@ class UserModel implements UserInterface
         return $this->getFirstname().' '.$this->getLastname();
     }
 
+    static public function canonicalize(string $string): ?string
+    {
+        if (null === $string) {
+            return null;
+        }
+
+        $encoding = mb_detect_encoding($string);
+        $result = $encoding
+            ? mb_convert_case($string, MB_CASE_LOWER, $encoding)
+            : mb_convert_case($string, MB_CASE_LOWER);
+
+        return $result;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function serialize(): string
     {
         // add $this->salt too if you don't use Bcrypt or Argon2i
-        return serialize([$this->id, $this->username, $this->password]);
+        return serialize([$this->id, $this->is_enabled, $this->username_canonical, $this->password]);
     }
 
     /**
@@ -205,7 +190,7 @@ class UserModel implements UserInterface
     public function unserialize($serialized): void
     {
         // add $this->salt too if you don't use Bcrypt or Argon2i
-        [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
+        [$this->id, $this->is_enabled, $this->username_canonical, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
     }
 
     /**
@@ -241,6 +226,19 @@ class UserModel implements UserInterface
     public function setUsername(string $username): self
     {
         $this->username = $username;
+        $this->username_canonical = self::canonicalize($this->username);
+
+        return $this;
+    }
+
+    public function getUsernameCanonical(): string
+    {
+        return $this->username_canonical;
+    }
+
+    public function setUsernameCanonical(string $username_canonical): self
+    {
+        $this->username_canonical = $username_canonical;
 
         return $this;
     }
@@ -260,7 +258,7 @@ class UserModel implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function addRole($role)
+    public function addRole($role): self
     {
         $role = strtoupper($role);
         if ($role === static::ROLE_DEFAULT) {
@@ -277,7 +275,7 @@ class UserModel implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function removeRole($role)
+    public function removeRole($role): self
     {
         if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
             unset($this->roles[$key]);
@@ -290,7 +288,7 @@ class UserModel implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function hasRole($role)
+    public function hasRole($role): bool
     {
         return in_array(strtoupper($role), $this->getRoles(), true);
     }
@@ -480,19 +478,11 @@ class UserModel implements UserInterface
         return $this;
     }
 
-    /**
-     * @return \DateTimeInterface|null
-     */
     public function getPasswordRequestedAt(): ?\DateTimeInterface
     {
         return $this->password_requested_at;
     }
 
-    /**
-     * @param \DateTimeInterface|null $password_requested_at
-     *
-     * @return $this
-     */
     public function setPasswordRequestedAt(?\DateTimeInterface $password_requested_at): self
     {
         $this->password_requested_at = $password_requested_at;
@@ -500,19 +490,11 @@ class UserModel implements UserInterface
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getResetPasswordCode(): ?int
     {
         return $this->reset_password_code;
     }
 
-    /**
-     * @param int|null $reset_password_code
-     *
-     * @return $this
-     */
     public function setResetPasswordCode(?int $reset_password_code): self
     {
         $this->reset_password_code = $reset_password_code;
@@ -520,19 +502,11 @@ class UserModel implements UserInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPlainPassword(): ?string
     {
         return $this->plain_password;
     }
 
-    /**
-     * @param string|null $plain_password
-     *
-     * @return $this
-     */
     public function setPlainPassword(?string $plain_password): self
     {
         $this->password = $plain_password;

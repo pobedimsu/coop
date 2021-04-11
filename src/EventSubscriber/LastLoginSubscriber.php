@@ -12,7 +12,7 @@ use Symfony\Component\Security\Http\SecurityEvents;
 
 class LastLoginSubscriber implements EventSubscriberInterface
 {
-    protected $em;
+    protected EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $em)
     {

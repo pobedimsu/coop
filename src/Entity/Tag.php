@@ -21,11 +21,9 @@ class Tag
     use ColumnTrait\User;
 
     /**
-     * @var string
-     *
      * @ORM\Column(type="string", unique=true)
      */
-    protected $title;
+    protected string $title;
 
     public function __construct()
     {
@@ -37,19 +35,11 @@ class Tag
         return $this->title;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     *
-     * @return $this
-     */
     public function setTitle(string $title): self
     {
         $this->title = $title;
