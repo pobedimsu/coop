@@ -83,12 +83,12 @@ class TexterManager
     public function persist(TextModel $text)
     {
         $this->em->persist($text);
-        $this->em->flush($text);
+        $this->em->flush();
 
         $textName = $text->getName();
         if (null === $textName or is_numeric($textName)) {
             $text->setName($text->getId());
-            $this->em->flush($text);
+            $this->em->flush();
         }
 
         return $this;
