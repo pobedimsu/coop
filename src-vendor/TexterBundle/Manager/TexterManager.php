@@ -2,6 +2,7 @@
 
 namespace SmartCore\Bundle\TexterBundle\Manager;
 
+use Doctrine\ORM\EntityManagerInterface;
 use SmartCore\Bundle\TexterBundle\Entity\Text;
 use SmartCore\Bundle\TexterBundle\Model\TextModel;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -11,7 +12,7 @@ class TexterManager
 {
     use ContainerAwareTrait;
 
-    /** @var \Doctrine\ORM\EntityManager $em */
+    /** @var EntityManagerInterface $em */
     protected $em;
 
     /** @var \SmartCore\Bundle\TexterBundle\Repository\TextRepository */
@@ -20,16 +21,9 @@ class TexterManager
     /** @var integer */
     protected $itemsPerPage;
 
-    /**
-     * TexterManager constructor.
-     *
-     * @param ContainerInterface $container
-     * @param int                $itemsPerPage
-     */
-    public function __construct(ContainerInterface $container, $itemsPerPage = 10)
+    public function __construct(EntityManagerInterface $em, $itemsPerPage = 10)
     {
-        $this->container = $container;
-        $this->em        = $container->get('doctrine.orm.entity_manager');
+        $this->em        = $em;
 
         $this->textersRepo = $this->em->getRepository('SmartTexterBundle:Text');
         $this->setItemsCountPerPage($itemsPerPage);

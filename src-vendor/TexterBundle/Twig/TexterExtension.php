@@ -3,7 +3,7 @@
 namespace SmartCore\Bundle\TexterBundle\Twig;
 
 use Doctrine\Common\Cache\Cache;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use SmartCore\Bundle\TexterBundle\Entity\Text;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -13,13 +13,13 @@ class TexterExtension extends AbstractExtension
     /** @var Cache */
 //    protected $cache;
 
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     protected $em;
 
     /**
      * @param EntityManager $em
      */
-    public function __construct(EntityManager $em, ?Cache $cache = null)
+    public function __construct(EntityManagerInterface $em, ?Cache $cache = null)
     {
         $this->cache = $cache;
         $this->em    = $em;

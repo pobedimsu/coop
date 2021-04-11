@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SmartCore\Bundle\MediaBundle\Service;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Liip\ImagineBundle\Model\FileBinary;
 use SmartCore\Bundle\MediaBundle\Entity\Category;
@@ -17,6 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class MediaCollection extends AbstractCollectionService
@@ -74,7 +74,7 @@ class MediaCollection extends AbstractCollectionService
         if ($this->getUploadFilter()) {
             $imagineFilterManager = $this->container->get('liip_imagine.filter.manager');
 
-            if ($file->getMimeType() == 'image/jpeg' or $file->getMimeType() == 'image/png' or $file->getMimeType() == 'image/gif') {
+            if ($file->getMimeType() === 'image/jpeg' or $file->getMimeType() === 'image/png' or $file->getMimeType() === 'image/gif') {
                 // dummy
             } else {
                 echo 'Unsupported image format';
@@ -82,10 +82,11 @@ class MediaCollection extends AbstractCollectionService
                 return null;
             }
 
-            $fileBinary = new FileBinary($file->getPathname(), $file->getMimeType(), ExtensionGuesser::getInstance()->guess($file->getMimeType()));
+            //$fileBinary = new FileBinary($file->getPathname(), $file->getMimeType(), ExtensionGuesser::getInstance()->guess($file->getMimeType()));
+            $fileBinary = new FileBinary($file->getPathname(), $file->getMimeType());
 
             $runtimeConfig = [];
-            if ($file->getMimeType() == 'image/png') {
+            if ($file->getMimeType() === 'image/png') {
                 $runtimeConfig['format'] = 'png';
             }
 

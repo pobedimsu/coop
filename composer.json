@@ -33,6 +33,7 @@
         "symfony/form": "5.2.*",
         "symfony/framework-bundle": "5.2.*",
         "symfony/maker-bundle": "^1.12",
+        "symfony/mime": "5.2.*",
         "symfony/profiler-pack": "^1.0",
         "symfony/proxy-manager-bridge": "5.2.*",
         "symfony/security-bundle": "5.2.*",
@@ -86,7 +87,7 @@
         "auto-scripts": {
             "sh bin/clear_cache": "script",
             "rm -rf public/bundles": "script",
-            "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
+            "bin/local-console assets:install --symlink --relative %PUBLIC_DIR%": "script",
             "sh bin/init_dirs": "script"
         },
         "post-install-cmd": [

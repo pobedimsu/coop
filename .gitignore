@@ -1,13 +1,16 @@
-docker-compose.override.yml
+/docker-compose.local.yml
 /config/_local.*
+/node_modules/
 /usr/
 
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
 /.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
 /public/components/
 /public/bundles/
+/src/.preload.php
 /var/
 /vendor/
 ###< symfony/framework-bundle ###

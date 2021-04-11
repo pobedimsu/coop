@@ -94,6 +94,14 @@ services:
         resource: '../src-vendor/JointPurchaseBundle/Controller'
         tags: ['controller.service_arguments']
 
+    SmartCore\Bundle\TexterBundle\:
+        resource: '../src-vendor/TexterBundle/*'
+        exclude: '../src-vendor/TexterBundle/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    SmartCore\Bundle\TexterBundle\Controller\:
+        resource: '../src-vendor/TexterBundle/Controller'
+        tags: ['controller.service_arguments']
+
 # @todo отрефакторить
 doctrine:
     orm:

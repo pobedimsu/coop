@@ -81,6 +81,7 @@ deploy:
 		make -s composer-install; \
 		make -s up; \
 		bin/console doctrine:migrations:migrate --no-interaction; \
+		bin/console app:init; \
 	fi
 
 soft-deploy:
@@ -91,6 +92,7 @@ soft-deploy:
 	else \
 		make -s composer-install; \
 		bin/console doctrine:migrations:migrate --no-interaction; \
+		bin/console app:init; \
 	fi
 
 init-configs:

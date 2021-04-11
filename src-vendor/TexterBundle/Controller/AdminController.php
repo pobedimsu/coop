@@ -2,27 +2,26 @@
 
 namespace SmartCore\Bundle\TexterBundle\Controller;
 
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\Pagerfanta;
 use SmartCore\Bundle\TexterBundle\Form\Type\TexterCreateFormType;
 use SmartCore\Bundle\TexterBundle\Form\Type\TexterEditFormType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use SmartCore\Bundle\TexterBundle\Manager\TexterManager;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminController extends Controller
+class AdminController extends AbstractController
 {
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function indexAction(Request $request)
+    public function indexAction(TexterManager $texterManager, Request $request)
     {
-        $texterManager = $this->get('smart_core.texter.manager');
-
-        $pagerfanta = new Pagerfanta(new DoctrineORMAdapter($texterManager->getFindAllQuery()));
+        $pagerfanta = new Pagerfanta(new QueryAdapter($texterManager->getFindAllQuery()));
         $pagerfanta->setMaxPerPage($texterManager->getItemsCountPerPage());
 
         try {
@@ -41,9 +40,9 @@ class AdminController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-    public function createAction(Request $request)
+    public function createAction(TexterManager $texterManager, Request $request)
     {
-        $text = $this->get('smart_core.texter.manager')->factoryText();
+        $text = $texterManager->factoryText();
 
         $form = $this->createForm(TexterCreateFormType::class, $text);
         if ($request->isMethod('POST')) {
@@ -54,7 +53,7 @@ class AdminController extends Controller
             }
 
             if ($form->isValid()) {
-                $this->get('smart_core.texter.manager')->persist($form->getData());
+                $texterManager->persist($form->getData());
 
                 return $this->redirectToRoute('smart_texter_admin_index');
             }
@@ -72,9 +71,9 @@ class AdminController extends Controller
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function editAction(Request $request, $id)
+    public function editAction(TexterManager $texterManager, Request $request, $id)
     {
-        $text = $this->get('smart_core.texter.manager')->get($id);
+        $text = $texterManager->get($id);
 
         if (empty($text)) {
             throw $this->createNotFoundException();
@@ -89,7 +88,7 @@ class AdminController extends Controller
             }
 
             if ($form->isValid()) {
-                $this->get('smart_core.texter.manager')->persist($form->getData());
+                $texterManager->persist($form->getData());
 
                 return $this->redirectToRoute('smart_texter_admin_index');
             }

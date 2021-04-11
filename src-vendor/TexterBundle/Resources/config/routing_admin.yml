@@ -1,6 +1,7 @@
 smart_texter_admin_index:
     path: /
-    defaults: { _controller: SmartTexterBundle:Admin:index }
+    defaults:
+        _controller: SmartCore\Bundle\TexterBundle\Controller\AdminController::indexAction
 
 #smart_texter_admin_create:
 #    path: /create/
@@ -8,6 +9,7 @@ smart_texter_admin_index:
 
 smart_texter_admin_edit:
     path: /{id}/
-    defaults: { _controller: SmartTexterBundle:Admin:edit }
+    defaults:
+        _controller: SmartCore\Bundle\TexterBundle\Controller\AdminController::editAction
     requirements:
         id: \d+
