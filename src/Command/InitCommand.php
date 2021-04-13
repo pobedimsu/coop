@@ -18,8 +18,8 @@ class InitCommand extends Command
 {
     protected static $defaultName = 'app:init';
 
-    private $io;
-    private $em;
+    private SymfonyStyle $io;
+    private EntityManagerInterface $em;
 
     protected function configure()
     {
@@ -40,7 +40,7 @@ class InitCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $isUpdated = false;
         $categories = $this->em->getRepository(Category::class)->findBy([]);
@@ -87,6 +87,6 @@ class InitCommand extends Command
             $this->io->writeln('Инициализация не требуется');
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 }

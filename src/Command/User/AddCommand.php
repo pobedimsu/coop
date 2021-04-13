@@ -101,7 +101,7 @@ class AddCommand extends Command
         }
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $stopwatch = new Stopwatch();
         $stopwatch->start('add-user-command');
@@ -137,7 +137,7 @@ class AddCommand extends Command
             $this->io->comment(sprintf('New user database id: %d / Elapsed time: %.2f ms / Consumed memory: %.2f MB', $user->getId(), $event->getDuration(), $event->getMemory() / (1024 ** 2)));
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 
     private function validateUserData($username, $plainPassword): void

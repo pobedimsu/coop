@@ -51,23 +51,23 @@ class EnableCommand extends Command
         }
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $username = $input->getArgument('username');
 
         /** @var User $user */
         $user = $this->em->getRepository(User::class)->findOneByUsername($username);
 
-        if (empty($user)) {
+        if (!$user) {
             $this->io->warning('User not found');
 
-            return 0;
+            return self::SUCCESS;
         }
 
         if ($user->isEnabled()) {
             $this->io->warning(sprintf('User "%s" is already enabled.', $username));
 
-            return 0;
+            return self::SUCCESS;
         }
 
         $user->setIsEnabled(true);
@@ -76,6 +76,6 @@ class EnableCommand extends Command
 
         $this->io->success(sprintf('User "%s" has been enabled.', $username));
 
-        return 0;
+        return self::SUCCESS;
     }
 }
