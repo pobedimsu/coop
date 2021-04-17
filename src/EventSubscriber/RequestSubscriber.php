@@ -46,6 +46,10 @@ class RequestSubscriber implements EventSubscriberInterface
             return;
         }
 
+        if ($user->hasRole('ROLE_SUPER_ADMIN')) {
+            return;
+        }
+
         // Если указано имя чат-бота, то необходимо привязать тг аккаунт
         if ($this->tgBotName and empty($user->getTelegramUsername())) {
             $requestRoute = $event->getRequest()->get('_route');
