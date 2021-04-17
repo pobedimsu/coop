@@ -67,7 +67,7 @@ class ChangePasswordCommand extends Command
         }
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $username = $input->getArgument('username');
         $plainPassword = $input->getArgument('password');
@@ -75,10 +75,10 @@ class ChangePasswordCommand extends Command
         /** @var User $user */
         $user = $this->em->getRepository(User::class)->findOneByUsername($username);
 
-        if (empty($user)) {
+        if (!$user) {
             $this->io->warning('User not found');
 
-            return 0;
+            return self::SUCCESS;
         }
 
         $this->validator->validatePassword($plainPassword);
@@ -91,6 +91,6 @@ class ChangePasswordCommand extends Command
 
         $this->io->success(sprintf('Password for user "%s" was successfully updated.', $username));
 
-        return 0;
+        return self::SUCCESS;
     }
 }

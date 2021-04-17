@@ -39,7 +39,7 @@ class ListCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $users = $this->em->getRepository(User::class)->findBy([], ['created_at' => 'ASC']);
 
@@ -75,6 +75,6 @@ class ListCommand extends Command
 
         $this->io->writeln("Всего: ".count($users));
 
-        return 0;
+        return self::SUCCESS;
     }
 }

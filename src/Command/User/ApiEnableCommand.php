@@ -51,7 +51,7 @@ class ApiEnableCommand extends Command
         }
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $username = $input->getArgument('username');
 
@@ -76,7 +76,7 @@ class ApiEnableCommand extends Command
             $this->io->writeln("<error>Пользователь не найден</error>");
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 
     protected function gneratetToken(int $length): string
