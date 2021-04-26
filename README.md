@@ -66,7 +66,7 @@ mcedit .env.local
 
 Создать конфиг Nginx:
 ```
-./install/nginx.php my-domain.ru
+./install/nginx-config <my-domain.ru>
 ```
 
 Установить SSL сертификат

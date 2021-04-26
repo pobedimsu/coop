@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 
-use Symfony\Component\Console\Input\ArgvInput;
+require_once dirname(__DIR__).'/vendor/symfony/dotenv/Dotenv.php';
+
 use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\ErrorHandler\Debug;
 
 if (!in_array(PHP_SAPI, ['cli', 'phpdbg', 'embed'], true)) {
     echo 'Warning: The console should be invoked via the CLI version of PHP, not the '.PHP_SAPI.' SAPI'.PHP_EOL;
@@ -11,7 +11,10 @@ if (!in_array(PHP_SAPI, ['cli', 'phpdbg', 'embed'], true)) {
 
 umask(0000);
 
-require dirname(__DIR__).'/vendor/autoload.php';
+if (!is_writable('/etc/nginx/sites-enabled')) {
+    echo "Directory '/etc/nginx/sites-enabled' is not writable.\n\nPlease run this script under privileged user.\n\n";
+    exit(1);
+}
 
 if (!isset($argv[1])) {
     echo "You need to set domain name\n\n";
@@ -25,16 +28,6 @@ if (file_exists('/etc/nginx/sites-enabled/' . $domain . '.conf')) {
     exit(1);
 }
 
-$input = new ArgvInput();
-if (null !== $env = $input->getParameterOption(['--env', '-e'], null, true)) {
-    putenv('APP_ENV='.$_SERVER['APP_ENV'] = $_ENV['APP_ENV'] = $env);
-}
-
-if ($input->hasParameterOption('--no-debug', true)) {
-    putenv('APP_DEBUG='.$_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = '0');
-}
-
-//Debug::enable();
 (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
 
 $dockerConfig = dirname(__DIR__)."/.env.docker.{$_SERVER['APP_ENV']}.local";
