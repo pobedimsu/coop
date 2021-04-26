@@ -64,7 +64,7 @@ mcedit .env.local
 ./deploy.sh
 ```
 
-Создать конфиг Nginx:
+Создание конфига для nginx, запустить с правами рута:
 ```
 ./install/nginx-config <my-domain.ru>
 ```
