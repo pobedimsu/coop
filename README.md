@@ -74,7 +74,7 @@ mcedit .env.local
 certbot
 ```
 
-Подключить телеграм бота к сайту:
+Подключить телеграм бота к сайту, где заменить `my-domain.ru` на ваш домен:
 ```
 bin/console telegram:bot:webhook:set coop https://my-domain.ru/telegram/
 ```
