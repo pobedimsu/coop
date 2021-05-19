@@ -70,6 +70,9 @@ help:
 restart: down up
 restart-build: down build up
 
+open:
+	@xdg-open http://localhost:${WEB_PORT}
+
 deploy:
 	@make -s down
 	@git pull
