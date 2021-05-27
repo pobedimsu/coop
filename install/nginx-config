@@ -41,9 +41,9 @@ if (!file_exists($dockerConfig)) {
 
 $conf = file_get_contents(dirname(__DIR__).'/install/configs/nginx.conf');
 
-$conf = str_replace('${DOMAIN}', $domain, $conf);
-$conf = str_replace('${WORKING_DIR}', $_SERVER['WORKING_DIR'], $conf);
-$conf = str_replace('${PHP_FPM_PROD_PORT}', $_SERVER['PHP_FPM_PROD_PORT'], $conf);
+$conf = str_replace('{{DOMAIN}}', $domain, $conf);
+$conf = str_replace('{{WORKING_DIR}}', $_SERVER['WORKING_DIR'], $conf);
+$conf = str_replace('{{PHP_FPM_PROD_PORT}}', $_SERVER['PHP_FPM_PROD_PORT'], $conf);
 
 file_put_contents('/etc/nginx/sites-enabled/'.$domain.'.conf', $conf);
 

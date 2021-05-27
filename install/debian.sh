@@ -3,7 +3,7 @@
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 
-DOCKER_COMPOSE=1.29.0
+DOCKER_COMPOSE=1.29.2
 
 SCRIPT_START_SECONDS=$(date +%s)
 SCRIPT_START_DATE=$(date +%T)
@@ -74,6 +74,9 @@ apt install php-cli php-mbstring -qq -y
 
 curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
+
+curl https://getmic.ro | bash
+mv micro /usr/bin
 
 if [ ! -f ~/.bashrc_old ]
 then
