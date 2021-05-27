@@ -10,6 +10,8 @@ if ($_SERVER['APP_DEBUG']) {
     umask(0000);
 
     Debug::enable();
+} else {
+    umask(0002);
 }
 
 if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? false) {
