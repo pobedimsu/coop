@@ -37,7 +37,7 @@ apt upgrade -qq -y -o Dpkg::Options::=--force-confnew --allow-change-held-packag
 export DEBIAN_FRONTEND=noninteractive
 export UCF_FORCE_CONFFNEW=1
 
-apt install gnupg gnupg2 software-properties-common dirmngr apt-transport-https ca-certificates -qq -y -o Dpkg::Options::=--force-confnew
+apt install curl gnupg gnupg2 software-properties-common dirmngr apt-transport-https ca-certificates -qq -y -o Dpkg::Options::=--force-confnew
 
 tput sgr0
 
