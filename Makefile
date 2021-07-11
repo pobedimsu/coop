@@ -108,7 +108,7 @@ init-configs:
 	fi
 	@if [ ! -f .env.docker.${env}.local ]; then \
   		echo "[${env}]: generate => .env.docker.${env}.local"; \
-		cp .docker/.env.docker.dist .env.docker.${env}.local; \
+		cp .docker/_templates/.env.docker.local .env.docker.${env}.local; \
 		sed -i "s/APP_ENV=~/APP_ENV=${env}/g" .env.docker.${env}.local; \
 		sed -i "s#WORKING_DIR=/app#WORKING_DIR=${pwd}#g" .env.docker.${env}.local; \
 	else \
@@ -117,6 +117,11 @@ init-configs:
 
 _init:
 	${docker-compose} run --rm alpine bin/init_dirs
+	@if [ ${env} = 'dev' ]; then \
+		cp --force .docker/_templates/nginx.conf var/nginx.conf; \
+		sed -i "s,{{DOMAIN}},${DOMAIN},g" var/nginx.conf; \
+		sed -i "s,{{WORKING_DIR}},${WORKING_DIR},g" var/nginx.conf; \
+	fi
 
 build:
 	@echo "[${env}]: build containers..."
