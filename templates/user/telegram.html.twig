@@ -25,7 +25,7 @@
 
             <p>Зайдите в чат бот в телеграме <a href="tg://resolve?domain={{ app_tg_bot_name() }}">@{{ app_tg_bot_name() }}</a> нажмите "старт", а затем вставьте скопированный ранее код.</p>
 
-            <p>Код действителен в течении <span id="countdown">02:00</span></p>
+            <p id="valid_msg">Код действителен в течении <span id="countdown">05:00</span> минут</p>
 
             <script>
               function startTimer(duration, display) {
@@ -37,7 +37,12 @@
                   minutes = minutes < 10 ? "0" + minutes : minutes;
                   seconds = seconds < 10 ? "0" + seconds : seconds;
 
-                  display.textContent = minutes + ":" + seconds;
+                  if (minutes === '00' && seconds === '00') {
+                      var validMsg = document.querySelector('#valid_msg');
+                      validMsg.innerHTML = '{{ 'Code is out of date'|trans }} - <a href="{{ path('profile_telegram') }}" class="btn btn-primary">{{ 'reload page'|trans }}</a>';
+                  } else {
+                      display.textContent = minutes + ":" + seconds;
+                  }
 
                   if (--timer < 0) {
                     //timer = duration;
@@ -47,10 +52,9 @@
               }
 
               window.onload = function () {
-                // var fiveMinutes = 60 * 2;
-                var fiveMinutes = {{ countdown }};
+                var seconds = {{ countdown }};
                 var display = document.querySelector('#countdown');
-                startTimer(fiveMinutes, display);
+                startTimer(seconds, display);
               };
             </script>
         {% else %}

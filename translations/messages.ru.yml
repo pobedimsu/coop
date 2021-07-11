@@ -5,6 +5,7 @@ Category: Категория
 Create: Создать
 Change password: Сменить пароль
 Code: Код
+Code is out of date: Код устарел
 Common: Основное
 Current password: Текущий пароль
 Day: День
@@ -51,6 +52,7 @@ Password confirmation: Повтор пароля
 Position: Позиция
 Price: Цена
 Registration: Регистрация
+reload page: перезагрузите страницу
 Repeat Password: Повторите пароль
 Reset Password: Сброс пароля
 Send: Отправить

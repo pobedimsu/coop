@@ -185,9 +185,10 @@ class UserController extends AbstractController
      */
     public function telegram(Request $request, EntityManagerInterface $em): Response
     {
-        if ($request->query->has('remove')) {
-            $user = $this->getUser();
+        /** @var User $user */
+        $user = $this->getUser();
 
+        if ($request->query->has('remove')) {
             $user->setTelegramUserId(null);
             $user->setTelegramUsername(null);
 
@@ -198,26 +199,26 @@ class UserController extends AbstractController
 
         $countdown = 0;
 
-        if ($this->getUser()->getTelegramUsername()) {
+        if ($user->getTelegramUsername()) {
             $code = null;
         } else {
             $cache = new FilesystemAdapter();
 
-            $code = $cache->get('connect_telegram_account_user'.$this->getUser()->getId()->serialize(), function (ItemInterface $item) {
-                $item->expiresAfter(60 * 2);
+            $code = $cache->get('connect_telegram_account_user'.$user->getId()->serialize(), function (ItemInterface $item) {
+                $item->expiresAfter(60 * 5);
 
                 return random_int(10000, 99999);
             });
 
-            // Сохранение к кеше user_id
-            $user_id = $cache->get('connect_telegram_account_code'.$code, function (ItemInterface $item) {
-                $item->expiresAfter(60 * 2);
+            // Сохранение в кеше user_id
+            $user_id = $cache->get('connect_telegram_account_code'.$code, function (ItemInterface $item) use ($user) {
+                $item->expiresAfter(60 * 5);
 
-                return $this->getUser()->getId()->serialize();
+                return $user->getId()->serialize();
             });
 
             /** @var CacheItem $code_item */
-            $code_item = $cache->getItem('connect_telegram_account_user'.$this->getUser()->getId()->serialize());
+            $code_item = $cache->getItem('connect_telegram_account_user'.$user->getId()->serialize());
 
             $countdown = $code_item->getMetadata()['expiry'] - time();
         }
