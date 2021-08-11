@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Event\UserEvent;
 use App\Form\Type\UserChangePasswordFormType;
 use App\Form\Type\UserFormType;
 use App\Repository\UserRepository;
@@ -23,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @Route("/profile")
@@ -183,7 +185,7 @@ class UserController extends AbstractController
     /**
      * @Route("/telegram/", name="profile_telegram")
      */
-    public function telegram(Request $request, EntityManagerInterface $em): Response
+    public function telegram(Request $request, EntityManagerInterface $em, EventDispatcherInterface $dispatcher): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -193,6 +195,8 @@ class UserController extends AbstractController
             $user->setTelegramUsername(null);
 
             $em->flush();
+
+            $dispatcher->dispatch($user, UserEvent::DISCONNECT_TELEGRAM);
 
             return $this->redirectToRoute('profile_telegram');
         }

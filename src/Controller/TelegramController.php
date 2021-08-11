@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Event\UserEvent;
 use Borsaco\TelegramBotApiBundle\Service\Bot;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +13,7 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Traits\Telegram;
 
@@ -23,9 +25,9 @@ class TelegramController extends AbstractController
      *
      * @Route("/telegram/", name="telegram")
      */
-    public function index(Request $request, Bot $bot, EntityManagerInterface $em): Response
+    public function index(Request $request, Bot $bot, EntityManagerInterface $em, EventDispatcherInterface $dispatcher): Response
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             $tg = $bot->getBot();
             $telegram = $tg; // temp
 
@@ -45,7 +47,7 @@ class TelegramController extends AbstractController
             }
 
             if($text) {
-                if ($text == '/start') {
+                if ($text === '/start') {
                     $reply = 'Добро пожаловать!';
 
                     if (empty($username)) {
@@ -71,10 +73,10 @@ class TelegramController extends AbstractController
                         'parse_mode' => 'html',
                         //'reply_markup' => $keyboard,
                     ]);
-                } elseif ($text == '/help') {
+                } elseif ($text === '/help') {
                     $reply = 'Информация с помощью.';
                     $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
-                } elseif ($text == 'Баланс') {
+                } elseif ($text === 'Баланс') {
                     $tg->sendMessage(['chat_id' => $chat_id, 'text' => "Ваш баланс \xF0\x9F\x92\xB0 : 0 "]);
                 } elseif (is_numeric($text)) {
                     if (empty($username)) {
@@ -99,6 +101,8 @@ class TelegramController extends AbstractController
                                     // @todo обработка ошибки при уникальности
                                     $em->flush();
                                     $reply = 'ok';
+
+                                    $dispatcher->dispatch($user, UserEvent::CONNECT_TELEGRAM);
 
                                     $cache->delete('connect_telegram_account_code'.$text);
                                 } else {

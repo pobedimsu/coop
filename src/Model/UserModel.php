@@ -369,6 +369,9 @@ class UserModel implements UserInterface
         return $this->invited_by_user;
     }
 
+    /**
+     * @param User|UserModel|UserInterface $invited_by_user
+     */
     public function setInvitedByUser(User $invited_by_user): self
     {
         $this->invited_by_user = $invited_by_user;
