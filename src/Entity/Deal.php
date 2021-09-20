@@ -160,7 +160,7 @@ class Deal
         return $this->cost;
     }
 
-    public function setCost($cost): Deal
+    public function setCost(int $cost): Deal
     {
         $this->cost = $cost;
 
@@ -184,7 +184,7 @@ class Deal
         return $this->amount_cost;
     }
 
-    public function setAmountCost($amount_cost): self
+    public function setAmountCost(int $amount_cost): self
     {
         $this->amount_cost = $amount_cost;
 
@@ -196,7 +196,7 @@ class Deal
         return (int) $this->quantity;
     }
 
-    public function setQuantity($quantity): self
+    public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
 
