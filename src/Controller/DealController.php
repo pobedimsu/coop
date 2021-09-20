@@ -93,9 +93,9 @@ class DealController extends AbstractController
             ];
         } else {
             $error_msg = null;
-            $quantity = $request->request->get('quantity', 1);
-            $price    = $request->request->get('price');
-            $type     = $request->request->get('type');
+            $quantity = (int) $request->request->get('quantity', 1);
+            $price    = (int) $request->request->get('price');
+            $type     = (int) $request->request->get('type');
 
             if ($quantity < 1) {
                 $quantity = 1;
