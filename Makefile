@@ -146,12 +146,7 @@ down:
 	@${docker-compose} down --remove-orphans
 	@echo "[${env}]: containers stopped!"
 
-bin-console:
-	@${docker-compose-php-cli} bin/local-console -e ${env} ${c}
-
-bin-console-exec:
-	@${docker-compose} exec ${EXEC_TTY} php-cli bin/local-console -e ${env} ${c}
-
+### Cache
 cache-clear:
 	@if [ -d var/cache/${env} ]; then \
 		echo "[${env}]: Clearing var/cache/${env}..."; \
@@ -162,6 +157,7 @@ cache-warmup:
 	@make -s _init
 	@${docker-compose-php-cli} bin/local-console cache:warmup -e ${env}
 
+### Composer
 composer-install:
 	@if [ ${env} = 'prod' ]; then \
 		${docker-compose-php-cli} composer install --no-dev; \
@@ -178,6 +174,29 @@ composer-update:
 
 composer:
 	@${docker-compose-php-cli} composer $(call args)
+
+### DataBase
+db-dump:
+	@${docker-compose-php-cli} bin/local-console -e ${env} db:du
+
+db-restore-from-dump:
+	@${docker-compose-php-cli} bin/local-console -e ${env} db:re
+
+db-diff:
+	@${docker-compose-php-cli} bin/local-console -e ${env} doctrine:migrations:diff
+
+db-migrate:
+	@${docker-compose-php-cli} bin/local-console -e ${env} doctrine:migrations:migrate --no-interaction
+
+db-show-sql-update:
+	@${docker-compose-php-cli} bin/local-console -e ${env} doctrine:schema:update --dump-sql
+
+### Helpers
+bin-console:
+	@${docker-compose-php-cli} bin/local-console -e ${env} ${c}
+
+bin-console-exec:
+	@${docker-compose} exec ${EXEC_TTY} php-cli bin/local-console -e ${env} ${c}
 
 run-in-php-cli: # make run-in-php-cli "php -i" | grep apc
 	@${docker-compose-php-cli} $(call args)

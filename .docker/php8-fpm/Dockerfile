@@ -1,19 +1,16 @@
-FROM php:7.4.19-cli
+FROM php:8.0.10-fpm
 
 RUN apt-get update && apt-get install -y \
     apt-utils \
-    bash-completion \
-    git \
     gnupg \
-    nano \
     lsb-release \
+    git \
     g++ \
     wget \
     ssh \
     unzip \
     libbz2-dev \
     libgmp-dev \
-    libevent-dev \
     libicu-dev \
     libmemcached-dev \
     libzip-dev \
@@ -36,7 +33,7 @@ RUN apt-get install -y \
     libxml2-dev \
     zlib1g-dev
 
-### Base PHP Extensions
+# Base PHP Extensions
 RUN docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install -j$(nproc) bz2 \
     && docker-php-ext-install -j$(nproc) calendar \
@@ -44,16 +41,13 @@ RUN docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install -j$(nproc) gmp \
     && docker-php-ext-install -j$(nproc) intl \
     && docker-php-ext-install -j$(nproc) opcache \
-#    && docker-php-ext-install -j$(nproc) pcntl \
-#    && docker-php-ext-install -j$(nproc) soap \
-#    && docker-php-ext-install -j$(nproc) sockets \
+    && docker-php-ext-install -j$(nproc) soap \
+    && docker-php-ext-install -j$(nproc) --ini-name 0-sockets.ini sockets \
     && docker-php-ext-install -j$(nproc) zip
 
 RUN pecl install apcu && docker-php-ext-enable apcu
-#RUN pecl install dbase && docker-php-ext-enable dbase
-#RUN pecl install event && docker-php-ext-enable event
 RUN pecl install memcached && docker-php-ext-enable memcached
-#RUN pecl install redis && docker-php-ext-enable redis
+RUN pecl install redis && docker-php-ext-enable redis
 RUN pecl install timezonedb && docker-php-ext-enable timezonedb
 
 ### MariaDB
@@ -62,7 +56,7 @@ RUN pecl install timezonedb && docker-php-ext-enable timezonedb
 #    && docker-php-ext-install -j$(nproc) pdo_mysql
 
 ### PostgreSQL
-RUN echo "installing postgresql 13.2 or higher..."
+RUN echo "installing postgresql 13.3 or higher..."
 RUN apt-get update --fix-missing && apt-get install -y postgresql-client \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install -j$(nproc) pgsql \
@@ -80,23 +74,26 @@ RUN docker-php-ext-configure gd \
 #    && pecl install imagick \
 #    && docker-php-ext-enable imagick
 
-RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64
-RUN chmod +x /usr/local/bin/dumb-init
+### OAuth
+#RUN pecl install oauth && docker-php-ext-enable oauth
 
-### Custom soft
-#RUN apt-get install -y mc htop cron rsyslog
+### AMQP
+#RUN apt-get install librabbitmq-dev -y \
+#    && pecl install amqp \
+#    && docker-php-ext-enable amqp
+# https://exploit.cz/how-to-compile-amqp-extension-for-php-8-0-via-multistage-dockerfile/
+#RUN docker-php-source extract \
+#    && apt-get install librabbitmq-dev -y \
+#    && git clone --branch master --depth 1 https://github.com/php-amqp/php-amqp.git /usr/src/php/ext/amqp \
+#    && cd /usr/src/php/ext/amqp && git submodule update --init \
+#    && docker-php-ext-install amqp
 
-### Cleanups
+# Cleanups
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ### Configs
-COPY ./.bashrc /root/.bashrc
-COPY ./symfony-console-autocomplete /etc/bash_completion.d/symfony-console-autocomplete
 COPY ./apcu.ini /usr/local/etc/php/conf.d/apcu.ini
 COPY ./global.ini /usr/local/etc/php/conf.d/zz-global.ini
-
-### Composer
-RUN echo "installing Composer v2.0.11 or higher..."
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet
-ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV COMPOSER_HOME '/root/.composer'
+#COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+#COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+#COPY ./fpm.www.conf /usr/local/etc/php-fpm.d/www.conf

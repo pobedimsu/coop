@@ -32,7 +32,7 @@ services:
             PGBOUNCER_MAX_CLIENT_CONN: 1000
 
     php-cli:
-        build: ./php-cli
+        build: ./php8-cli
         working_dir: '${WORKING_DIR}'
         stdin_open: true # docker run -i
         tty: true        # docker run -t
@@ -44,13 +44,13 @@ services:
             - './../:${WORKING_DIR}'
             - ./../var/log/php_errors.log:/var/log/php_errors.log
             - /root/.composer/cache:/root/.composer/cache
-            - ./php-cli/global.ini:/usr/local/etc/php/conf.d/global.ini
-            - ./php-cli/apcu.ini:/usr/local/etc/php/conf.d/apcu.ini
-            - ./php-cli/symfony-console-autocomplete:/etc/bash_completion.d/symfony-console-autocomplete
-            - ./php-cli/.bashrc:/root/.bashrc
+#            - ./php-cli/global.ini:/usr/local/etc/php/conf.d/global.ini
+#            - ./php-cli/apcu.ini:/usr/local/etc/php/conf.d/apcu.ini
+#            - ./php-cli/symfony-console-autocomplete:/etc/bash_completion.d/symfony-console-autocomplete
+#            - ./php-cli/.bashrc:/root/.bashrc
 
     php-fpm:
-        build: ./php-fpm
+        build: ./php8-fpm
         working_dir: '${WORKING_DIR}'
         depends_on:
             - pgbouncer
@@ -59,8 +59,8 @@ services:
         volumes:
             - './../:${WORKING_DIR}'
             - ./../var/log/php-fpm_errors.log:/var/log/php-fpm_errors.log
-            - ./php-fpm/global.ini:/usr/local/etc/php/conf.d/global.ini
-            - ./php-fpm/apcu.ini:/usr/local/etc/php/conf.d/apcu.ini
+#            - ./php-fpm/global.ini:/usr/local/etc/php/conf.d/global.ini
+#            - ./php-fpm/apcu.ini:/usr/local/etc/php/conf.d/apcu.ini
 
 volumes:
     pg13:
