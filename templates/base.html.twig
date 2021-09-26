@@ -155,9 +155,9 @@
             <a href="{{ path('profile') }}" class="btn btn-outline-primary btn-sm">Мой профиль</a> <a href="{{ path('user_show', {'id': app.user.id}) }}" class="btn btn-outline-primary btn-sm">
                 Мой баланс <b style="color: black;">{{ app_balance(app.user) }}</b>{{ app_currency() }}
             </a>
-        {% endif %}
 
-        <a href="{{ path('security_logout') }}" class="btn btn-outline-warning btn-sm" onclick="return confirm('Вы уверены, что хотите выйти?')">Выход</a>
+            <a href="{{ path('security_logout') }}" class="btn btn-outline-warning btn-sm" onclick="return confirm('Вы уверены, что хотите выйти?')">Выход</a>
+        {% endif %}
     </div>
     <style>
         .stupid-user-header {
