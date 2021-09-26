@@ -98,48 +98,86 @@
 <body class="bg-light">
 
 {% block header %}
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark __fixed-top bg-dark">
-            <div class="container">
-{#                <a class="navbar-brand py-0" href="/">Главная</a>#}
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <div class="d-none d-lg-block">
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark __fixed-top bg-dark">
+                <div class="container">
+                    {#                <a class="navbar-brand py-0" href="/">Главная</a>#}
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <div class="mr-auto">
-                        {{ knp_menu_render('top') }}
-                    </div>
-                    <ul class="navbar-nav">
-                        {% if is_granted('ROLE_USER') %}
-                            <li><a href="{{ path('user_show', {'id': app.user.id}) }}" class="nav-link py-0 active" style="color: #d4d5d6; background-color: #4b4c4d">
-                                    Баланс <b style="color: white;">{{ app_balance(app.user) }}</b>{{ app_currency() }}
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <div class="mr-auto">
+                            {{ knp_menu_render('top') }}
+                        </div>
+                        <ul class="navbar-nav">
+                            {% if is_granted('ROLE_USER') %}
+                                <li><a href="{{ path('user_show', {'id': app.user.id}) }}" class="nav-link py-0 active" style="color: #d4d5d6; background-color: #4b4c4d">
+                                        Баланс <b style="color: white;">{{ app_balance(app.user) }}</b>{{ app_currency() }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle py-0" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ app.user }}
                                 </a>
-                            </li>
-                        {% endif %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle py-0" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ app.user }}
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ path('profile') }}">Мой профиль</a>
-                                <a class="dropdown-item" href="{{ path('users') }}">Список всех участников</a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ path('profile') }}">Мой профиль</a>
+                                    <a class="dropdown-item" href="{{ path('users') }}">Список всех участников</a>
 
-                                {% if is_granted('ROLE_ADMIN') %}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{{ path('admin') }}">Admin</a>
+                                    {% endif %}
+
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{ path('admin') }}">Admin</a>
-                                {% endif %}
-
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ path('security_logout') }}">Выход</a>
-                            </div>
-                        </li>
-                    </ul>
+                                    <a class="dropdown-item" href="{{ path('security_logout') }}">Выход</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
+            </nav>
+        </header>
+    </div>
+
+    <div class="d-lg-none stupid-user-header">
+        {{ knp_menu_render('top', {'template': '_menu-stupid-user-header.html.twig'}) }}
+
+        <a href="{{ path('users') }}" class="btn btn-outline-primary btn-sm">Список всех участников</a>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('admin') }}" class="btn btn-outline-primary btn-sm">Admin</a>
+        {% endif %}
+
+        {% if is_granted('ROLE_USER') %}
+            <a href="{{ path('profile') }}" class="btn btn-outline-primary btn-sm">Мой профиль</a> <a href="{{ path('user_show', {'id': app.user.id}) }}" class="btn btn-outline-primary btn-sm">
+                Мой баланс <b style="color: black;">{{ app_balance(app.user) }}</b>{{ app_currency() }}
+            </a>
+        {% endif %}
+
+        <a href="{{ path('security_logout') }}" class="btn btn-outline-warning btn-sm" onclick="return confirm('Вы уверены, что хотите выйти?')">Выход</a>
+    </div>
+    <style>
+        .stupid-user-header {
+            margin: 10px;
+        }
+
+        .stupid-user-header ul {
+            list-style-type: none;
+            overflow: hidden !important;
+        }
+        .stupid-user-header li {
+            float: left !important;
+        }
+        .stupid-user-header a {
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
 {% endblock header %}
+
 <content role="main">
     <div class="container">
         {% block content '' %}
