@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\City;
 use App\Form\Type\CategoryFormType;
+use App\Form\Type\CityFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -107,6 +109,68 @@ class AdminController extends AbstractController
 
         return $this->render('admin/category/edit.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/city/", name="admin_city")
+     */
+    public function city(Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(CityFormType::class);
+        $form->remove('update');
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->has('cancel') and $form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('admin_city');
+            }
+
+            if ($form->get('create')->isClicked() and $form->isValid()) {
+                $em->persist($form->getData());
+                $em->flush();
+
+                $this->addFlash('success', 'Город создан');
+
+                return $this->redirectToRoute('admin_city');
+            }
+        }
+
+        return $this->render('admin/city/index.html.twig', [
+            'form' => $form->createView(),
+            'cities' => $em->getRepository(City::class)->findBy([], ['title' => 'ASC']),
+        ]);
+    }
+
+    /**
+     * @Route("/city/{id}/", name="admin_city_edit")
+     */
+    public function cityEdit(City $city, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(CityFormType::class, $city);
+        $form->remove('create');
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->has('cancel') and $form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('admin_city');
+            }
+
+            if ($form->get('update')->isClicked() and $form->isValid()) {
+                $em->persist($form->getData());
+                $em->flush();
+
+                $this->addFlash('success', 'Город обновлён');
+
+                return $this->redirectToRoute('admin_city');
+            }
+        }
+
+        return $this->render('admin/city/edit.html.twig', [
+            'form' => $form->createView(),
+            'cities' => $em->getRepository(City::class)->findBy([], ['title' => 'ASC']),
         ]);
     }
 }

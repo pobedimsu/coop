@@ -10,6 +10,7 @@
 
     <h1>{{ 'Advertisements'|trans }}</h1>
 
+{#
     <form method="get">
     <table width="100%" style="margin-bottom: 12px;">
         <tr>
@@ -31,7 +32,6 @@
                             {{ c.title }}
                         </option>
                     {% endfor %}
-
                 </select>
             </td>
             <td>
@@ -42,6 +42,53 @@
             </td>
         </tr>
     </table>
+    </form>
+#}
+    <form method="get">
+        <div class="row">
+            <div class="col-2">
+                <select name="category" class="form-control">
+                    <option value="">Любая категория</option>
+                    {% for c in categories %}
+                        <option value="{{ c.id }}"
+                                {% if app.request.query.get('category') == c.id %} selected {% endif %}
+                        >
+                            {% set prefix = '' %}
+                            {% for i in 1..c.level %}
+                                {% if i > 1 %}
+                                    {% set prefix = prefix ~ '&nbsp;' %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {{ prefix|raw }}
+                            {{ c.title }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-7">
+                <input name="search" value="{{ app.request.query.get('search') }}" class="form-control" type="text" placeholder="Поиск по предложениям">
+            </div>
+
+            <div class="col-2">
+                <select name="city" class="form-control">
+                    <option value="">Любой город</option>
+                    {% for city in cities %}
+                        <option value="{{ city.id }}"
+                                {% if app.request.query.get('city') == city.id %} selected {% endif %}
+                        >
+                            {{ city }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-1">
+                <button>Найти</button>
+            </div>
+        </div>
+        <br>
     </form>
 
     <p>Всего: {{ offers|length }}</p>

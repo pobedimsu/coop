@@ -25,6 +25,7 @@ class OfferFormType extends AbstractType
         $builder
             ->add('title', null, ['attr' => ['autofocus' => true]])
             ->add('category', CategoryTreeType::class)
+            ->add('city')
             ->add('image_id', ImageFormType::class, [
                 'mapped' => true,
                 'required' => false,

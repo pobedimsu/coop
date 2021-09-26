@@ -118,6 +118,11 @@ class Offer
      */
     protected Category $category;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="City")
+     */
+    protected ?City $city = null;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
@@ -289,5 +294,17 @@ class Offer
     public function isDisabled(): bool
     {
         return !$this->is_enabled;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): self
+    {
+        $this->city = $city;
+
+        return $this;
     }
 }

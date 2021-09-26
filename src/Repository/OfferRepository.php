@@ -29,6 +29,11 @@ class OfferRepository extends ServiceEntityRepository
             $qb->setParameter('category', $filters['category']);
         }
 
+        if (!empty($filters['city']) and $filters['city'] >= 1) {
+            $qb->andWhere('e.city = :city');
+            $qb->setParameter('city', $filters['city']);
+        }
+
         if (!empty($filters['search']) and strlen($filters['search']) >= 3) {
             $qb->andWhere('e.title LIKE :search');
             $qb->setParameter('search', '%'.$filters['search'].'%');

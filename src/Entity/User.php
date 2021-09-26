@@ -91,6 +91,11 @@ class User extends UserModel
      */
     protected ?bool $is_meat_consumption;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="City")
+     */
+    protected ?City $city = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -190,6 +195,18 @@ class User extends UserModel
     public function setLevel(int $level): self
     {
         $this->level = $level;
+
+        return $this;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): self
+    {
+        $this->city = $city;
 
         return $this;
     }

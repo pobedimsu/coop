@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\City;
 use App\Entity\Offer;
 use App\Form\Type\OfferFormType;
 use App\Repository\CategoryRepository;
@@ -25,12 +26,13 @@ class OfferController extends AbstractController
     /**
      * @Route("/", name="offers")
      */
-    public function index(CategoryRepository $categoryRepository, OfferRepository $offerRepo, Request $request): Response
+    public function index(CategoryRepository $categoryRepository, OfferRepository $offerRepo, EntityManagerInterface $em, Request $request): Response
     {
         // @todo постраничность
         $offers = $offerRepo
             ->getFindQueryBuilder([
                 'category' => $request->query->get('category'),
+                'city' => $request->query->get('city'),
                 'search' => $request->query->get('search'),
                 'is_enabled' => true,
             ])
@@ -40,6 +42,7 @@ class OfferController extends AbstractController
 
         return $this->render('offer/index.html.twig', [
             'categories' => $categoryRepository->childrenHierarchyList(),
+            'cities' => $em->getRepository(City::class)->findBy([], ['title' => 'ASC']),
             'offers' => $offers,
         ]);
     }
@@ -50,7 +53,10 @@ class OfferController extends AbstractController
     public function create(Request $request, EntityManagerInterface $em, MediaCloudService $mc): Response
     {
         $offer = new Offer();
-        $offer->setUser($this->getUser());
+        $offer
+            ->setUser($this->getUser())
+            ->setCity($this->getUser()->getCity())
+        ;
 
         $form = $this->createForm(OfferFormType::class, $offer);
         $form->remove('update');

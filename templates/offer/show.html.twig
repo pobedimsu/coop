@@ -141,6 +141,10 @@
                 {% endif %}
             {% endif %}
 
+            {% if offer.city %}
+                <p><i class="fas fa-home"></i> г.{{ offer.city }}</p>
+            {% endif %}
+
             {% if offer.user.longitude and offer.user.latitude %}
                 <style type="text/css">
                     #mapdiv {
@@ -177,6 +181,18 @@
                     {% endif %}
                     </a>
                 </h4>
+
+                <p>
+                    <i class="fas fa-home"></i>
+                    Город:
+
+                    {% if offer.user.city %}
+                        {{ offer.user.city }}
+                    {% else %}
+                        <i>не указан...</i>
+                    {% endif %}
+                </p>
+
                 <p>
                     {% include 'user/_anketa.html.twig' with {'user': offer.user} %}
                 </p>
