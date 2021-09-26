@@ -51,7 +51,7 @@ class MediaCollection extends AbstractCollectionService
             and $container->get('security.token_storage')->getToken()
             and method_exists($container->get('security.token_storage')->getToken()->getUser(), 'getId')
         ) {
-            $this->user_id = $container->get('security.token_storage')->getToken()->getUser()->getId();
+            $this->user_id = (string) $container->get('security.token_storage')->getToken()->getUser()->getId();
         } else{
             $this->user_id = null;
         }
