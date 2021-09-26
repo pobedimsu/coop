@@ -11,14 +11,10 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class MainMenu
 {
-    private FactoryInterface $factory;
-    private KernelInterface $kernel;
-
-    public function __construct(FactoryInterface $factory, KernelInterface $kernel)
-    {
-        $this->factory = $factory;
-        $this->kernel  = $kernel;
-    }
+    public function __construct(
+        private FactoryInterface $factory,
+        private KernelInterface $kernel,
+    ) {}
 
     /**
      * Главное меню
@@ -100,7 +96,10 @@ class MainMenu
                 'class' => 'nav flex-column nav-pills',
             ],
         ]);
-        $menu->setExtra('translation_domain', false);
+        $menu
+            ->setExtra('translation_domain', false)
+            ->setExtra('select_intehitance', false)
+        ;
 
         $this->addManualChild($menu);
 
@@ -117,6 +116,10 @@ class MainMenu
         $finder = new Finder();
         $finder->files()->in($manDir)->sortByName();
 
+        $menu->addChild('Description', ['route' => 'manual'])
+            ->setLabel('Description')
+        ;
+
         foreach ($finder as $file) {
             $file->getRelativePathname();
 
@@ -132,7 +135,6 @@ class MainMenu
 
             $menu->addChild($file, ['route' => 'manual', 'routeParameters' => ['slug' => $file]])
                 ->setLabel($label)
-                //->setExtra('translation_domain', false)
             ;
         }
     }
