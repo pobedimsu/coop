@@ -18,7 +18,7 @@ class UserInviteFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username', null, ['attr' => ['autofocus' => 'autofocus']])
+            ->add('username')
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'options' => [
