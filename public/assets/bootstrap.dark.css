@@ -15,6 +15,9 @@ a:hover {
     color: #5eb5e0;
 }
 
+.alert-warning h4, .alert-warning h5 {
+    color: #856404;
+}
 .jumbotron {
     filter: invert(85%);
 }
