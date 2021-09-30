@@ -46,7 +46,7 @@
 #}
     <form method="get">
         <div class="row">
-            <div class="col-2">
+            <div class="col-md-2">
                 <select name="category" class="form-control">
                     <option value="">Любая категория</option>
                     {% for c in categories %}
@@ -67,11 +67,11 @@
                 </select>
             </div>
 
-            <div class="col-7">
+            <div class="col-md-7">
                 <input name="search" value="{{ app.request.query.get('search') }}" class="form-control" type="text" placeholder="Поиск по предложениям">
             </div>
 
-            <div class="col-2">
+            <div class="col-md-2">
                 <select name="city" class="form-control">
                     <option value="">Любой город</option>
                     {% for city in cities %}
@@ -84,8 +84,8 @@
                 </select>
             </div>
 
-            <div class="col-1">
-                <button>Найти</button>
+            <div class="col-md-1">
+                <button class="btn btn-outline-success">Найти</button>
             </div>
         </div>
         <br>
