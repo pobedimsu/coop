@@ -1,0 +1,119 @@
+body, textarea {
+    color: white;
+    background-color: #272727 !important;
+}
+
+h1, h2, h3, h4, h5, h6, label, legend, .table {
+    color: white;
+}
+
+a {
+    color: #01a0e4;
+}
+
+a:hover {
+    color: #5eb5e0;
+}
+
+.jumbotron {
+    filter: invert(85%);
+}
+
+.table-bordered td, .table-bordered th {
+    border: 1px solid #666;
+}
+
+.table thead th {
+    background-color: #333;
+    border-bottom: 2px solid #555;
+}
+
+.table-hover tr:hover {
+    color: white !important;
+}
+
+tr.table-info, .table-hover tr.table-info:hover {
+    color: black !important;
+}
+
+.btn-group button, .dropdown-menu, .dropdown-item {
+    border-color: #333333 !important;
+    color: white;
+    background-color: #313131;
+}
+.btn-group button:hover, .btn-group button:focus, .dropdown-toggle:hover, .dropdown-toggle:focus {
+    color: white !important;
+    background-color: #444 !important;
+}
+.dropdown-item:hover, .nav-link:hover {
+    color: white !important;
+    background-color: #444 !important;
+}
+.dropdown-divider {
+    border-top-color: #555;
+}
+.card {
+    background-color: #313131;
+}
+
+.custom-file-input {
+    background-color: transparent;
+}
+
+.modal-content {
+    background-color: #333;
+}
+
+.modal-header {
+    border-bottom-color: #555;
+}
+
+button.close {
+    color: lightgray;
+}
+
+button.close:hover {
+    color: white;
+}
+
+.modal-footer {
+    border-top-color: #555;
+}
+.myform {
+    background-color: #333;
+}
+
+.pagination .page-link {
+    border-color: #292929 !important;
+    background-color: #272727 !important;
+}
+.pagination a.page-link {
+    color: #01a0e4;
+}
+
+.navbar-brand {
+    filter: invert(100%);
+}
+.active {
+    color: white !important;
+    border-color: #999 !important;
+    background-color: #444 !important;
+}
+
+.bg-light, .bg-white {
+    background-color: transparent !important;
+}
+
+.breadcrumb > .active {
+    background-color: #272727 !important;
+}
+
+.form-control {
+    color: white;
+    background-color: #444 !important;
+    border: 1px solid #777;
+}
+
+.form-control:focus {
+    color: white;
+}
