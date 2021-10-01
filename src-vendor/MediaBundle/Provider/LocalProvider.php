@@ -48,10 +48,7 @@ class LocalProvider implements ProviderInterface
      */
     protected $mediaCollection;
 
-    /**
-     * LocalProvider constructor.
-     */
-    public function __construct(ContainerInterface $container, array $arguments = [], LoggerInterface $logger)
+    public function __construct(ContainerInterface $container, LoggerInterface $logger, array $arguments = [])
     {
         if (isset($arguments['filter_dir'])) {
             $this->filter_dir = $arguments['filter_dir'];

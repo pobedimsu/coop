@@ -100,14 +100,11 @@ class MediaStorage
         return $this;
     }
 
-    /**
-     * @return ProviderInterface
-     */
     public function factoryProvider(): ProviderInterface
     {
         $providerClass = $this->getProviderClass();
 
-        $provider = new $providerClass($this->container, $this->getArguments(), $this->logger);
+        $provider = new $providerClass($this->container, $this->logger, $this->getArguments());
 
         return $provider;
     }

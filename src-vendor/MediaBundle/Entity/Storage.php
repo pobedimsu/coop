@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SmartCore\Bundle\MediaBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
+use SmartCore\Bundle\MediaBundle\Provider\LocalProvider;
 use SmartCore\Bundle\MediaBundle\Provider\ProviderInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -59,7 +59,7 @@ class Storage
         $this->created_at       = new \DateTime();
         $this->relative_path    = $relativePath;
         $this->title            = 'Новое хранилище';
-        $this->provider         = 'SmartCore\Bundle\MediaBundle\Provider\LocalProvider';
+        $this->provider         = LocalProvider::class;
     }
 
     /**
