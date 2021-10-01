@@ -105,7 +105,7 @@ class DefaultController extends AbstractController
      * @Route("/manual/", name="manual_index") // Так надо, потому что маршрут со slug, генерируется без завершающего слеша :(
      * @Route("/manual/{slug<.+>}", name="manual")
      */
-    public function manual(string $slug = '', KernelInterface $kernel): Response
+    public function manual(KernelInterface $kernel, string $slug = ''): Response
     {
         $fileMd = $kernel->getProjectDir() . '/doc/manual/' . $slug;
 
