@@ -193,9 +193,14 @@
                     {% endif %}
                 </p>
 
+                {% if offer.user.description %}
+                    <p>Описание: {{ offer.user.description }}</p>
+                {% endif %}
+
                 <p>
                     {% include 'user/_anketa.html.twig' with {'user': offer.user} %}
                 </p>
+
                 {% if offer.user != app.user %}
                     <p><i class="far fa-paper-plane"></i>
                         {% if offer.user.telegramUsername %}
