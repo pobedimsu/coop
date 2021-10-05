@@ -35,8 +35,12 @@ class OfferRepository extends ServiceEntityRepository
         }
 
         if (!empty($filters['search']) and strlen($filters['search']) >= 3) {
-            $qb->andWhere('e.title LIKE :search');
-            $qb->setParameter('search', '%'.$filters['search'].'%');
+            $qb->andWhere($qb->expr()->orX(
+                $qb->expr()->like($qb->expr()->lower('e.title'),':search_like'),
+                $qb->expr()->like($qb->expr()->lower('e.short_description'),':search_like'),
+                $qb->expr()->like($qb->expr()->lower('e.description'),':search_like')
+            ));
+            $qb->setParameter('search_like', mb_strtolower('%'.$filters['search'].'%'));
         }
 
         if (isset($filters['is_enabled']) and is_bool($filters['is_enabled'])) {
