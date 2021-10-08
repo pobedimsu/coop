@@ -146,6 +146,9 @@ down:
 	@${docker-compose} down --remove-orphans
 	@echo "[${env}]: containers stopped!"
 
+ps:
+	@${docker-compose} ps
+
 ### Cache
 cache-clear:
 	@if [ -d var/cache/${env} ]; then \
