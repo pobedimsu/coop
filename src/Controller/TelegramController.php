@@ -80,7 +80,7 @@ class TelegramController extends AbstractController
                     $tg->sendMessage(['chat_id' => $chat_id, 'text' => "Ваш баланс \xF0\x9F\x92\xB0 : 0 "]);
                 } elseif (is_numeric($text)) {
                     if (empty($username)) {
-                        $reply = "\n\nУ вас не задано имя пользователя. Пожалуйста, укажите его в настройках телеграма";
+                        $reply = "\n\nУ вас не задано 'имя пользователя'. Пожалуйста, укажите его в настройках телеграма (для этого нужно нажать на иконку 'три черточки' слева-вверху и там в найтроках найти 'ИМЯ ПОЛЬЗОВАТЕЛЯ', а не просто 'Имя')";
                     } else {
                         $cache = new FilesystemAdapter();
                         $user_id = $cache->getItem('connect_telegram_account_code'.$text)->get();
