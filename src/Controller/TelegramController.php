@@ -100,7 +100,7 @@ class TelegramController extends AbstractController
                                     $user->setTelegramUsername($username);
                                     // @todo обработка ошибки при уникальности
                                     $em->flush();
-                                    $reply = 'ok';
+                                    $reply = 'Отлично! ваш телеграм подключен! теперь все функции доступны, можно вернуться на сайт и полноценно пользоваться.';
 
                                     $dispatcher->dispatch($user, UserEvent::CONNECT_TELEGRAM);
 
