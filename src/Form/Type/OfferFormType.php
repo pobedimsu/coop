@@ -57,7 +57,10 @@ class OfferFormType extends AbstractType
                 'choices' => Offer::getStatusFormChoices(),
                 'choice_translation_domain' => false,
             ])
-            ->add('is_enabled')
+            ->add('is_enabled', null, [
+                'label' => 'Обьявление выключено',
+                'help'  => 'Если выключить, то пропадёт из списка объявлений и не будет учавствовать в формировании баланса',
+            ])
 
             ->add('create', SubmitType::class, ['attr' => ['class' => 'btn-success']])
             ->add('update', SubmitType::class, ['attr' => ['class' => 'btn-success']])
