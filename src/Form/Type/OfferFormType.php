@@ -62,7 +62,12 @@ class OfferFormType extends AbstractType
                 'help'  => 'Если выключить, то пропадёт из списка объявлений и не будет участвовать в формировании баланса',
             ])
 
-            ->add('create', SubmitType::class, ['attr' => ['class' => 'btn-success']])
+            ->add('create', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn-success',
+                    'onclick' => "this.disabled=true; this.form.submit();",
+                ],
+            ])
             ->add('update', SubmitType::class, ['attr' => ['class' => 'btn-success']])
             ->add('cancel', SubmitType::class, ['attr' => ['class' => 'btn-light', 'formnovalidate' => 'formnovalidate']])
         ;
