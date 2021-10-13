@@ -65,13 +65,14 @@ class OfferFormType extends AbstractType
             ->add('create', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn-success',
-                    'onclick' => "this.disabled=true; this.value='create'; this.form.submit();",
+//                    'onclick' => "this.disabled=true; this.value='create'; this.form.submit();",
                 ],
             ])
             ->add('update', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn-success',
-                    'onclick' => "this.disabled=true; this.value='update'; this.form.submit();",
+//                    'onclick' => "this.disabled=true; this.value='update'; this.form.submit();",
+//                    'onclick' => "this.disabled=true; retutn true;",
                 ],
             ])
             ->add('cancel', SubmitType::class, ['attr' => ['class' => 'btn-light', 'formnovalidate' => 'formnovalidate']])

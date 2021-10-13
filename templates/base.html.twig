@@ -236,6 +236,33 @@
             }
           }
         );
+        {#
+        $("button").click(function() {
+            $buttonpressed = $(this).attr('name');
+            $(this).attr("disabled", true);
+
+            setTimeout(function() {
+                $(this).removeAttr("disabled");
+            }, 5000);
+
+            var form = $(this).closest('form');
+            form.attr($buttonpressed, $(this).attr('value'));
+            //form.submit();
+
+            form.submit(function(e){
+                //console.log(this);
+                // Stop the form submitting
+                e.preventDefault();
+
+                // Do whatever it is you wish to do
+                //...
+                // Now submit it
+                // Don't use $(this).submit() FFS!
+                // You'll never leave this function & smash the call stack! :D
+                e.currentTarget.submit();
+            });
+        });
+        #}
     </script>
 {% endblock %}
 </body>
