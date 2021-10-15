@@ -124,7 +124,7 @@ class InviteController extends AbstractController
         }
 
         if ($this->getUser()) {
-            return $this->redirectToRoute('invite');
+            return $this->redirectToRoute('offers');
         }
 
         // Просрочено или не найдено приглашение
@@ -185,6 +185,10 @@ class InviteController extends AbstractController
 
                 return $this->redirectToRoute('homepage');
             }
+        }
+
+        if (!$request->getSession()->get('accepted')) {
+            return $this->render('invite/register_welcome.html.twig', ['invite' => $invite,]);
         }
 
         return $this->render('invite/register.html.twig', [
