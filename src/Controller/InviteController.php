@@ -187,6 +187,12 @@ class InviteController extends AbstractController
             }
         }
 
+        if ($request->query->has('accept')) {
+            $request->getSession()->set('accepted', true);
+
+            return $this->redirectToRoute('invite_register', ['id' => $id]);
+        }
+
         if (!$request->getSession()->get('accepted')) {
             return $this->render('invite/register_welcome.html.twig', ['invite' => $invite,]);
         }
