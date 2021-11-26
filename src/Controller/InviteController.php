@@ -15,11 +15,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -30,7 +30,7 @@ class InviteController extends AbstractController
     /**
      * @Route("/", name="invite")
      */
-    public function index(Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $em, $isUserForm): Response
+    public function index(Request $request, UserPasswordHasherInterface $encoder, EntityManagerInterface $em, $isUserForm): Response
     {
         $user = new User();
         $user->setInvitedByUser($this->getUser());
@@ -64,7 +64,7 @@ class InviteController extends AbstractController
             }
 
             if ($form->get('create')->isClicked() and $form->isValid()) {
-                $encodedPassword = $encoder->encodePassword($user, $user->getPlainPassword());
+                $encodedPassword = $encoder->hashPassword($user, $user->getPlainPassword());
                 $user->setPassword($encodedPassword);
 
                 $em->persist($user);
@@ -106,7 +106,7 @@ class InviteController extends AbstractController
     public function register(
         $id,
         Request $request,
-        UserPasswordEncoderInterface $encoder,
+        UserPasswordHasherInterface $encoder,
         EntityManagerInterface $em,
         $isUserForm,
         AuthenticationManagerInterface $authenticationManager,
@@ -167,7 +167,7 @@ class InviteController extends AbstractController
             }
 
             if ($form->get('create')->isClicked() and $form->isValid()) {
-                $encodedPassword = $encoder->encodePassword($user, $user->getPlainPassword());
+                $encodedPassword = $encoder->hashPassword($user, $user->getPlainPassword());
                 $user->setPassword($encodedPassword);
 
                 $em->persist($user);

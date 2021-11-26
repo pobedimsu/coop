@@ -18,12 +18,12 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\CacheItem;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -107,7 +107,7 @@ class UserController extends AbstractController
     /**
      * @Route("/password/", name="profile_password")
      */
-    public function password(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder): Response
+    public function password(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $encoder): Response
     {
         $form = $this->createForm(UserChangePasswordFormType::class);
 
@@ -134,7 +134,7 @@ class UserController extends AbstractController
                     $validator->validatePassword($password);
 
                     $user->setPassword(
-                        $encoder->encodePassword($user, $password)
+                        $encoder->hashPassword($user, $password)
                     );
 
                     $em->persist($user);

@@ -12,15 +12,17 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 class AddCommand extends Command
 {
     protected static $defaultName = 'user:add';
 
+    /** @var SymfonyStyle */
     private $io;
 
     private $entityManager;
@@ -28,7 +30,7 @@ class AddCommand extends Command
     private $validator;
     private $users;
 
-    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, UserValidator $validator, UserRepository $users)
+    public function __construct(EntityManagerInterface $em, UserPasswordHasherInterface $encoder, UserValidator $validator, UserRepository $users)
     {
         parent::__construct();
 
@@ -44,17 +46,32 @@ class AddCommand extends Command
             ->setDescription('Create a user')
             ->addArgument('username', InputArgument::OPTIONAL, 'The username of the new user')
             ->addArgument('password', InputArgument::OPTIONAL, 'The plain password of the new user')
-//            ->addArgument('email', InputArgument::OPTIONAL, 'The email of the new user')
-            ->addArgument('firstname', InputArgument::OPTIONAL, 'Firstname')
-            ->addArgument('lastname', InputArgument::OPTIONAL, 'Lastname')
+            ->addArgument('email', InputArgument::OPTIONAL, 'The email of the new user')
         ;
     }
 
+    /**
+     * This optional method is the first one executed for a command after configure()
+     * and is useful to initialize properties based on the input arguments and options.
+     */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
+        // SymfonyStyle is an optional feature that Symfony provides so you can
+        // apply a consistent look to the commands of your application.
+        // See https://symfony.com/doc/current/console/style.html
         $this->io = new SymfonyStyle($input, $output);
     }
 
+    /**
+     * This method is executed after initialize() and before execute(). Its purpose
+     * is to check if some of the options/arguments are missing and interactively
+     * ask the user for those values.
+     *
+     * This method is completely optional. If you are developing an internal console
+     * command, you probably should not implement this method because it requires
+     * quite a lot of work. However, if the command is meant to be used by external
+     * users, this method is a nice way to fall back and prevent errors.
+     */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         $username = $input->getArgument('username');
@@ -65,30 +82,12 @@ class AddCommand extends Command
             $input->setArgument('username', $username);
         }
 
-        /*
         $email = $input->getArgument('email');
         if (null !== $email) {
             $this->io->text(' > <info>Email</info>: '.$email);
         } else {
             $email = $this->io->ask('Email', null, [$this->validator, 'validateEmail']);
             $input->setArgument('email', $email);
-        }
-        */
-
-        $firstname = $input->getArgument('firstname');
-        if (null !== $firstname) {
-            $this->io->text(' > <info>Firstname</info>: '.$firstname);
-        } else {
-            $firstname = $this->io->ask('Firstname');
-            $input->setArgument('firstname', $firstname);
-        }
-
-        $lastname = $input->getArgument('lastname');
-        if (null !== $lastname) {
-            $this->io->text(' > <info>Lastname</info>: '.$lastname);
-        } else {
-            $lastname = $this->io->ask('Lastname');
-            $input->setArgument('lastname', $lastname);
         }
 
         // Ask for the password if it's not defined
@@ -101,12 +100,12 @@ class AddCommand extends Command
         }
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $stopwatch = new Stopwatch();
         $stopwatch->start('add-user-command');
 
-//        $email         = $input->getArgument('email');
+        $email         = $input->getArgument('email');
         $username      = $input->getArgument('username');
         $plainPassword = $input->getArgument('password');
 
@@ -116,14 +115,12 @@ class AddCommand extends Command
         // create the user and encode its password
         $user = new User();
         $user
-//            ->setEmail($email)
+            ->setEmail($email)
             ->setUsername($username)
-            ->setFirstname($input->getArgument('firstname'))
-            ->setLastname($input->getArgument('lastname'))
         ;
 
         // See https://symfony.com/doc/current/book/security.html#security-encoding-password
-        $encodedPassword = $this->passwordEncoder->encodePassword($user, $plainPassword);
+        $encodedPassword = $this->passwordEncoder->hashPassword($user, $plainPassword);
         $user->setPassword($encodedPassword);
 
         $this->entityManager->persist($user);

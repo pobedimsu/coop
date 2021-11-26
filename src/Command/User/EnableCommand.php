@@ -17,6 +17,7 @@ class EnableCommand extends Command
 {
     protected static $defaultName = 'user:enable';
 
+    /** @var SymfonyStyle */
     protected $io;
     protected $em;
 

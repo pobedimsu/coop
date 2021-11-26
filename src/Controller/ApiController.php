@@ -9,8 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/api")
@@ -20,7 +20,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/user/create", name="api_create_user", methods={"POST"})
      */
-    public function createUser(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder): JsonResponse
+    public function createUser(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $encoder): JsonResponse
     {
         $access_token = $request->request->get('access_token');
         $username     = $request->request->get('username');
@@ -93,7 +93,7 @@ class ApiController extends AbstractController
             ->setUsername($username)
             ->setFirstname($firstname)
             ->setLastname($lastname)
-            ->setPassword($encoder->encodePassword($user, $password))
+            ->setPassword($encoder->hashPassword($user, $password))
         ;
 
         $em->persist($user);

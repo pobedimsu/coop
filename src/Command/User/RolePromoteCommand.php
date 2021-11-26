@@ -17,6 +17,7 @@ class RolePromoteCommand extends Command
 {
     protected static $defaultName = 'user:role:promote';
 
+    /** @var SymfonyStyle */
     protected $io;
     protected $em;
 

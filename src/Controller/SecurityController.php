@@ -10,8 +10,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
@@ -26,7 +26,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/reset/password/{token}", name="reset_password")
      */
-    public function resetPassword($token, UserRepository $ur, Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $em): Response
+    public function resetPassword($token, UserRepository $ur, Request $request, UserPasswordHasherInterface $encoder, EntityManagerInterface $em): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('homepage');
@@ -69,7 +69,7 @@ class SecurityController extends AbstractController
 
             if (empty($errors)) {
                 $user
-                    ->setPassword($encoder->encodePassword($user, $password))
+                    ->setPassword($encoder->hashPassword($user, $password))
                     ->setResetPasswordCode(null)
                     ->setConfirmationToken(null)
                 ;

@@ -6,6 +6,7 @@ namespace App\Command\User;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\Self_;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,6 +18,7 @@ class DisableCommand extends Command
 {
     protected static $defaultName = 'user:disable';
 
+    /** @var SymfonyStyle */
     protected $io;
     protected $em;
 
@@ -61,13 +63,13 @@ class DisableCommand extends Command
         if (!$user) {
             $this->io->warning('User not found');
 
-            return 0;
+            return self::SUCCESS;
         }
 
         if (!$user->isEnabled()) {
             $this->io->warning(sprintf('User "%s" is already disabled.', $username));
 
-            return 0;
+            return self::SUCCESS;
         }
 
         $user->setIsEnabled(false);

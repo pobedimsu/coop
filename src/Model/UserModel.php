@@ -11,10 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class UserModel implements UserInterface
+class UserModel implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use ColumnTrait\Uuid;
     use ColumnTrait\CreatedAt;

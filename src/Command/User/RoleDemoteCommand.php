@@ -17,6 +17,7 @@ class RoleDemoteCommand extends Command
 {
     protected static $defaultName = 'user:role:demote';
 
+    /** @var SymfonyStyle */
     protected $io;
     protected $em;
 

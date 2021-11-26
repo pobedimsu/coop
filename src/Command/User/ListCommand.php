@@ -17,6 +17,7 @@ class ListCommand extends Command
 {
     protected static $defaultName = 'user:list';
 
+    /** @var SymfonyStyle */
     private $io;
     private $em;
 
@@ -41,6 +42,7 @@ class ListCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var User[] $users */
         $users = $this->em->getRepository(User::class)->findBy([], ['created_at' => 'ASC']);
 
         $rows = [];
@@ -48,7 +50,7 @@ class ListCommand extends Command
             $roles = '';
 
             foreach ($user->getRoles() as $key => $role) {
-                if ($role == 'ROLE_USER') {
+                if ($role === 'ROLE_USER') {
                     $role = '';
                 }
 

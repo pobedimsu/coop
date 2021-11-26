@@ -13,18 +13,19 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ChangePasswordCommand extends Command
 {
     protected static $defaultName = 'user:change-password';
 
+    /** @var SymfonyStyle */
     protected $io;
     protected $em;
     protected $passwordEncoder;
     protected $validator;
 
-    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, UserValidator $validator)
+    public function __construct(EntityManagerInterface $em, UserPasswordHasherInterface $encoder, UserValidator $validator)
     {
         parent::__construct();
 
@@ -75,7 +76,7 @@ class ChangePasswordCommand extends Command
         /** @var User $user */
         $user = $this->em->getRepository(User::class)->findOneByUsername($username);
 
-        if (!$user) {
+        if (empty($user)) {
             $this->io->warning('User not found');
 
             return self::SUCCESS;
@@ -84,7 +85,7 @@ class ChangePasswordCommand extends Command
         $this->validator->validatePassword($plainPassword);
 
         // See https://symfony.com/doc/current/book/security.html#security-encoding-password
-        $encodedPassword = $this->passwordEncoder->encodePassword($user, $plainPassword);
+        $encodedPassword = $this->passwordEncoder->hashPassword($user, $plainPassword);
         $user->setPassword($encodedPassword);
 
         $this->em->flush();
