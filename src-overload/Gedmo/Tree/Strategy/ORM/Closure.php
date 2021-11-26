@@ -15,7 +15,7 @@ use Gedmo\Tree\Strategy;
 use Gedmo\Tree\TreeListener;
 
 /**
- * Отличие от оригиныла в $this->pendingNodesLevelProcess[(string) $nodeId] = $node; <-- Добавлен (string)
+ * Отличие от оригинала в $this->pendingNodesLevelProcess[(string) $nodeId] = $node; <-- Добавлен (string)
  */
 
 /**
@@ -195,7 +195,7 @@ class Closure implements Strategy
     {
     }
 
-     /**
+    /**
      * {@inheritdoc}
      */
     public function processScheduledInsertion($em, $node, AdapterInterface $ea)

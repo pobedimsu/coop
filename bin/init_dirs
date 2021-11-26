@@ -4,7 +4,13 @@ VAR="var"
 
 if [ ! -d "$VAR" ]; then
     mkdir $VAR
+fi
+
+if [ ! -d "$VAR/cache" ]; then
     mkdir $VAR/cache
+fi
+
+if [ ! -d "$VAR/log" ]; then
     mkdir $VAR/log
 fi
 

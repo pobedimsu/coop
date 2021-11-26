@@ -176,6 +176,11 @@ class UserModel implements UserInterface, PasswordAuthenticatedUserInterface
         return $result;
     }
 
+    public function getUserIdentifier(): string
+    {
+        return $this->getUsernameCanonical();
+    }
+
     /**
      * {@inheritdoc}
      */
