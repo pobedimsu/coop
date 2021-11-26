@@ -53,6 +53,9 @@
     "symfony/password-hasher": {
         "version": "v5.3.8"
     },
+    "symfony/polyfill-intl-icu": {
+        "version": "v1.23.0"
+    },
     "symfony/polyfill-php81": {
         "version": "v1.23.0"
     },
