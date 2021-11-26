@@ -16,7 +16,7 @@ services:
             POSTGRES_PASSWORD: '${DB_PASSWORD}'
             POSTGRES_DB: '${DB_NAME}'
         volumes:
-            - pg13:/var/lib/postgresql/data
+            - pg14:/var/lib/postgresql/data
 
     pgbouncer:
         image: pgbouncer/pgbouncer:latest
@@ -39,7 +39,7 @@ services:
         depends_on:
             - pgbouncer
         environment:
-            DATABASE_URL: 'pgsql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:6432/${DB_NAME}?serverVersion=13.2&charset=utf8'
+            DATABASE_URL: 'pgsql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:6432/${DB_NAME}?serverVersion=14.1&charset=utf8'
         volumes:
             - './../:${WORKING_DIR}'
             - ./../var/log/php_errors.log:/var/log/php_errors.log
@@ -55,7 +55,7 @@ services:
         depends_on:
             - pgbouncer
         environment:
-            DATABASE_URL: 'pgsql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:6432/${DB_NAME}?serverVersion=13.2&charset=utf8'
+            DATABASE_URL: 'pgsql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:6432/${DB_NAME}?serverVersion=14.1&charset=utf8'
         volumes:
             - './../:${WORKING_DIR}'
             - ./../var/log/php-fpm_errors.log:/var/log/php-fpm_errors.log
@@ -63,4 +63,4 @@ services:
 #            - ./php-fpm/apcu.ini:/usr/local/etc/php/conf.d/apcu.ini
 
 volumes:
-    pg13:
+    pg14:

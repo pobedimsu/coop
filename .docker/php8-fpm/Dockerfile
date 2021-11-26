@@ -1,4 +1,4 @@
-FROM php:8.0.10-fpm
+FROM php:8.0.13-fpm
 
 RUN apt-get update && apt-get install -y \
     apt-utils \
