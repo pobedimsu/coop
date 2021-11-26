@@ -29,6 +29,9 @@
     "psr/event-dispatcher": {
         "version": "1.0.0"
     },
+    "roave/security-advisories": {
+        "version": "dev-latest"
+    },
     "symfony/css-selector": {
         "version": "v5.2.4"
     },
@@ -64,6 +67,9 @@
     },
     "symfony/rate-limiter": {
         "version": "v5.2.12"
+    },
+    "symfony/runtime": {
+        "version": "v5.3.11"
     },
     "tijsverkoyen/css-to-inline-styles": {
         "version": "2.2.3"

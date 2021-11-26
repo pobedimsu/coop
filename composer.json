@@ -44,13 +44,13 @@
         "symfony/property-info": "5.3.*",
         "symfony/proxy-manager-bridge": "5.3.*",
         "symfony/rate-limiter": "5.3.*",
+        "symfony/runtime": "5.3.*",
         "symfony/security-bundle": "5.3.*",
         "symfony/serializer": "5.3.*",
         "symfony/stopwatch": "5.3.*",
         "symfony/templating": "5.3.*",
         "symfony/translation": "5.3.*",
         "symfony/validator": "5.3.*",
-        "symfony/web-profiler-bundle": "5.3.*",
         "symfony/yaml": "5.3.*",
         "twig/cssinliner-extra": "^3.1",
         "twig/extra-bundle": "^3.1",
@@ -58,8 +58,13 @@
         "twig/twig": "^3.0",
         "vich/uploader-bundle": "^1.17"
     },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "symfony/web-profiler-bundle": "^5.3"
+    },
     "config": {
         "apcu-autoloader": true,
+        "optimize-autoloader": true,
         "component-dir": "public/components",
         "preferred-install": {
             "*": "dist"
