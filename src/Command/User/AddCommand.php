@@ -82,6 +82,7 @@ class AddCommand extends Command
             $input->setArgument('username', $username);
         }
 
+        /*
         $email = $input->getArgument('email');
         if (null !== $email) {
             $this->io->text(' > <info>Email</info>: '.$email);
@@ -89,6 +90,7 @@ class AddCommand extends Command
             $email = $this->io->ask('Email', null, [$this->validator, 'validateEmail']);
             $input->setArgument('email', $email);
         }
+        */
 
         // Ask for the password if it's not defined
         $password = $input->getArgument('password');
@@ -105,7 +107,7 @@ class AddCommand extends Command
         $stopwatch = new Stopwatch();
         $stopwatch->start('add-user-command');
 
-        $email         = $input->getArgument('email');
+        //$email         = $input->getArgument('email');
         $username      = $input->getArgument('username');
         $plainPassword = $input->getArgument('password');
 
@@ -115,8 +117,10 @@ class AddCommand extends Command
         // create the user and encode its password
         $user = new User();
         $user
-            ->setEmail($email)
+            //->setEmail($email)
             ->setUsername($username)
+            ->setFirstname($input->getArgument('firstname'))
+            ->setLastname($input->getArgument('lastname'))
         ;
 
         // See https://symfony.com/doc/current/book/security.html#security-encoding-password
