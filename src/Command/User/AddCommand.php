@@ -92,6 +92,22 @@ class AddCommand extends Command
         }
         */
 
+        $firstname = $input->getArgument('firstname');
+        if (null !== $firstname) {
+            $this->io->text(' > <info>Firstname</info>: '.$firstname);
+        } else {
+            $firstname = $this->io->ask('Firstname');
+            $input->setArgument('firstname', $firstname);
+        }
+
+        $lastname = $input->getArgument('lastname');
+        if (null !== $lastname) {
+            $this->io->text(' > <info>Lastname</info>: '.$lastname);
+        } else {
+            $lastname = $this->io->ask('Lastname');
+            $input->setArgument('lastname', $lastname);
+        }
+
         // Ask for the password if it's not defined
         $password = $input->getArgument('password');
         if (null !== $password) {
