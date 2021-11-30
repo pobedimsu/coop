@@ -46,7 +46,9 @@ class AddCommand extends Command
             ->setDescription('Create a user')
             ->addArgument('username', InputArgument::OPTIONAL, 'The username of the new user')
             ->addArgument('password', InputArgument::OPTIONAL, 'The plain password of the new user')
-            ->addArgument('email', InputArgument::OPTIONAL, 'The email of the new user')
+            ->addArgument('firstname', InputArgument::OPTIONAL, 'Firstname')
+            ->addArgument('lastname', InputArgument::OPTIONAL, 'Lastname')
+            //->addArgument('email', InputArgument::OPTIONAL, 'The email of the new user')
         ;
     }
 
