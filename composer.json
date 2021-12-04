@@ -54,8 +54,7 @@
         "twig/cssinliner-extra": "^3.1",
         "twig/extra-bundle": "^3.1",
         "twig/intl-extra": "^3.2",
-        "twig/twig": "^3.0",
-        "vich/uploader-bundle": "^1.17"
+        "twig/twig": "^3.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
