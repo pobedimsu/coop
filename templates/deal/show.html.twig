@@ -96,9 +96,9 @@
 
     {% if deal.status == constant('App\\Entity\\Deal::STATUS_ACCEPTED') or deal.status == constant('App\\Entity\\Deal::STATUS_ACCEPTED_EXTERNAL') %}
         <br>
-        {% if deal.seller.id == app.user.id %}
+        {% if deal.buyer.id == app.user.id %}
             <div class="alert alert-info" role="alert">
-                После того, как вы произведёте обмен, нужно будет завершить сделку, для начисления баллов.
+                После того, как вы произведёте обмен, нужно будет завершить сделку.
             </div>
 
             <p>
@@ -107,7 +107,11 @@
 
             <br>
             {#<p>* - <i>в данном случае участники самостоятельно решают на каких условиях совершить обмен по данному предложения и стоимость сделки не затрагивает балансы участников в системе.</i></p>#}
-        {% elseif deal.buyer.id == app.user.id %}
+        {% elseif deal.seller.id == app.user.id %}
+            <div class="alert alert-info" role="alert">
+                После того, как вы произведёте обмен, нужно будет завершить сделку, для начисления баллов.
+            </div>
+
             <p>
                 {#<a href="{{ path('site.deal.show', {'id': deal.id, 'action': 'cancel'}) }}" class="btn btn-default" onclick="return confirm('Вы уверены, что хотите отменить заявку?')">Отменить, если вы передумали</a>#}
             </p>

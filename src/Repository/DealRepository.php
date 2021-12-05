@@ -8,6 +8,7 @@ use App\Entity\Deal;
 use App\Entity\Offer;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Smart\CoreBundle\Doctrine\RepositoryTrait;
 
@@ -20,10 +21,7 @@ class DealRepository extends ServiceEntityRepository
         parent::__construct($registry, Deal::class);
     }
 
-    /**
-     * @return Deal[]
-     */
-    public function findActiveByUser(User $user): array
+    public function getfindActiveByUserQueryBuilder(User $user): QueryBuilder
     {
         $qb = $this->createQueryBuilder('e');
         $qb->where($qb->expr()->orX(
@@ -36,15 +34,33 @@ class DealRepository extends ServiceEntityRepository
             $qb->expr()->eq('e.status', ':status_accepted'),
             $qb->expr()->eq('e.status', ':status_accepted_external')
         ));
-        $qb->orderBy('e.updated_at', 'DESC')
-            ->setParameter('user', $user)
+        $qb->setParameter('user', $user)
             ->setParameter('status_new', Deal::STATUS_NEW)
             ->setParameter('status_view', Deal::STATUS_VIEW)
             ->setParameter('status_accepted', Deal::STATUS_ACCEPTED)
             ->setParameter('status_accepted_external', Deal::STATUS_ACCEPTED_EXTERNAL)
         ;
 
+        return $qb;
+    }
+
+    /**
+     * @return Deal[]
+     */
+    public function findActiveByUser(User $user): array
+    {
+        $qb = $this->getfindActiveByUserQueryBuilder($user);
+        $qb->orderBy('e.updated_at', 'DESC');
+
         return $qb->getQuery()->getResult();
+    }
+
+    public function countActiveByUser(User $user): int
+    {
+        $qb = $this->getfindActiveByUserQueryBuilder($user);
+        $qb->select('COUNT(e.id)');
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -73,6 +89,34 @@ class DealRepository extends ServiceEntityRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @return Deal[]
+     */
+    public function countNewByUser(User $user): int
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COUNT(e.id)');
+        $qb->where($qb->expr()->orX(
+            $qb->expr()->eq('e.seller', ':user'),
+            $qb->expr()->eq('e.buyer', ':user')
+        ));
+        $qb->andWhere('e.viewed_at IS NULL');
+        $qb->andWhere($qb->expr()->orX(
+            $qb->expr()->eq('e.status', ':status_new'),
+            $qb->expr()->eq('e.status', ':status_view'),
+            $qb->expr()->eq('e.status', ':status_accepted'),
+            $qb->expr()->eq('e.status', ':status_accepted_external')
+        ));
+        $qb->setParameter('user', $user)
+            ->setParameter('status_new', Deal::STATUS_NEW)
+            ->setParameter('status_view', Deal::STATUS_VIEW)
+            ->setParameter('status_accepted', Deal::STATUS_ACCEPTED)
+            ->setParameter('status_accepted_external', Deal::STATUS_ACCEPTED_EXTERNAL)
+        ;
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -138,10 +182,43 @@ class DealRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function countNewIncomingByUser(User $user): int
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COUNT(e.id)');
+        $qb->where('e.seller = :user');
+        $qb->andWhere($qb->expr()->orX(
+            $qb->expr()->eq('e.status', ':status_new'),
+            $qb->expr()->eq('e.status', ':status_view'),
+        ));
+        $qb->setParameter('user', $user)
+            ->setParameter('status_new', Deal::STATUS_NEW)
+            ->setParameter('status_view', Deal::STATUS_VIEW)
+        ;
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function countActiveIncomingByUser(User $user): int
+    {
+        $qb = $this->getfindActiveIncomingByUserQueryBuilder($user);
+        $qb->select('COUNT(e.id)');
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
     /**
      * @return Deal[]
      */
     public function findActiveIncomingByUser(User $user): array
+    {
+        $qb = $this->getfindActiveIncomingByUserQueryBuilder($user);
+        $qb->orderBy('e.updated_at', 'DESC');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getfindActiveIncomingByUserQueryBuilder(User $user): QueryBuilder
     {
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.seller = :user');
@@ -151,15 +228,14 @@ class DealRepository extends ServiceEntityRepository
             $qb->expr()->eq('e.status', ':status_accepted'),
             $qb->expr()->eq('e.status', ':status_accepted_external')
         ));
-        $qb->orderBy('e.updated_at', 'DESC')
-            ->setParameter('user', $user)
+        $qb->setParameter('user', $user)
             ->setParameter('status_new', Deal::STATUS_NEW)
             ->setParameter('status_view', Deal::STATUS_VIEW)
             ->setParameter('status_accepted', Deal::STATUS_ACCEPTED)
             ->setParameter('status_accepted_external', Deal::STATUS_ACCEPTED_EXTERNAL)
         ;
 
-        return $qb->getQuery()->getResult();
+        return $qb;
     }
 
     /**
@@ -184,6 +260,28 @@ class DealRepository extends ServiceEntityRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function countOutgoingByUser(User $user): int
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COUNT(e.id)');
+        $qb->where('e.buyer = :user');
+        $qb->andWhere($qb->expr()->orX(
+            $qb->expr()->eq('e.status', ':status_new'),
+            $qb->expr()->eq('e.status', ':status_view'),
+            $qb->expr()->eq('e.status', ':status_accepted'),
+            $qb->expr()->eq('e.status', ':status_accepted_external')
+        ));
+        $qb->setParameter('user', $user)
+            ->setParameter('user', $user)
+            ->setParameter('status_new', Deal::STATUS_NEW)
+            ->setParameter('status_view', Deal::STATUS_VIEW)
+            ->setParameter('status_accepted', Deal::STATUS_ACCEPTED)
+            ->setParameter('status_accepted_external', Deal::STATUS_ACCEPTED_EXTERNAL)
+        ;
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**

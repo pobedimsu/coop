@@ -56,10 +56,16 @@
 {% block linkElement %}
     {% import 'knp_menu.html.twig' as knp_menu %}
 
-    <a href="{{ item.uri }}" class="btn btn-outline-primary btn-sm"
+    <a href="{{ item.uri }}" class="btn btn-outline-primary btn-sm">
         <span>
             {{ block('label') }}
         </span>
+
+        {% if item.extra('countNewIncoming') %}
+            <span class="badge badge-danger">{{ item.extra('countNewIncoming') }}</span>
+        {% elseif item.extra('countActive') %}
+            <span class="badge badge-secondary">{{ item.extra('countActive') }}</span>
+        {% endif %}
     </a>
 {% endblock %}
 

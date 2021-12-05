@@ -6,12 +6,60 @@
     <h1>Мои сделки</h1>
 
     <ul class="nav nav-pills">
-        <li {% if show == 'new' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'new'}) }}">Новые</a></li>
-        <li {% if show == 'active' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'active'}) }}">Активные</a></li>
-        <li {% if show == 'in' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'in'}) }}">Входящие</a></li>
-        <li {% if show == 'out' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'out'}) }}">Исходящие</a></li>
+        <li {% if show == 'new' %}class="active"{% endif %}>
+            <a href="{{ path('deals', {'tab': 'new'}) }}">
+                Новые
+
+                {% set deals_count_new = app_deals_count_new_by_user(app.user) %}
+                {% if deals_count_new %}
+                    <span class="badge badge-primary">{{ deals_count_new }}</span>
+                {% endif %}
+            </a>
+        </li>
+
+        <li {% if show == 'active' %}class="active"{% endif %}>
+            <a href="{{ path('deals', {'tab': 'active'}) }}">
+                Активные
+
+                {% set deals_count_active = app_deals_count_active_by_user(app.user) %}
+                {% if deals_count_active %}
+                    <span class="badge badge-primary">{{ deals_count_active }}</span>
+                {% endif %}
+            </a>
+        </li>
+
+        <li {% if show == 'in' %}class="active"{% endif %}>
+            <a href="{{ path('deals', {'tab': 'in'}) }}">
+                Входящие
+
+                {% set deals_count_new_incoming = app_deals_count_new_incoming_by_user(app.user) %}
+                {% if deals_count_new_incoming %}
+                    <span class="badge badge-danger">{{ deals_count_new_incoming }}</span>
+                {% else %}
+                    {% set deals_count_incoming = app_deals_count_incoming_by_user(app.user) %}
+
+                    {% if deals_count_incoming %}
+                        <span class="badge badge-primary">{{ deals_count_incoming }}</span>
+                    {% endif %}
+                {% endif %}
+            </a>
+        </li>
+
+        <li {% if show == 'out' %}class="active"{% endif %}>
+            <a href="{{ path('deals', {'tab': 'out'}) }}">
+                Исходящие
+
+                {% set deals_count_outgoing = app_deals_count_outgoing_by_user(app.user) %}
+                {% if deals_count_outgoing %}
+                    <span class="badge badge-primary">{{ deals_count_outgoing }}</span>
+                {% endif %}
+            </a>
+        </li>
+
         <li {% if show == 'complete' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'complete'}) }}">Завершенные</a></li>
+
         <li {% if show == 'canceled' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'canceled'}) }}">Отменённые</a></li>
+
         <li {% if show == 'all' %}class="active"{% endif %}><a href="{{ path('deals', {'tab': 'all'}) }}">Все</a></li>
     </ul>
 

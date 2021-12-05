@@ -37,16 +37,23 @@ class AppExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('app_balance',                     [$this, 'getBalance']),
-            new TwigFunction('app_offers_balance',              [$this, 'getOffersBallance']),
-            new TwigFunction('app_count_deals_for_offer',       [$this, 'getCountAllDealsForOffer']),
-            new TwigFunction('app_count_deals_for_user',        [$this, 'getCountAllDealsForUser']),
-            new TwigFunction('app_count_offers_for_user',       [$this, 'getCountOffersForUser']),
-            new TwigFunction('app_count_offers_available_for_user', [$this, 'getCountOffersAvailableByUser']),
-            new TwigFunction('app_count_active_deals_for_offer',    [$this, 'getCountActiveDealsForOffer']),
-            new TwigFunction('app_get_hold_sum',                [$this, 'getHoldSum']),
-            new TwigFunction('app_transactions_in',             [$this, 'getTransactionsIn']),
-            new TwigFunction('app_transactions_out',            [$this, 'getTransactionsOut']),
+            new TwigFunction('app_balance',                             [$this, 'getBalance']),
+            new TwigFunction('app_offers_balance',                      [$this, 'getOffersBallance']),
+
+            new TwigFunction('app_count_deals_for_offer',               [$this, 'getCountAllDealsForOffer']),
+            new TwigFunction('app_count_deals_for_user',                [$this, 'getCountAllDealsForUser']),
+            new TwigFunction('app_deals_count_new_by_user',             [$this, 'dealsCountNewByUser']),
+            new TwigFunction('app_deals_count_active_by_user',          [$this, 'dealsCountActiveByUser']),
+            new TwigFunction('app_deals_count_new_incoming_by_user',    [$this, 'dealsCountNewIncomingByUser']),
+            new TwigFunction('app_deals_count_incoming_by_user',        [$this, 'dealsCountIncomingByUser']),
+            new TwigFunction('app_deals_count_outgoing_by_user',        [$this, 'dealsCountOutgoingByUser']),
+
+            new TwigFunction('app_count_offers_for_user',               [$this, 'getCountOffersForUser']),
+            new TwigFunction('app_count_offers_available_for_user',     [$this, 'getCountOffersAvailableByUser']),
+            new TwigFunction('app_count_active_deals_for_offer',        [$this, 'getCountActiveDealsForOffer']),
+            new TwigFunction('app_get_hold_sum',                        [$this, 'getHoldSum']),
+            new TwigFunction('app_transactions_in',                     [$this, 'getTransactionsIn']),
+            new TwigFunction('app_transactions_out',                    [$this, 'getTransactionsOut']),
 
             new TwigFunction('app_tg_bot_name',                 [$this, 'getTgBotName']),
             new TwigFunction('app_tg_is_enable',                [$this, 'getTgIsEnable']),
@@ -149,6 +156,31 @@ class AppExtension extends AbstractExtension
     public function getCountAllDealsForUser(User $user): int
     {
         return $this->em->getRepository(Deal::class)->countForUser($user);
+    }
+
+    public function dealsCountActiveByUser(User $user): int
+    {
+        return $this->em->getRepository(Deal::class)->countActiveByUser($user);
+    }
+
+    public function dealsCountNewByUser(User $user): int
+    {
+        return $this->em->getRepository(Deal::class)->countNewByUser($user);
+    }
+
+    public function dealsCountNewIncomingByUser(User $user): int
+    {
+        return $this->em->getRepository(Deal::class)->countNewIncomingByUser($user);
+    }
+
+    public function dealsCountIncomingByUser(User $user): int
+    {
+        return $this->em->getRepository(Deal::class)->countActiveIncomingByUser($user);
+    }
+
+    public function dealsCountOutgoingByUser(User $user): int
+    {
+        return $this->em->getRepository(Deal::class)->countOutgoingByUser($user);
     }
 
     public function getCountOffersForUser(User $user): int

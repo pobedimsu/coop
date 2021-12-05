@@ -4,19 +4,24 @@ declare(strict_types=1);
 
 namespace App\Menu;
 
+use App\Entity\Deal;
 use App\Service\TelegramService;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class MainMenu
 {
     public function __construct(
         private FactoryInterface $factory,
+        private EntityManagerInterface $em,
         private KernelInterface $kernel,
         private string $tgBotToken,
         private TelegramService $telegram,
+        private TokenStorageInterface $tokenStorage,
     ) {}
 
     /**
@@ -45,9 +50,14 @@ class MainMenu
             ->setLinkAttribute('class', 'nav-link py-0')
         ;
 
-        $menu->addChild('My deals', ['route' => 'deals'])
+        $countNewIncoming = $this->em->getRepository(Deal::class)->countNewIncomingByUser($this->tokenStorage->getToken()->getUser());
+        $countActive = $this->em->getRepository(Deal::class)->countActiveByUser($this->tokenStorage->getToken()->getUser());
+
+        $menu->addChild('My deals', ['route' => 'deals', 'routeParameters' => ['tab' => $countNewIncoming ? 'in' : ($countActive ? 'active' : null) ]])
             ->setAttribute('class', 'nav-item')
             ->setLinkAttribute('class', 'nav-link py-0')
+            ->setExtra('countNewIncoming', $countNewIncoming)
+            ->setExtra('countActive', $countActive)
         ;
 
         $menu->addChild('Joint Purchases', ['route' => 'jp'])

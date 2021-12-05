@@ -114,7 +114,9 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div class="mr-auto">
-                            {{ knp_menu_render('top') }}
+                            {{ knp_menu_render('top', {
+                                'template': 'menu/knp_menu.html.twig',
+                            }) }}
                         </div>
                         <ul class="navbar-nav">
                             {% if is_granted('ROLE_USER') %}

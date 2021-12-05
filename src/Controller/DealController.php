@@ -21,19 +21,19 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class DealController extends AbstractController
 {
-    /**
-     * @Route("/deals/", name="deals")
-     */
+    #[Route('/deals/', name: 'deals')]
     public function index(Request $request, DealRepository $dealRepo): Response
     {
         // @todo постраничность
 
         $show = $request->query->get('tab', 'active');
 
-        $deals = $dealRepo->findNewByUser($this->getUser());
+        if ($request->query->get('tab') === null or $request->query->get('tab') === 'new') {
+            $deals = $dealRepo->findNewByUser($this->getUser());
 
-        if ($deals and $request->query->get('tab') === null) {
-            $show = 'new';
+            if ($deals) {
+                $show = 'new';
+            }
         }
 
         switch ($show) {
@@ -67,15 +67,13 @@ class DealController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/deal/create", name="deal_create", methods={"POST"})
-     */
+    #[Route('/deal/create', name: 'deal_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em, BillService $billService, EventDispatcherInterface $dispatcher): JsonResponse
     {
         try {
             $offer = $em->find(Offer::class, $request->request->get('offer_id'));
         } catch (ConversionException $e) {
-            return new JsonResponse([
+            return $this->json([
                 'status' => 'error',
                 'message' => 'Предложение не найдено',
             ]);
@@ -104,7 +102,7 @@ class DealController extends AbstractController
             if (!$offer->isStatusAccessToOrder()) {
                 $error_msg = 'Предложение не доступно для заказа';
             } elseif (
-                (int) $type === Deal::TYPE_INNER
+                $type === Deal::TYPE_INNER
                 and $quantity * $price > $billService->getBalance($this->getUser())
             ) {
                 $error_msg = 'У вас недостаточно ресурсов для заключения сделки';
@@ -137,7 +135,7 @@ class DealController extends AbstractController
                     ->setAmountCost($price * $quantity)
                     ->setBuyer($this->getUser())
                     ->setSeller($offer->getUser())
-                    ->setType((int) $type)
+                    ->setType($type)
                     ->setComment($request->request->get('comment'))
                 ;
 
@@ -166,12 +164,10 @@ class DealController extends AbstractController
             }
         }
 
-        return new JsonResponse($data);
+        return $this->json($data);
     }
 
-    /**
-     * @Route("/deal/{id}/", name="deal_show")
-     */
+    #[Route('/deal/{id}', name: 'deal_show')]
     public function show(Deal $deal, Request $request, EntityManagerInterface $em, EventDispatcherInterface $dispatcher): Response
     {
         if ($deal->getSeller() == $this->getUser() or $deal->getBuyer() == $this->getUser()) {
@@ -185,7 +181,7 @@ class DealController extends AbstractController
         $quantity_reserved = (int) $offer->getQuantityReserved();
 
         if ($request->query->has('action')) {
-            if ($request->query->get('action') == 'cancel') {
+            if ($request->query->get('action') === 'cancel') {
                 if ($deal->getSeller() == $this->getUser()) {
                     $deal->setStatus(Deal::STATUS_CANCEL_BY_SELLER);
 
@@ -207,7 +203,7 @@ class DealController extends AbstractController
                 if (!empty($offer->getQuantity()) and $quantity_reserved > 0) {
                     $offer->setQuantityReserved($quantity_reserved - $deal->getQuantity());
 
-                    if ((int) $offer->getStatus() == Offer::STATUS_RESERVE) {
+                    if ($offer->getStatus() === Offer::STATUS_RESERVE) {
                         $offer->setStatus(Offer::STATUS_AVAILABLE);
                     }
 
@@ -218,13 +214,13 @@ class DealController extends AbstractController
                 $this->addFlash('success', 'Сделка отменена.');
             }
 
-            if ($request->query->get('action') == 'complete') {
-                if ($deal->getSeller() == $this->getUser()) {
-                    if ($deal->getStatus() == Deal::STATUS_ACCEPTED) {
+            if ($request->query->get('action') === 'complete') {
+                if ($deal->getBuyer() == $this->getUser()) {
+                    if ($deal->getStatus() === Deal::STATUS_ACCEPTED) {
                         $deal->setStatus(Deal::STATUS_COMPLETE);
                     }
 
-                    if ($deal->getStatus() == Deal::STATUS_ACCEPTED_EXTERNAL) {
+                    if ($deal->getStatus() === Deal::STATUS_ACCEPTED_EXTERNAL) {
                         $deal->setStatus(Deal::STATUS_COMPLETE_OUTSIDE);
                     }
 
@@ -247,7 +243,7 @@ class DealController extends AbstractController
                     }
 
                     // В транзакциях учитываются только сделки внутри системы.
-                    if ($deal->getStatus() == Deal::STATUS_COMPLETE) {
+                    if ($deal->getStatus() === Deal::STATUS_COMPLETE) {
                         $transaction = new Transaction();
                         $transaction
                             ->setFromUser($deal->getBuyer())
@@ -266,7 +262,7 @@ class DealController extends AbstractController
                 }
             }
 
-            if ($request->query->get('action') == 'accept') {
+            if ($request->query->get('action') === 'accept') {
                 if ($deal->getType() === Deal::TYPE_INNER) {
                     $deal->setStatus(Deal::STATUS_ACCEPTED);
                 } else {
@@ -285,7 +281,7 @@ class DealController extends AbstractController
             return $this->redirectToRoute('deal_show', ['id' => $deal->getId()]);
         }
 
-        if (empty($deal->getViewedAt()) and $deal->getSeller() == $this->getUser()) {
+        if ($deal->getViewedAt() === null and $deal->getSeller() == $this->getUser()) {
             $deal
                 ->setStatus(Deal::STATUS_VIEW)
                 ->setViewedAt(new \DateTime())
