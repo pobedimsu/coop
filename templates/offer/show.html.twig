@@ -66,7 +66,6 @@
             </p>
 
             {% if offer.isEnabled %}
-
                 {% if offer.isStatusAccessToOrder and offer.user != app.user %}
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                         <i class="far fa-handshake"></i> Отправить запрос на сделку
@@ -92,7 +91,7 @@
                         <div class="modal-body">
                             <p><i class="fas fa-cart-plus"></i> {{ offer }}</p>
 
-                            <form id="myform" action="{{ path('deal_create') }}" method="post" >
+                            <form id="myform" action="{{ path('deal_create') }}" method="post">
                                 <input type="hidden" name="offer_id" value="{{ offer.id }}">
 
                                 <div class="form-group">
@@ -182,6 +181,53 @@
                     </a>
                 </h4>
 
+                {% if app_tg_is_enable() and offer.user != app.user %}
+                    <p><i class="far fa-paper-plane"></i>
+                        {% if offer.user.telegramUsername %}
+                            <a href="tg://resolve?domain={{ offer.user.telegramUsername }}">Написать сообщение в Телеграм</a>
+                        {% else %}
+                            <span style="color: red;">Телеграм не подключен</span>
+                        {% endif %}
+                    </p>
+                {% endif %}
+
+                {% if app_is_internal_messenger_enable() and offer.user != app.user %}
+                    <p>
+                        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#im_modal">
+                            <i class="far fa-envelope"></i> Написать сообщение
+                        </button>
+                    </p>
+
+                    <div class="modal fade" id="im_modal" tabindex="-1" role="dialog" aria-labelledby="mailModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="mailModalLabel">Написать сообщение</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>{{ offer.user }}</p>
+
+                                    <form id="im_send_msg_form" action="{{ path('im_send_message') }}" method="post">
+                                        <input type="hidden" name="user_id" value="{{ offer.user.id }}">
+
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Текст</label>
+                                            <textarea class="form-control" id="im_text" name="text" rows="4"></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light" data-dismiss="modal">Закрыть</button>
+                                            <button type="submit" class="btn btn-success" id="im_send_msg_form_submit">Отправить</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
                 <p>
                     <i class="fas fa-home"></i>
                     Город:
@@ -201,15 +247,6 @@
                     {% include 'user/_anketa.html.twig' with {'user': offer.user} %}
                 </p>
 
-                {% if offer.user != app.user %}
-                    <p><i class="far fa-paper-plane"></i>
-                        {% if offer.user.telegramUsername %}
-                            <a href="tg://resolve?domain={{ offer.user.telegramUsername }}">Написать сообщение в Телеграм</a>
-                        {% else %}
-                            <span style="color: red;">Телеграм не подключен</span>
-                        {% endif %}
-                    </p>
-                {% endif %}
 {#                <p><i class="fas fa-map-marker-alt"></i> Новосибирск  --- @todo</p>#}
                 <p><i class="far fa-calendar-check"></i> Участник с {{ offer.user.createdAt|format_date }}</p>
                 <p><i class="far fa-money-bill-alt"></i> Баланс:
@@ -246,8 +283,7 @@
 
             $.post( $(this).attr('action'), $(this).serialize(), function(data) {
               //console.log(data);
-              if(data.status == 'success') {
-                // Success code here
+              if(data.status === 'success') {
                 location.reload();
               } else {
                 // Error code here
@@ -278,5 +314,33 @@
             $('#order-amount').text(this.value * price);
           });
         });
+
+        {# Отправка сообщений в чат #}
+        {% if app_is_internal_messenger_enable() %}
+        $(document).ready(function() {
+          $('#im_send_msg_form').on('submit', function(event) {
+            event.preventDefault();
+            $('#im_send_msg_form_submit').attr('disabled', true);
+
+            $.post($(this).attr('action'), $(this).serialize(), function(data, statusText, xhr) {
+                location.reload();
+            }, 'json')
+            .fail(function(xhr) {
+                // Error code here
+                new PNotify({
+                    title: '{{ 'Error'|trans }}!',
+                    text: xhr.responseJSON.message,
+                    type: 'error'
+                });
+
+                $('#im_send_msg_form_submit').attr('disabled', false);
+            })
+          });
+
+          $('#im_modal').on('shown.bs.modal', function (e) {
+            $('#im_text').focus();
+          });
+        });
+        {% endif %}
     </script>
 {% endblock js %}

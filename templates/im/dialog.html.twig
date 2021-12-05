@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ dialog.recipient }} - Диалог {% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        #im_container {
+            height: 87vh;
+            display: flex;
+            flex-direction: column;
+        }
+        #im_messages {
+            flex: auto;
+            overflow: auto;
+            bottom: 0;
+        }
+        #im_container > form {
+            flex-shrink: 0;
+        }
+        #im_text {
+            min-height: 40px;
+        }
+        .im_msg {
+            display: inline-block;
+            clear: both;
+        }
+        .im_msg_date, form span {
+            float: right;
+            opacity: 0.5;
+            margin-left: 6px;
+            margin-top: 5px;
+        }
+        .im_msg_text {
+            border-radius: 9px;
+            padding: 7px 10px;
+        }
+        .im_msg_own .im_msg_text {
+            background-color: rgba(0,81,159,0.99);
+        }
+        .im_msg_own {
+            color: white;
+            margin: 8px 0px 2px auto;
+            padding-left: 50px;
+            float: right;
+        }
+        .im_msg_recipient {
+            float: left;
+            margin: 8px auto 2px 0;
+            padding-right: 50px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <a href="{{ path('im_index') }}" style="float: right; margin-top: 10px;"><< все диалоги</a>
+
+    <h2>Диалог - {{ dialog.recipient }}</h2>
+
+    <div id="im_container">
+        <div id="im_temp"></div>
+
+        <div id="im_messages" onScroll="handleOnScroll();">
+            {% include 'im/messages.html.twig' with {'messages': messages} %}
+        </div>
+
+        <form id="im_send_msg_form" method="post">
+            <input type="hidden" name="user_id" value="{{ dialog.recipient.id }}">
+            <textarea class="form-control" id="im_text" name="text" rows="2" autofocus placeholder="Написать сообщение..."></textarea>
+            <button type="submit" class="btn btn-success" id="im_send_msg_form_submit">Отправить</button>
+            <span>отправить: Ctrl+Enter</span>
+        </form>
+    </div>
+{% endblock %}
+
+{#{% block theme_toggler '' %}#}
+
+{% block js %}
+    {{ parent() }}
+    <script>
+        var offset = 0;
+
+        $(document).ready(function() {
+            document.getElementById('im_messages').scrollTop = 9999999;
+
+            $('#im_text').keydown(function (e) {
+                if (e.ctrlKey && e.keyCode === 13) {
+                    $('#im_send_msg_form').submit()
+                }
+            });
+        });
+
+        function handleOnScroll() {
+            var div = document.getElementById('im_messages');
+
+            if (div.scrollTop === 0) {
+                offset = offset + {{ limit }}
+
+                $.get('{{ path('im_dialog_messages', {'id': dialog.id}) }}', {
+                    limit: {{ limit }},
+                    offset: offset
+                }).done(function (data) {
+                    if (data.length) {
+                        $d = $('#im_temp').prepend(data)
+                        h = $d.outerHeight();
+
+                        $('#im_messages').prepend($('#im_temp').html())
+                        $('#im_temp').empty()
+
+                        document.getElementById('im_messages').scrollTop = h;
+
+                        h = 0;
+                    }
+                });
+            }
+
+            // console.log(div.scrollTop)
+        };
+    </script>
+{% endblock js %}
+

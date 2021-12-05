@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Диалоги {% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        .clickable-row tr {
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h2>Диалоги</h2>
+
+    <table class="table table-bordered table-hover clickable-row">
+        {% for dialog in dialogs %}
+        <tr data-href="{{ path('im_dialog', {'id': dialog.id}) }}">
+            <td nowrap>
+                {{ dialog.recipient }}
+
+                {% if dialog.unreadOwnerCount %}
+                    <span class="badge badge-pill badge-primary">{{ dialog.unreadOwnerCount }}</span>
+                {% elseif dialog.unreadRecipientCount %}
+                    <span class="badge badge-pill badge-secondary">{{ dialog.unreadRecipientCount }}</span>
+                {% endif %}
+            </td>
+            <td style="width: 100%;">{{ dialog.announce|raw }}</td>
+            <td nowrap>{{ dialog.lastMessageDate|app_date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    <script>
+        $(document).ready( function() {
+            $(".clickable-row tr").click(function() {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+{% endblock js %}

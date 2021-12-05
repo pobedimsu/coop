@@ -86,6 +86,10 @@
                 height: 500px;
                 width: 100%;
             }
+            #theme-toggler {
+                font-weight: normal !important;
+                color: lightgray;
+            }
         </style>
     {% endblock %}
 
@@ -118,6 +122,20 @@
                                         Баланс <b style="color: white;">{{ app_balance(app.user) }}</b>{{ app_currency() }}
                                     </a>
                                 </li>
+
+                                {% if app_is_internal_messenger_enable() %}
+                                    {% set im_unread_dialogs_count = app_im_unread_dialogs_count(app.user) %}
+
+                                    <li>
+                                        <a href="{{ path('im_index') }}" class="nav-link py-0" title="Сообщения ({{ im_unread_dialogs_count }})">
+                                            <i class="fab fa-telegram-plane"></i>
+
+                                            {% if im_unread_dialogs_count %}
+                                                <span class="badge badge-pill badge-primary">{{ im_unread_dialogs_count }}</span>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                {% endif %}
                             {% endif %}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle py-0" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -153,9 +171,22 @@
         {% endif %}
 
         {% if is_granted('ROLE_USER') %}
-            <a href="{{ path('profile') }}" class="btn btn-outline-primary btn-sm">Мой профиль</a> <a href="{{ path('user_show', {'id': app.user.id}) }}" class="btn btn-outline-primary btn-sm">
+            <a href="{{ path('profile') }}" class="btn btn-outline-primary btn-sm">Мой профиль</a>
+            <a href="{{ path('user_show', {'id': app.user.id}) }}" class="btn btn-outline-primary btn-sm">
                 Мой баланс <b style="color: black;">{{ app_balance(app.user) }}</b>{{ app_currency() }}
             </a>
+
+            {% if app_is_internal_messenger_enable() %}
+                <a href="{{ path('im_index') }}" class="btn btn-outline-primary btn-sm">
+                    <i class="fab fa-telegram-plane"></i>
+                    Сообщения
+{#                    {% set im_unread_dialogs_count = app_im_unread_dialogs_count() %}#}
+
+                    {% if im_unread_dialogs_count %}
+                        <span class="badge badge-pill badge-primary">{{ im_unread_dialogs_count }}</span>
+                    {% endif %}
+                </a>
+            {% endif %}
 
             <a href="{{ path('security_logout') }}" class="btn btn-outline-warning btn-sm" onclick="return confirm('Вы уверены, что хотите выйти?')">Выход</a>
         {% endif %}
@@ -179,19 +210,22 @@
     </style>
 {% endblock header %}
 
+{% block container_main %}
 <content role="main">
     <div class="container">
         {% block content '' %}
 
+        {% block theme_toggler %}
         <a  href="javascript:void()"
             class="btn btn-outline-dark ml-auto font-weight-bold"
             id="theme-toggler"
             style="float: right;"
             onclick="toggleTheme()"
         ></a>
-
+        {% endblock %}
     </div>
 </content>
+{% endblock container_main %}
 
 {% block footer %}
     <footer class="my-5 _pt-5 text-muted text-center text-small">

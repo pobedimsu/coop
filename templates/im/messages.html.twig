@@ -1,0 +1,16 @@
+{% for message in messages %}
+{% if message.author == app.user %}
+    {% set im_msg_type = 'im_msg_own' %}
+{% else %}
+    {% set im_msg_type = 'im_msg_recipient' %}
+{% endif %}
+
+<div class="im_msg {{ im_msg_type }}">
+    <div class="im_msg_text">
+        {{ message|nl2br|raw }}
+        <span class="im_msg_date">
+            {{ message.createdAt|app_date }}
+        </span>
+    </div>
+</div>
+{% endfor %}

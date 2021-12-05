@@ -12,15 +12,17 @@ use Telegram\Bot\Exceptions\TelegramSDKException;
 class TelegramService
 {
     protected Api $tg;
+    protected Bot $bot;
 
     public function __construct(Bot $bot)
     {
+        $this->bot = $bot;
         $this->tg = $bot->getBot();
     }
 
     public function sendMessage(User $user, string $text): void
     {
-        if (empty($user->getTelegramUserId())) {
+        if (!$user->getTelegramUserId()) {
             return;
         }
 
@@ -40,5 +42,17 @@ class TelegramService
                 goto Try_Send_Message;
             }
         }
+    }
+
+    public function isEnable(): bool
+    {
+        if ($this->tg->getAccessToken() === '~'
+            or $this->tg->getAccessToken() === 'null'
+            or $this->tg->getAccessToken() === 'false'
+        ) {
+            return false;
+        }
+
+        return true;
     }
 }

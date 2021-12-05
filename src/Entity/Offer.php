@@ -67,7 +67,7 @@ class Offer
     ];
 
     /**
-     * @ORM\Column(type="boolean", nullable=false,  options={"default":1})
+     * @ORM\Column(type="boolean", nullable=false, options={"default":1})
      */
     protected bool $is_enabled;
 

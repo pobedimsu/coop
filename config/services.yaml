@@ -14,10 +14,12 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:               # defines the scalar arguments once and apply them to any service defined/created in this file
-            $currency: "%env(default::CURRENCY)%"
+            $currency:   "%env(default::CURRENCY)%"
             $dateDefaultTimezone: "%env(default::TIMEZONE)%"
             $tgBotName:  "%env(default::TG_BOT_NAME)%"
+            $tgBotToken: "%env(default::TG_BOT_TOKEN)%"
             $isUserForm: "%env(bool:USER_FORM_ENABLE)%"
+            $isInternalMessengerEnable: "%env(bool:INTERNAL_MESSENGER_ENABLE)%"
 
     _instanceof:
         # services whose classes are instances of CustomInterface will be tagged automatically

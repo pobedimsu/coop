@@ -120,3 +120,7 @@ button.close:hover {
 .form-control:focus {
     color: white;
 }
+
+#theme-toggler {
+    color: gray;
+}

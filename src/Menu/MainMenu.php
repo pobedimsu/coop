@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Menu;
 
+use App\Service\TelegramService;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\Finder\Finder;
@@ -14,6 +15,8 @@ class MainMenu
     public function __construct(
         private FactoryInterface $factory,
         private KernelInterface $kernel,
+        private string $tgBotToken,
+        private TelegramService $telegram,
     ) {}
 
     /**
@@ -77,8 +80,13 @@ class MainMenu
         ]);
 
         $menu->setExtra('select_intehitance', false);
+
         $menu->addChild('Common', ['route' => 'profile']);
-        $menu->addChild('Telegram', ['route' => 'profile_telegram']);
+
+        if ($this->telegram->isEnable()) {
+            $menu->addChild('Telegram', ['route' => 'profile_telegram']);
+        }
+
         $menu->addChild('Geoposition', ['route' => 'profile_geoposition']);
         $menu->addChild('Invited users', ['route' => 'profile_invited']);
         $menu->addChild('Change password', ['route' => 'profile_password']);

@@ -8,6 +8,7 @@
         "ext-gd": "*",
         "ext-iconv": "*",
         "ext-intl": "*",
+        "ext-mbstring": "*",
         "babdev/pagerfanta-bundle": "^3.0",
         "borsaco/telegram-bot-api-bundle": "^1.0",
         "composer/package-versions-deprecated": "^1.0",

@@ -2,7 +2,6 @@
     {% apply spaceless %}
         {% if data is not empty %}
 {#            {{ smart_media_img(data, '100x100') }}#}
-{#            {{ dump(data) }}#}
 
             {% if data.filename is not defined  %}
                 <img src="{{ path('image', {'filter': '100x70', 'id': data}) }}" _width="100" height="70">
@@ -22,7 +21,6 @@
     {% apply spaceless %}
         {% if data is not empty %}
 {#            {{ smart_media_img(data, '100x100') }}#}
-{#            {{ dump(data) }}#}
 
             {% if data.filename is not defined  %}
                 <img src="{{ path('image', {'filter': '100x70', 'id': data}) }}" _width="100" height="70">

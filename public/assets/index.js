@@ -19,11 +19,9 @@ if (isDark) {
     disableDarkTheme();
 }
 
-
 /**
  * Apart from toggling themes, this will also store user's theme preference in local storage.
  * So when user visits next time, we can load the same theme.
- *
  */
 function toggleTheme() {
     isDark = !isDark;
@@ -38,14 +36,14 @@ function toggleTheme() {
 
 function enableDarkTheme() {
     DARK_STYLE_LINK.setAttribute("href", DARK_THEME_PATH);
-    THEME_TOGGLER.innerHTML = "🌙"; // Dark
+    THEME_TOGGLER.innerHTML = "🌞 тема оформления"; // Dark
 
     $('body').removeClass('bg-light');
 }
 
 function disableDarkTheme() {
     DARK_STYLE_LINK.setAttribute("href", "");
-    THEME_TOGGLER.innerHTML = "🌞"; // Light
+    THEME_TOGGLER.innerHTML = "🌙 тема оформления"; // Light
 
     $('body').addClass('bg-light');
 }

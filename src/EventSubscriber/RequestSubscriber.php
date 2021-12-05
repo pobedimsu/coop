@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\EventSubscriber;
 
 use App\Entity\User;
+use App\Service\TelegramService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -15,18 +16,13 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class RequestSubscriber implements EventSubscriberInterface
 {
-    protected RequestStack $requestStack;
-    protected RouterInterface $router;
-    protected TokenStorageInterface $tokenStorage;
-    protected ?string $tgBotName;
-
-    public function __construct(?string $tgBotName, RequestStack $requestStack, RouterInterface $router, TokenStorageInterface $tokenStorage)
-    {
-        $this->requestStack = $requestStack;
-        $this->router       = $router;
-        $this->tokenStorage = $tokenStorage;
-        $this->tgBotName    = $tgBotName;
-    }
+    public function __construct(
+        private ?string $tgBotName,
+        private RequestStack $requestStack,
+        private RouterInterface $router,
+        private TokenStorageInterface $tokenStorage,
+        private TelegramService $telegram,
+    ) {}
 
     public static function getSubscribedEvents(): array
     {
@@ -54,7 +50,7 @@ class RequestSubscriber implements EventSubscriberInterface
         }
 
         // Если указано имя чат-бота, то необходимо привязать тг аккаунт
-        if ($this->tgBotName and empty($user->getTelegramUsername())) {
+        if ($this->telegram->isEnable() and $this->tgBotName and empty($user->getTelegramUsername())) {
             $requestRoute = $event->getRequest()->get('_route');
             $route = 'profile_telegram';
 
@@ -66,7 +62,7 @@ class RequestSubscriber implements EventSubscriberInterface
                 return;
             }
 
-            $this->requestStack->getMasterRequest()->getSession()->getFlashBag()->add('notice', 'Для доступа ко всем функциям сайта, нужно подключить свой аккаунт Телеграм.');
+            $this->requestStack->getMainRequest()->getSession()->getFlashBag()->add('notice', 'Для доступа ко всем функциям сайта, нужно подключить свой аккаунт Телеграм.');
 
             $response = new RedirectResponse($this->router->generate($route));
             $event->setResponse($response);

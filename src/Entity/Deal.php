@@ -105,7 +105,7 @@ class Deal
     protected $offer;
 
     /**
-     * Ппродавец
+     * Продавец
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(nullable=false)
