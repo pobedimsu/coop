@@ -50,8 +50,13 @@ class MainMenu
             ->setLinkAttribute('class', 'nav-link py-0')
         ;
 
-        $countNewIncoming = $this->em->getRepository(Deal::class)->countNewIncomingByUser($this->tokenStorage->getToken()->getUser());
-        $countActive = $this->em->getRepository(Deal::class)->countActiveByUser($this->tokenStorage->getToken()->getUser());
+        if ($this->tokenStorage->getToken()) {
+            $countNewIncoming = $this->em->getRepository(Deal::class)->countNewIncomingByUser($this->tokenStorage->getToken()->getUser());
+            $countActive = $this->em->getRepository(Deal::class)->countActiveByUser($this->tokenStorage->getToken()->getUser());
+        } else {
+            $countNewIncoming = null;
+            $countActive = null;
+        }
 
         $menu->addChild('My deals', ['route' => 'deals', 'routeParameters' => ['tab' => $countNewIncoming ? 'in' : ($countActive ? 'active' : null) ]])
             ->setAttribute('class', 'nav-item')
