@@ -30,13 +30,35 @@
         {% endif %}
     </h3>
 
+    {% if deal.seller == app.user and deal.buyer.telegramUsername %}
+        <p>
+            <a href="tg://resolve?domain={{ deal.buyer.telegramUsername }}">
+                Написать сообщение
+
+                <span title="Написать сообщение в Телеграм" style="float: left; color: Dodgerblue; padding-right: 8px;">
+                        <i class="fab fa-telegram-plane"></i>
+                </span>
+            </a>
+        </p>
+    {% endif %}
+
+    {% if deal.buyer == app.user and deal.seller.telegramUsername %}
+        <p>
+            <a href="tg://resolve?domain={{ deal.seller.telegramUsername }}">
+                Написать сообщение
+
+                <span title="Написать сообщение в Телеграм" style="float: left; color: Dodgerblue; padding-right: 8px;">
+                        <i class="fab fa-telegram-plane"></i>
+                </span>
+            </a>
+        </p>
+    {% endif %}
+
     <p>Дата: {{ deal.createdAt|format_datetime }}</p>
 
     <p>Предложение: <a href="{{ path('offer_show', {'id': offer.id}) }}">{{ offer }}</a></p>
 
-    <p>
-        Количество: {{ deal.quantity }} <i>{{ offer.quantity ? offer.measureAsText : '' }}</i>
-    </p>
+    <p>Количество: {{ deal.quantity }} <i>{{ offer.quantity ? offer.measureAsText : '' }}</i></p>
 
     <p>Стоимость: {{ deal.offer.price }}{{ app_currency() }}
         {% if deal.offer.quantity > 0 %}
