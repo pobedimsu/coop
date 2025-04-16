@@ -17,7 +17,7 @@ class TexterEditFormType extends TexterFormType
         ;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'smart_texter_update';
     }

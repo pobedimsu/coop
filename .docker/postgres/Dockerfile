@@ -1,4 +1,4 @@
-FROM postgres:14.1-alpine
+FROM postgres:14.17-alpine
 
 RUN rm -rf /var/cache/apk/* && \
     rm -rf /tmp/*

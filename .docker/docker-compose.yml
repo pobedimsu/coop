@@ -39,7 +39,7 @@ services:
         depends_on:
             - pgbouncer
         environment:
-            DATABASE_URL: 'pgsql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:6432/${DB_NAME}?serverVersion=14.1&charset=utf8'
+            DATABASE_URL: 'pgsql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:6432/${DB_NAME}?serverVersion=14.17&charset=utf8'
         volumes:
             - './../:${WORKING_DIR}'
             - ./../var/log/php_errors.log:/var/log/php_errors.log
@@ -55,7 +55,7 @@ services:
         depends_on:
             - pgbouncer
         environment:
-            DATABASE_URL: 'pgsql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:6432/${DB_NAME}?serverVersion=14.1&charset=utf8'
+            DATABASE_URL: 'pgsql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:6432/${DB_NAME}?serverVersion=14.17&charset=utf8'
         volumes:
             - './../:${WORKING_DIR}'
             - ./../var/log/php-fpm_errors.log:/var/log/php-fpm_errors.log

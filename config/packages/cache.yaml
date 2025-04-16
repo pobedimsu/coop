@@ -16,6 +16,8 @@ framework:
 
         # Namespaced pools use the above "app" backend by default
         pools:
+            doctrine.system_cache_pool:
+                adapter: cache.adapter.apcu
             app.cache.filesystem:
                 adapter: cache.adapter.filesystem
                 tags: true

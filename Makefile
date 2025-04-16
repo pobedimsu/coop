@@ -21,10 +21,14 @@ else # cron job
 	EXEC_TTY := -T
 endif
 
-ifneq (",$(wildcard /usr/bin/docker-compose)")
+ifneq (",$(wildcard /usr/bin/docker-compose-v1)")
+	DOCKER_COMPOSE_BIN := /usr/bin/docker-compose-v1
+else ifneq (",$(wildcard /usr/local/bin/docker-compose-v1)")
+	DOCKER_COMPOSE_BIN := /usr/local/bin/docker-compose-v1
+else ifneq (",$(wildcard /usr/bin/docker-compose)")
 	DOCKER_COMPOSE_BIN := /usr/bin/docker-compose
 else
-    DOCKER_COMPOSE_BIN := /usr/local/bin/docker-compose
+    DOCKER_COMPOSE_BIN := $(shell which docker-compose)
 endif
 
 ifeq ($(OS),Windows_NT)
@@ -163,20 +167,34 @@ cache-warmup:
 ### Composer
 composer-install:
 	@if [ ${env} = 'prod' ]; then \
-		${docker-compose-php-cli} composer install --no-dev; \
+		${docker-compose-php-cli} composer install --no-dev --optimize-autoloader; \
 	else \
 		${docker-compose-php-cli} composer install; \
 	fi
+	@echo "[${env}]: Time elapsed $$(date -ud "@$$(($$(date +%s) - $(shell date +%s)))" +%T)"
+
+composer-outdated:
+	@if [ ${env} = 'prod' ]; then \
+		${docker-compose-php-cli} composer outdated -m --no-dev; \
+	else \
+		${docker-compose-php-cli} composer outdated -m; \
+	fi
+	@echo "[${env}]: Time elapsed $$(date -ud "@$$(($$(date +%s) - $(shell date +%s)))" +%T)"
 
 composer-update:
 	@if [ ${env} = 'prod' ]; then \
-		${docker-compose-php-cli} composer update --no-dev; \
+		${docker-compose-php-cli} composer update --no-dev --optimize-autoloader; \
 	else \
 		${docker-compose-php-cli} composer update; \
 	fi
+	@echo "[${env}]: Time elapsed $$(date -ud "@$$(($$(date +%s) - $(shell date +%s)))" +%T)"
+
+composer-require-dev:
+	@${docker-compose-php-cli} composer require --dev $(call args)
 
 composer:
 	@${docker-compose-php-cli} composer $(call args)
+	@echo "[${env}]: Time elapsed $$(date -ud "@$$(($$(date +%s) - $(shell date +%s)))" +%T)"
 
 ### DataBase
 db-dump:

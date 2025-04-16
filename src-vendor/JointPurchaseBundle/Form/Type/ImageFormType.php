@@ -17,12 +17,12 @@ class ImageFormType extends AbstractType
         ]);
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return FileType::class;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'joint_purchase_media_image';
     }

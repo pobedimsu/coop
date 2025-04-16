@@ -23,7 +23,7 @@ class TexterFormType extends AbstractType
         ]);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'smart_texter';
     }

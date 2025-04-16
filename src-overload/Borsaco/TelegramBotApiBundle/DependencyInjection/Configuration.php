@@ -10,7 +10,7 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
     	if (\App\Kernel::VERSION_ID >= 40200) {
             $builder = new TreeBuilder('telegram_bot_api');

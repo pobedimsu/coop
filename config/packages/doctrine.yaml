@@ -1,11 +1,15 @@
 doctrine:
     dbal:
-        override_url: true
+        # override_url: true
         url: '%env(resolve:DATABASE_URL)%'
     orm:
         auto_generate_proxy_classes: true
-        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
+        # controller_resolver:
+        #     auto_mapping: false
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        # report_fields_where_declared: true
+        # enable_lazy_ghost_objects: true
         mappings:
             App:
                 is_bundle: false
