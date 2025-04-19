@@ -21,23 +21,11 @@ else # cron job
 	EXEC_TTY := -T
 endif
 
-ifneq (",$(wildcard /usr/bin/docker-compose-v1)")
-	DOCKER_COMPOSE_BIN := /usr/bin/docker-compose-v1
-else ifneq (",$(wildcard /usr/local/bin/docker-compose-v1)")
-	DOCKER_COMPOSE_BIN := /usr/local/bin/docker-compose-v1
-else ifneq (",$(wildcard /usr/bin/docker-compose)")
-	DOCKER_COMPOSE_BIN := /usr/bin/docker-compose
-else
-    DOCKER_COMPOSE_BIN := $(shell which docker-compose)
-endif
-
-ifeq ($(OS),Windows_NT)
-    DOCKER_COMPOSE_BIN := winpty docker-compose
-endif
-
 args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
 env = ${APP_ENV}
 pwd = $(shell eval pwd -P)
+
+DOCKER_COMPOSE_BIN := "${pwd}/.docker/docker-compose-v1"
 
 ifneq (",$(wildcard ./docker-compose.local.yml)")
     docker-compose = ${DOCKER_COMPOSE_BIN} --file=./.docker/docker-compose.yml --file=./.docker/docker-compose.${env}.yml --file=./docker-compose.local.yml --env-file=./.env.docker.${env}.local -p "${pwd}_${env}"
